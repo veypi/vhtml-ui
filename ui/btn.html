@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Button Component">
+  <title>Button</title>
+</head>
+<style>
+  /* 组件宿主样式 */
+  body {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .v-btn {
+    /* Base Styles */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: var(--v-radius-md);
+    font-weight: var(--v-font-weight-medium);
+    transition: all var(--v-transition-base);
+    outline: none;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    border: 1px solid transparent;
+    gap: var(--v-spacing-sm);
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .v-btn:focus-visible {
+    box-shadow: 0 0 0 2px var(--v-bg-color), 0 0 0 4px var(--v-color-primary);
+  }
+
+  .v-btn:disabled,
+  .v-btn--disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* vhtml vslot 默认是实体元素，设为 contents 让内部元素直接参与 Flex 布局 */
+  vslot {
+    display: contents;
+  }
+
+  /* Variants */
+
+  /* Default (Solid) */
+  .v-btn--default {
+    background-color: var(--v-btn-bg, var(--v-color-primary));
+    color: var(--v-btn-text, var(--v-color-primary-text));
+    border-color: transparent;
+    box-shadow: var(--v-shadow-sm);
+  }
+
+  .v-btn--default:hover:not(:disabled) {
+    /* Use color-mix for hover state if --v-btn-bg-hover is not explicitly set */
+    background-color: var(--v-btn-bg-hover, color-mix(in srgb, var(--v-btn-bg, var(--v-color-primary)), black 10%));
+    box-shadow: var(--v-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .v-btn--default:active:not(:disabled) {
+    /* Use color-mix for active state */
+    background-color: var(--v-btn-bg-active, color-mix(in srgb, var(--v-btn-bg, var(--v-color-primary)), black 20%));
+    transform: translateY(0);
+  }
+
+  /* Outline */
+  .v-btn--outline {
+    border-color: var(--v-btn-border, var(--v-border-color));
+    background-color: transparent;
+    color: var(--v-btn-text, var(--v-text-color));
+  }
+
+  .v-btn--outline:hover:not(:disabled) {
+    background-color: var(--v-btn-bg-hover, var(--v-bg-color-secondary));
+    border-color: var(--v-btn-border-hover, var(--v-text-color-secondary));
+    color: var(--v-btn-text-hover, var(--v-text-color));
+  }
+
+  /* Outline with colored text/border (for both custom and semantic colors) */
+  .v-btn--outline.v-btn--colored {
+    color: var(--v-btn-color);
+    border-color: var(--v-btn-color);
+  }
+
+  .v-btn--outline.v-btn--colored:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--v-btn-color), transparent 90%);
+    color: var(--v-btn-color);
+    border-color: var(--v-btn-color);
+  }
+
+
+  /* Ghost */
+  .v-btn--ghost {
+    background-color: transparent;
+    color: var(--v-btn-text, var(--v-text-color));
+    border-color: transparent;
+  }
+
+  .v-btn--ghost:hover:not(:disabled) {
+    background-color: var(--v-btn-bg-hover, var(--v-bg-color-secondary));
+    color: var(--v-btn-text-hover, var(--v-text-color));
+  }
+
+  /* Ghost with colored text (for both custom and semantic colors) */
+  .v-btn--ghost.v-btn--colored {
+    color: var(--v-btn-color);
+  }
+
+  .v-btn--ghost.v-btn--colored:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--v-btn-color), transparent 90%);
+    color: var(--v-btn-color);
+  }
+
+  /* Sizes */
+
+  /* XXS */
+  .v-btn--size-xxs {
+    height: 20px;
+    padding: 0 var(--v-spacing-xs);
+    font-size: 10px;
+    border-radius: var(--v-radius-sm);
+  }
+
+  /* XS */
+  .v-btn--size-xs {
+    height: 24px;
+    padding: 0 var(--v-spacing-sm);
+    font-size: var(--v-font-size-xs);
+    border-radius: var(--v-radius-sm);
+  }
+
+  /* SM */
+  .v-btn--size-sm {
+    height: 32px;
+    padding: 0 12px;
+    font-size: var(--v-font-size-sm);
+  }
+
+  /* MD (Default) */
+  .v-btn--size-md {
+    height: 40px;
+    padding: 0 var(--v-spacing-md);
+    font-size: var(--v-font-size-md);
+  }
+
+  /* LG */
+  .v-btn--size-lg {
+    height: 48px;
+    padding: 0 20px;
+    font-size: var(--v-font-size-lg);
+  }
+
+  /* XL */
+  .v-btn--size-xl {
+    height: 56px;
+    padding: 0 28px;
+    font-size: var(--v-font-size-xl);
+    border-radius: var(--v-radius-lg);
+  }
+
+  /* XXL */
+  .v-btn--size-xxl {
+    height: 64px;
+    padding: 0 36px;
+    font-size: var(--v-font-size-2xl);
+    border-radius: var(--v-radius-xl);
+  }
+
+  /* Icon Sizes - Optional, derived from height */
+  .v-btn--size-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+  }
+
+  .v-btn--size-icon-xxs {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    font-size: 10px;
+  }
+
+  .v-btn--size-icon-xs {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: var(--v-font-size-xs);
+  }
+
+  .v-btn--size-icon-sm {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: var(--v-font-size-sm);
+  }
+
+  .v-btn--size-icon-md {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: var(--v-font-size-md);
+  }
+
+  .v-btn--size-icon-lg {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    font-size: var(--v-font-size-lg);
+  }
+
+  .v-btn--size-icon-xl {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    font-size: var(--v-font-size-xl);
+  }
+
+  .v-btn--size-icon-xxl {
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    font-size: var(--v-font-size-2xl);
+  }
+
+  /* Block */
+  .v-btn--block {
+    display: flex;
+    width: 100%;
+  }
+
+  /* Rounded Full (Utility) */
+  .v-btn.rounded-full {
+    border-radius: var(--v-radius-full, 9999px);
+  }
+
+  /* Loading Spinner */
+  .v-btn-spinner {
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: v-btn-spin 1s linear infinite;
+  }
+
+  @keyframes v-btn-spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<body>
+  <button class="v-btn" :class="computeClass" :style="computeStyle" :type="type" :disabled="disabled || loading"
+    @click="handleClick">
+    <span v-if="loading" class="v-btn-spinner"></span>
+    <vslot></vslot>
+  </button>
+</body>
+<script setup>
+  variant = 'default'; // default, destructive, outline, ghost
+  size = 'md';         // xxs, xs, sm, md, lg, xl, xxl
+  icon = false;        // if true, sets size to icon-{size}
+  type = 'button';     // button, submit, reset
+  color = 'primary';   // primary，secondary, success, danger, warning, info, #XXXXXX, rgba(0,0,0,0.5)
+  block = false;
+  round = false;
+  disabled = false;
+  loading = false;
+  click = null;
+
+
+  computeClass = () => {
+    // Handle backward compatibility or default 'default' to 'md'
+    let currentSize = size === 'default' ? 'md' : size;
+
+    // If icon prop is true, use icon size variant
+    if (icon) {
+      currentSize = 'icon-' + currentSize;
+    }
+
+    const classes = [
+      'v-btn--' + variant,
+      'v-btn--size-' + currentSize
+    ];
+    if (block) classes.push('v-btn--block');
+    if (round) classes.push('rounded-full');
+    if (disabled) classes.push('v-btn--disabled');
+
+    // Check if using color (either custom or semantic, but not default/primary for basic variants unless we want them colored)
+    // Actually, we want 'primary', 'success' etc to also trigger the colored behavior for ghost/outline.
+    // So we just check if color is present and valid.
+    if (color && color !== 'default') {
+      classes.push('v-btn--colored');
+    }
+
+    return classes;
+  }
+
+  // Compute style variables based on color prop
+  computeStyle = () => {
+    const styles = {};
+    let baseColor = '';
+
+    // Map semantic colors to CSS variables
+    switch (color) {
+      case 'primary':
+        baseColor = 'var(--v-color-primary)';
+        break;
+      case 'secondary':
+        baseColor = 'var(--v-color-secondary)';
+        break;
+      case 'success':
+        baseColor = 'var(--v-color-success)';
+        break;
+      case 'danger':
+      case 'destructive':
+        baseColor = 'var(--v-color-danger)';
+        break;
+      case 'warning':
+        baseColor = 'var(--v-color-warning)';
+        break;
+      case 'info':
+        baseColor = 'var(--v-color-info)';
+        break;
+      default:
+        // Custom color (Hex, RGB, etc)
+        baseColor = color;
+    }
+
+    if (!baseColor) return {};
+
+    // Apply to variables based on variant
+    if (variant === 'default') {
+      styles['--v-btn-bg'] = baseColor;
+      // No need to calculate hover/active manually anymore, CSS color-mix handles it based on --v-btn-bg
+      styles['--v-btn-text'] = 'white'; // Default text color
+    } else if (variant === 'outline' || variant === 'ghost') {
+      styles['--v-btn-color'] = baseColor;
+      // No need to calculate alpha manually, CSS color-mix handles it based on --v-btn-color
+    }
+
+    return styles;
+  }
+
+  handleClick = async (e) => {
+    if (disabled || loading) {
+      e.preventDefault();
+      return;
+    }
+
+    // Handle async click
+    if (typeof click === 'function') {
+      const result = click(e);
+      if (result && typeof result.then === 'function') {
+        loading = true;
+        try {
+          await result;
+        } finally {
+          loading = false;
+        }
+      }
+    } else {
+      $emit('click', e);
+    }
+  };
+</script>
+
+</html>

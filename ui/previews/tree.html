@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Tree Component Documentation">
+  <title>Tree Docs</title>
+</head>
+
+<body>
+  <div class="section-title">Tree 树形组件 - 文件目录示例</div>
+  <div class="v-mb-md">
+    <div class="v-p-md v-border v-rounded-md" style="max-width: 400px;">
+      <div vsrc='/tree' :data="fileTreeData">
+        <div vslot='row' class="v-flex v-items-center v-hover-bg-secondary v-cursor-pointer v-p-xs v-rounded-sm"
+          :style="{paddingLeft: (depth * 20 + 8) + 'px'}">
+          <span class="v-mr-sm" style="width: 20px; text-align: center;">
+            <i v-if="row.children" class="fa-solid"
+              :class="row.expand ? 'fa-folder-open v-text-yellow-500' : 'fa-folder v-text-yellow-500'">
+            </i>
+            <i v-else class="fa-regular fa-file v-text-gray-400"></i>
+          </span>
+          <span class="v-text-sm">{{ row.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div vsrc="/tree" :data="fileTreeData">
+    <div vslot="row">
+      <div :style="{paddingLeft: (depth * 20) + 'px'}">
+        <span v-if="row.children && row.children.length">
+          {{ row.expand ? '[-]' : '[+]' }}
+        </span>
+        {{ row.name }}
+      </div>
+    </div>
+  </div>
+</body>
+<script setup>
+  fileTreeData = [
+    {
+      name: 'vhtml-ui',
+      expand: true,
+      children: [
+        {
+          name: 'src',
+          expand: true,
+          children: [
+            {
+              name: 'assets',
+              children: [
+                {name: 'logo.png'},
+                {name: 'common.css'}
+              ]
+            },
+            {
+              name: 'components',
+              expand: true,
+              children: [
+                {name: 'Button.html'},
+                {name: 'Input.html'},
+                {name: 'Tree.html'}
+              ]
+            },
+            {name: 'main.js'},
+            {name: 'App.html'}
+          ]
+        },
+        {
+          name: 'public',
+          children: [
+            {name: 'index.html'},
+            {name: 'favicon.ico'}
+          ]
+        },
+        {name: 'package.json'},
+        {name: 'README.md'},
+        {name: '.gitignore'}
+      ]
+    }
+  ]
+</script>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Dropdown Menu Component">
+  <title>Dropdown</title>
+</head>
+<style>
+  .v-dropdown {
+    display: inline-block;
+    position: relative;
+  }
+
+  .v-dropdown-trigger {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .v-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 120px;
+    padding: var(--v-spacing-xs) 0;
+    margin-top: var(--v-spacing-xs);
+    background-color: var(--v-bg-color);
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-md);
+    box-shadow: var(--v-shadow-md);
+    z-index: 100;
+    animation: v-dropdown-fade-in 0.2s ease-out;
+    white-space: nowrap;
+  }
+  
+  .v-dropdown-menu[placement^="bottom"] {
+      top: 100%;
+  }
+  .v-dropdown-menu[placement^="top"] {
+      top: auto;
+      bottom: 100%;
+      margin-top: 0;
+      margin-bottom: var(--v-spacing-xs);
+  }
+  .v-dropdown-menu[placement$="end"] {
+      left: auto;
+      right: 0;
+  }
+
+  @keyframes v-dropdown-fade-in {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .v-dropdown-item {
+    padding: var(--v-spacing-sm) var(--v-spacing-md);
+    font-size: var(--v-font-size-md);
+    color: var(--v-text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: var(--v-spacing-sm);
+    text-decoration: none;
+  }
+
+  .v-dropdown-item:hover {
+    background-color: var(--v-bg-color-secondary);
+  }
+  
+  .v-dropdown-item.is-disabled {
+      color: var(--v-text-color-disabled);
+      cursor: not-allowed;
+      pointer-events: none;
+  }
+  
+  .v-dropdown-item.is-divided {
+      border-top: 1px solid var(--v-border-color);
+      margin-top: 4px;
+      padding-top: 4px; 
+  }
+
+  .v-dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 90;
+    background: transparent;
+  }
+  
+  vslot {
+      display: contents;
+  }
+</style>
+<body>
+  <!-- Overlay for handling click outside -->
+  <div v-if="visible" class="v-dropdown-overlay" @click="handleClose"></div>
+
+  <div class="v-dropdown">
+    <!-- Trigger -->
+    <div class="v-dropdown-trigger" @click="toggle">
+      <vslot></vslot>
+    </div>
+
+    <!-- Menu -->
+    <div v-if="visible" class="v-dropdown-menu" :placement="placement">
+      <!-- Custom Menu Slot -->
+      <vslot name="menu"></vslot>
+      
+      <!-- Generated Items -->
+      <div v-for="item in items" 
+           class="v-dropdown-item" 
+           :class="computeItemClass(item)"
+           @click="handleItemClick(item)">
+        {{ item.label }}
+      </div>
+    </div>
+  </div>
+</body>
+<script setup>
+  visible = false;
+  placement = 'bottom-start'; // bottom-start, bottom-end, top-start, top-end
+  items = []; // Array of { label, value, disabled, divided }
+
+  toggle = () => {
+      visible = !visible;
+  };
+  
+  handleClose = () => {
+      visible = false;
+  };
+
+  computeItemClass = (item) => {
+    let cls = '';
+    if (item.disabled) cls += ' is-disabled';
+    if (item.divided) cls += ' is-divided';
+    return cls;
+  };
+
+  handleItemClick = (item) => {
+      if (item.disabled) return;
+      $emit('command', item.value !== undefined ? item.value : item);
+      visible = false;
+  };
+</script>
+</html>

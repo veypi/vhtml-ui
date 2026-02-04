@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Form Generator Component">
+  <title>Form</title>
+</head>
+<style>
+  .v-form {
+    display: block;
+    width: 100%;
+  }
+
+  .v-form-item {
+    margin-bottom: var(--v-spacing-lg, 16px);
+  }
+
+  .v-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+  }
+</style>
+
+<body>
+  <form class="v-form">
+    <div v-for="(item, index) in items" :key="item.name || index" class="v-form-item">
+      <!-- Dynamic Input Component -->
+      <div vsrc="/input.html" :type="item.type || 'text'" :label="item.label" :placeholder="item.placeholder"
+        :required="item.required" :disabled="item.disabled || disabled" :readonly="item.readonly"
+        :noborder="item.noborder" :validate="item.validate" :opts="item.opts || {}" :name="item.name"
+        v:value="data[item.name]">
+      </div>
+    </div>
+
+    <div class="v-form-actions">
+      <vslot name="actions">
+        <div vsrc="/btn.html" type="submit">提交</div>
+        <div vsrc="/btn.html" variant="outline" type="reset">重置</div>
+      </vslot>
+    </div>
+  </form>
+</body>
+<script setup>
+  items = []; // Field configurations: [{name, type, label, ...}]
+  data = {};  // Form data object
+  disabled = false;
+
+</script>
+
+</html>

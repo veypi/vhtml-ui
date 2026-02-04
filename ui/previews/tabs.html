@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tabs Component Demo">
+  <title>Tabs Demo</title>
+</head>
+<style>
+  body {
+    padding: 20px;
+  }
+  .demo-section {
+    margin-bottom: 40px;
+    padding: 24px;
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-lg);
+    background: var(--v-bg-color);
+  }
+  .demo-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--v-border-color);
+  }
+  .tab-content {
+    padding: 20px;
+    background: var(--v-bg-color-secondary);
+    border-radius: var(--v-radius-md);
+    min-height: 100px;
+  }
+</style>
+
+<body layout="default">
+
+  <div class="v-container">
+    <h1>Tabs 标签页</h1>
+    <p class="v-text-secondary v-mb-lg">提供平级的区域将大块内容进行收纳和展现，保持界面整洁。</p>
+
+    <!-- Basic Line Usage -->
+    <div class="demo-section">
+      <div class="demo-title">基础用法 (Line)</div>
+      <div vsrc="/tabs" v:value="activeTab1" :items="items1">
+        <div class="tab-content">
+          <div v-if="activeTab1 === '1'">用户管理的内容...</div>
+          <div v-if="activeTab1 === '2'">配置管理的内容...</div>
+          <div v-if="activeTab1 === '3'">角色管理的内容...</div>
+        </div>
+      </div>
+      <div class="v-mt-md v-text-secondary">当前选中: {{ activeTab1 }}</div>
+    </div>
+
+    <!-- Card Style -->
+    <div class="demo-section">
+      <div class="demo-title">选项卡样式 (Card)</div>
+      <div vsrc="/tabs" variant="card" v:value="activeTab2" :items="items2">
+        <div class="tab-content" style="border-top-left-radius: 0;">
+          <div v-if="activeTab2 === 'profile'">Profile Info</div>
+          <div v-if="activeTab2 === 'settings'">Settings Panel</div>
+          <div v-if="activeTab2 === 'messages'">Messages List</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pills Style -->
+    <div class="demo-section">
+      <div class="demo-title">胶囊样式 (Pills)</div>
+      <div vsrc="/tabs" variant="pills" v:value="activeTab3" :items="items3">
+        <div class="tab-content v-mt-md">
+           当前查看: {{ activeTab3 }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+<script setup>
+  // Demo 1 Data
+  activeTab1 = '1';
+  items1 = [
+    { label: '用户管理', value: '1' },
+    { label: '配置管理', value: '2' },
+    { label: '角色管理', value: '3' },
+    { label: '定时任务', value: '4', disabled: true }
+  ];
+
+  // Demo 2 Data
+  activeTab2 = 'profile';
+  items2 = [
+    { label: '个人中心', value: 'profile' },
+    { label: '系统设置', value: 'settings' },
+    { label: '消息通知', value: 'messages' }
+  ];
+
+  // Demo 3 Data
+  activeTab3 = 'all';
+  items3 = [
+    { label: '全部', value: 'all' },
+    { label: '待付款', value: 'pending' },
+    { label: '待发货', value: 'processing' },
+    { label: '已完成', value: 'completed' }
+  ];
+</script>
+</html>

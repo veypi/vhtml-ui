@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Tabs Component">
+  <title>Tabs</title>
+</head>
+<style>
+  /* Container */
+  .v-tabs-container {
+    width: 100%;
+  }
+
+  /* Header List */
+  .v-tabs-nav {
+    display: flex;
+    position: relative;
+    margin-bottom: var(--v-spacing-md);
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+  }
+  .v-tabs-nav::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  /* Variant: Line (Default) */
+  .v-tabs-nav.is-line {
+    border-bottom: 1px solid var(--v-border-color);
+    gap: var(--v-spacing-lg);
+  }
+  
+  .v-tabs-nav.is-line .v-tab-item {
+    padding: var(--v-spacing-sm) 0;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .v-tabs-nav.is-line .v-tab-item.is-active {
+    color: var(--v-color-primary);
+    border-bottom-color: var(--v-color-primary);
+  }
+
+  /* Variant: Card */
+  .v-tabs-nav.is-card {
+    border-bottom: 1px solid var(--v-border-color);
+    gap: 4px;
+    background-color: var(--v-bg-color-secondary);
+    padding: 4px 4px 0;
+    border-radius: var(--v-radius-md) var(--v-radius-md) 0 0;
+  }
+
+  .v-tabs-nav.is-card .v-tab-item {
+    padding: var(--v-spacing-sm) var(--v-spacing-md);
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: var(--v-radius-md) var(--v-radius-md) 0 0;
+    background-color: transparent;
+    transition: all 0.2s;
+  }
+
+  .v-tabs-nav.is-card .v-tab-item.is-active {
+    background-color: var(--v-bg-color);
+    color: var(--v-color-primary);
+    box-shadow: 0 -1px 2px rgba(0,0,0,0.05);
+  }
+
+  /* Variant: Pills */
+  .v-tabs-nav.is-pills {
+    gap: var(--v-spacing-sm);
+    border-bottom: none;
+  }
+
+  .v-tabs-nav.is-pills .v-tab-item {
+    padding: var(--v-spacing-xs) var(--v-spacing-md);
+    border-radius: var(--v-radius-md);
+    background-color: var(--v-bg-color-secondary);
+    border: 1px solid transparent;
+  }
+
+  .v-tabs-nav.is-pills .v-tab-item.is-active {
+    background-color: var(--v-color-primary);
+    color: var(--v-color-primary-text);
+  }
+
+  /* Common Item Styles */
+  .v-tab-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: var(--v-font-size-md);
+    font-weight: var(--v-font-weight-medium);
+    color: var(--v-text-color-secondary);
+    white-space: nowrap;
+    user-select: none;
+    transition: color var(--v-transition-base), background-color var(--v-transition-base);
+  }
+
+  .v-tab-item:hover:not(.is-disabled):not(.is-active) {
+    color: var(--v-color-primary);
+  }
+
+  .v-tab-item.is-disabled {
+    cursor: not-allowed;
+    color: var(--v-text-color-disabled);
+  }
+
+  /* Content Slot */
+  .v-tabs-content {
+    position: relative;
+  }
+  
+  vslot {
+    display: block;
+  }
+</style>
+<body>
+  <div class="v-tabs-container">
+    <div class="v-tabs-nav" :class="navClass">
+      <div v-for="item in items" 
+           class="v-tab-item" 
+           :class="getItemClass(item)"
+           @click="handleTabClick(item)">
+        {{ item.label }}
+      </div>
+    </div>
+    <div class="v-tabs-content">
+      <vslot></vslot>
+    </div>
+  </div>
+</body>
+<script setup>
+  // Props
+  items = []; // [{ label: 'Tab 1', value: '1', disabled: false }]
+  value = ''; // v:value binding
+  variant = 'line'; // line, card, pills
+
+  // Computed classes (simulated via function)
+  navClass = ()=>'is-' + (variant || 'line');
+  
+  getItemClass = (item) => {
+    let cls = '';
+    if (item.value === value) cls += ' is-active';
+    if (item.disabled) cls += ' is-disabled';
+    return cls;
+  };
+
+  // Methods
+  handleTabClick = (item) => {
+    if (item.disabled) return;
+    if (item.value !== value) {
+      value = item.value;
+      $emit('change', value);
+      
+      // Update local styles trigger
+      // Since 'value' is reactive, the view should update automatically
+    }
+  };
+</script>
+</html>

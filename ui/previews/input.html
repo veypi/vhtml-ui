@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .demo-section {
+      margin-bottom: 40px;
+      padding: 20px;
+      border: 1px solid var(--v-border-color);
+      border-radius: var(--v-radius-lg);
+      background-color: var(--v-bg-color);
+    }
+
+    .demo-row {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .demo-label {
+      font-size: 0.9rem;
+      color: var(--v-text-color-secondary);
+      font-weight: 500;
+    }
+
+    .value-display {
+      font-family: monospace;
+      font-size: 12px;
+      background: #f5f5f5;
+      padding: 8px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .avatar-uploader {
+      margin: auto;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      background-size: cover;
+      background-position: center;
+      color: #999;
+      font-size: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .avatar-uploader:hover {
+      border-color: var(--v-color-primary);
+      color: var(--v-color-primary);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="section-title">Input 组件演示</div>
+
+  <!-- 1. 基础输入类型 -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">1. 基础输入类型 (Text, Password, Number)</h3>
+    <div class="demo-row">
+      <span class="demo-label">文本输入 无标签 (v:value={{ textVal }})</span>
+      <div vsrc="/input" v:value="textVal" noborder placeholder="请输入用户名"></div>
+    </div>
+
+    <div class="demo-row">
+      <span class="demo-label">密码输入</span>
+      <div vsrc="/input" type="password" v:value="passVal" label="密码" placeholder="请输入密码"></div>
+    </div>
+
+    <div class="demo-row">
+      <span class="demo-label">数字输入 (Min: 0, Max: 100)</span>
+      <div vsrc="/input" type="number" v:value="numVal" label="年龄" placeholder="请输入年龄" :validate="numValidator">
+      </div>
+      <div class="value-display">Current Value: {{ numVal }}</div>
+    </div>
+  </div>
+
+  <!-- 1.5 Textarea -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">1.5 多行文本 (Textarea)</h3>
+    <div class="demo-row">
+      <span class="demo-label">多行文本输入 (v:value={{ textareaVal }})</span>
+      <div vsrc="/input" type="textarea" v:value="textareaVal" label="备注" placeholder="请输入备注" :opts="{rows: 4}">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Select 选择器 -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2. Select 选择器</h3>
+    <div class="demo-row">
+      <span class="demo-label">基础单选 (v:value)</span>
+      <div vsrc="/input" type="select" v:value="selectVal" label="选择城市" placeholder="请选择"
+        :opts="{options: cityOptions}">
+      </div>
+    </div>
+
+    <div class="demo-row">
+      <span class="demo-label">禁用状态</span>
+      <div vsrc="/input" type="select" :disabled="true" label="禁用选择" placeholder="不可选" :opts="{options: cityOptions}">
+      </div>
+    </div>
+
+    <div class="demo-row">
+      <span class="demo-label">简单数组选项 (v:value)</span>
+      <div vsrc="/input" type="select" v:value="simpleSelectVal" label="选择颜色" placeholder="请选择颜色"
+        :opts="{options: colorOptions}">
+      </div>
+      <div class="value-display">Selected Color: {{ simpleSelectVal }}</div>
+    </div>
+  </div>
+
+  <!-- 2.5 Checkbox -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2.5 Checkbox 多选框</h3>
+
+    <div class="demo-row">
+      <span class="demo-label">单选框 (v:value={{ checkboxVal }})</span>
+      <div vsrc="/input" type="checkbox" v:value="checkboxVal" placeholder="同意协议"></div>
+    </div>
+
+    <div class="demo-row">
+      <span class="demo-label">多选框组 (v:value={{ checkboxGroupVal }})</span>
+      <div vsrc="/input" type="checkbox" v:value="checkboxGroupVal" label="兴趣爱好" :opts="{options: hobbyOptions}">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.6 Radio -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2.6 Radio 单选框</h3>
+
+    <div class="demo-row">
+      <span class="demo-label">单选框组 (v:value={{ radioVal }})</span>
+      <div vsrc="/input" type="radio" v:value="radioVal" label="性别" :opts="{options: genderOptions}">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.7 Switch -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2.7 Switch 开关</h3>
+    <div class="demo-row">
+      <span class="demo-label">基础开关 (v:value={{ switchVal }})</span>
+      <div vsrc="/input" type="switch" v:value="switchVal" placeholder="开启通知"></div>
+    </div>
+    <div class="demo-row">
+      <span class="demo-label">禁用状态</span>
+      <div vsrc="/input" type="switch" :value="true" :disabled="true" placeholder="已禁用"></div>
+    </div>
+  </div>
+
+  <!-- 2.8 Date & Time -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2.8 日期与时间选择</h3>
+    <div class="demo-row">
+      <span class="demo-label">日期选择 (Date) - v:value={{ dateVal }}</span>
+      <div vsrc="/input" type="date" v:value="dateVal" label="出生日期"></div>
+    </div>
+    <div class="demo-row">
+      <span class="demo-label">日期时间 (Datetime / Datetime-local) - v:value={{ datetimeVal }}</span>
+      <div vsrc="/input" type="datetime" v:value="datetimeVal" label="会议时间"></div>
+    </div>
+    <div class="demo-row">
+      <span class="demo-label">时间选择 (Time) - v:value={{ timeVal }}</span>
+      <div vsrc="/input" type="time" v:value="timeVal" label="提醒时间"></div>
+    </div>
+  </div>
+
+  <!-- 2.9 Slider -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2.9 Slider 滑块</h3>
+    <div class="demo-row">
+      <span class="demo-label">基础滑块 (v:value={{ sliderVal }})</span>
+      <div vsrc="/input" type="slider" v:value="sliderVal" :opts="{min: 0, max: 100, step: 1, showValue: true}">
+      </div>
+    </div>
+    <div class="demo-row">
+      <span class="demo-label">自定义范围与步长 (Min: 10, Max: 50, Step: 5)</span>
+      <div vsrc="/input" type="slider" :value="30" label="slider" :opts="{min: 10, max: 50, step: 5, showValue: true}">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.10 Range -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2.10 Range 范围选择</h3>
+    <div class="demo-row">
+      <span class="demo-label">范围选择 (v:value={{ rangeVal }})</span>
+      <div vsrc="/input" type="range" v:value="rangeVal" label="range"
+        :opts="{min: 0, max: 100, step: 1, showValue: true}"></div>
+    </div>
+  </div>
+
+  <!-- 2.11 File -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">2.11 File 文件上传</h3>
+    <div class="demo-row">
+      <span class="demo-label">自动上传 (Auto Upload)</span>
+      <div vsrc="/input" type="file" v:value="fileVal" placeholder="选择文件自动上传"
+        :opts="{uploader: mockUploader, multiple: false}">
+      </div>
+      <div class="value-display" style="white-space: pre-wrap;">Value: {{ fileVal }}</div>
+    </div>
+
+    <div class="demo-row">
+      <span class="demo-label">手动上传 (Manual Upload)</span>
+      <div vsrc="/input" type="file" placeholder="选择文件后点击上传" :opts="{uploader: mockUploader, autoUpload: false}">
+      </div>
+    </div>
+
+    <div class="demo-row">
+      <span class="demo-label">自定义头像上传 (Avatar Upload)</span>
+      <div vsrc="/input" type="file" v:value="avatarVal" :noborder="true"
+        :opts="{uploader: mockUploader, autoUpload: true, showList: false, accept: 'image/*'}">
+
+        <div vslot="trigger" class="avatar-uploader"
+          :style="{backgroundImage: avatarVal && avatarVal[0] ? 'url(' + avatarVal[0].url + ')' : 'none'}">
+          <span v-if="!avatarVal || !avatarVal[0]">+</span>
+        </div>
+
+      </div>
+      <div class="value-display" style="white-space: pre-wrap;">Value: {{avatarVal}}</div>
+    </div>
+  </div>
+
+  <!-- 3. 表单校验与提交 -->
+  <div class="demo-section">
+    <h3 class="v-mb-md">3. 表单校验与提交</h3>
+    <form id="demo-form" action="javascript:void(0);">
+
+      <div vsrc="/input" label="必填文本" required noborder placeholder="必须填写">
+      </div>
+
+      <div vsrc="/input" type="email" label="邮箱校验 (Regex)" :required="true" validate="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+        placeholder="example@mail.com">
+      </div>
+      <div vsrc="/input" type="email" label="邮箱校验" :required="true" placeholder="example@mail.com">
+      </div>
+
+      <div vsrc="/input" type="select" label="必选选项" :required="true" placeholder="请选择一项" :opts="{options: cityOptions}">
+      </div>
+
+      <div vsrc="/input" type="checkbox" :required="true" placeholder="我已阅读并同意相关协议 (必选)">
+      </div>
+
+      <div vsrc="/input" type="checkbox" label="必选兴趣 (至少一项)" :required="true" :opts="{options: hobbyOptions}">
+      </div>
+
+      <div vsrc="/input" type="radio" label="必选性别" :required="true" :opts="{options: genderOptions}">
+      </div>
+
+      <div class="v-flex v-gap-sm v-mt-md">
+        <div vsrc='/btn' type="submit" variant="default" @click="submitForm">提交表单 (Submit)</div>
+        <div vsrc='/btn' type="button" variant="outline" @click="resetForm">重置 (Reset)</div>
+      </div>
+    </form>
+  </div>
+</body>
+<script setup>
+  // Data
+  textVal = "Hello";
+  textareaVal = "This is a textarea.";
+  passVal = "";
+  numVal = 25;
+  selectVal = "shanghai";
+  simpleSelectVal = "red";
+  checkboxVal = false;
+  checkboxGroupVal = ["reading"];
+  radioVal = "male";
+  switchVal = false;
+  dateVal = "2023-10-01";
+  datetimeVal = "";
+  timeVal = "09:00";
+  sliderVal = 50;
+  rangeVal = [20, 80];
+  fileVal = [{name: 'InitialFile.pdf', url: 'https://example.com/InitialFile.pdf'}];
+  avatarVal = [];
+
+  // Options
+  genderOptions = [
+    {label: 'Male', value: 'male'},
+    {label: 'Female', value: 'female'},
+    {label: 'Other', value: 'other'}
+  ];
+
+  hobbyOptions = [
+    {label: 'Reading', value: 'reading'},
+    {label: 'Gaming', value: 'gaming'},
+    {label: 'Coding', value: 'coding'}
+  ];
+
+  cityOptions = [
+    {label: '北京', value: 'beijing'},
+    {label: '上海', value: 'shanghai'},
+    {label: '广州', value: 'guangzhou'},
+    {label: '深圳', value: 'shenzhen'}
+  ];
+  colorOptions = ["red", "green", "blue"];
+
+  // Validators
+  numValidator = (val) => {
+    const n = Number(val);
+    if (n < 0 || n > 100) return "Must be between 0 and 100";
+    return true;
+  };
+
+  mockUploader = (file, onProgress) => {
+    console.log(file)
+    return new Promise((resolve, reject) => {
+      let p = 0;
+      const interval = setInterval(() => {
+        p += 10;
+        onProgress(p);
+        if (p >= 100) {
+          clearInterval(interval);
+          resolve(`https://public.veypi.com/img/avatar/01${(Math.random() * 90 + 10).toFixed(0)}.jpg`);
+        }
+      }, 100);
+    });
+  };
+
+  // Methods
+  resetForm = () => {
+    document.getElementById('demo-form').reset();
+    // Reset reactive data manually because form.reset() only affects DOM elements not bound via v-model in vhtml (unless 2-way binding handles it, but vhtml might need manual reset for complex types)
+    // Actually vhtml v:value should update, but let's be safe or just let form.reset do its job if input listens to reset event?
+    // vhtml inputs don't listen to form reset event automatically. 
+    // So we should reset data.
+    textVal = "";
+    passVal = "";
+    numVal = "";
+    textareaVal = "";
+    selectVal = "";
+    checkboxVal = false;
+    checkboxGroupVal = [];
+    radioVal = "";
+    switchVal = false;
+    dateVal = "";
+    datetimeVal = "";
+    timeVal = "";
+    sliderVal = 50;
+    rangeVal = [20, 80];
+  };
+
+  submitForm = () => {
+    const form = document.getElementById('demo-form');
+    if (form.reportValidity()) {
+      $message.success("校验通过，正在提交...");
+      console.log("Form Data:", {
+        email, password, age, intro, country, checkboxVal, checkboxGroupVal, radioVal
+      });
+    } else {
+      $message.error("表单校验失败，请检查输入项。");
+    }
+  };
+</script>
+
+</html>

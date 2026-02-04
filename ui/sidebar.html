@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Sidebar Component">
+  <title>Sidebar</title>
+</head>
+<style>
+  .v-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-right: 1px solid var(--v-border-color);
+    transition: width var(--v-transition-base);
+    overflow: hidden;
+    background-color: var(--v-bg-color);
+    color: var(--v-text-color);
+  }
+
+  .v-sidebar-header {
+    padding: var(--v-spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--v-border-color);
+  }
+
+  .v-sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--v-spacing-sm) 0;
+  }
+
+  .v-sidebar-footer {
+    padding: var(--v-spacing-xs);
+    border-top: 1px solid var(--v-border-color);
+  }
+
+  /* Menu Items */
+  .v-menu-item {
+    display: flex;
+    align-items: center;
+    padding: var(--v-spacing-sm) var(--v-spacing-md);
+    cursor: pointer;
+    color: var(--v-text-color);
+    transition: background-color var(--v-transition-fast), color var(--v-transition-fast);
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    font-size: var(--v-font-size-md);
+    margin: 2px var(--v-spacing-sm);
+    border-radius: var(--v-radius-md);
+  }
+
+  .v-menu-item:hover {
+    background-color: var(--v-bg-color-secondary);
+    color: var(--v-color-primary);
+  }
+
+  .v-menu-item[active] {
+    background-color: var(--v-blue-50);
+    color: var(--v-color-primary);
+    font-weight: var(--v-font-weight-medium);
+  }
+
+  .v-menu-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: var(--v-spacing-sm);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .v-menu-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .v-menu-arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--v-transition-base);
+  }
+
+  .v-menu-arrow.is-expanded {
+    transform: rotate(180deg);
+  }
+
+  /* Submenu */
+  .v-submenu {
+    overflow: hidden;
+    transition: max-height var(--v-transition-base);
+  }
+
+  .v-submenu .v-menu-item {
+    padding-left: calc(var(--v-spacing-md) + 20px + var(--v-spacing-sm));
+    font-size: var(--v-font-size-sm);
+  }
+
+  /* Collapsed State */
+  .v-sidebar.is-collapsed .v-menu-label,
+  .v-sidebar.is-collapsed .v-menu-arrow,
+  .v-sidebar.is-collapsed .v-sidebar-header span {
+    display: none;
+  }
+
+  .v-sidebar.is-collapsed .v-menu-item {
+    justify-content: center;
+    padding: var(--v-spacing-sm);
+    margin: 2px 4px;
+  }
+
+  .v-sidebar.is-collapsed .v-menu-icon {
+    margin-right: 0;
+  }
+
+  /* Tooltip logic for collapsed state could be added here or via title attribute */
+
+  vslot {
+    display: contents;
+  }
+</style>
+
+<body>
+  <div class="v-sidebar" :class="collapsed ? 'is-collapsed' : ''" :style="{width: collapsed ? collapsedWidth : width}">
+
+    <!-- Header -->
+    <vslot v-if='!noheader' class="v-sidebar-header" name="header">
+    </vslot>
+
+    <!-- Body -->
+    <div class="v-sidebar-body">
+      <div v-for="item in items">
+
+        <!-- Parent Item (Group Header) -->
+        <div v-if="item.children" class="v-menu-item" @click="toggleExpand(item)" :title="collapsed ? item.label : ''">
+          <div class="v-menu-icon" v-if="item.icon" v-html="item.icon"></div>
+          <span class="v-menu-label">{{ item.label }}</span>
+          <svg v-if="!collapsed" class="v-menu-arrow" :class="item.expanded ? 'is-expanded' : ''" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+
+        <!-- Leaf Item (Link) -->
+        <a v-else class="v-menu-item" :href="pathPrefix + item.path" @click="$emit('select', item)"
+          :title="collapsed ? item.label : ''">
+          <div class="v-menu-icon" v-if="item.icon" v-html="item.icon"></div>
+          <span class="v-menu-label">{{ item.label }}</span>
+        </a>
+
+        <!-- Children -->
+        <div v-if="item.children && !collapsed" class="v-submenu" :style="{maxHeight: item.expanded ? '500px' : '0'}">
+          <a v-for="subItem in item.children" class="v-menu-item" :href="pathPrefix + subItem.path"
+            @click="$emit('select', subItem)" :title="subItem.label">
+            <div class="v-menu-icon" v-if="subItem.icon" v-html="subItem.icon"></div>
+            <span class="v-menu-label">{{ subItem.label }}</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="v-sidebar-footer">
+      <vslot name="footer"></vslot>
+    </div>
+  </div>
+</body>
+<script setup>
+  items = []; // [{label, icon, path, children, expanded}]
+  collapsed = false;
+  width = '240px';
+  collapsedWidth = '64px';
+  noheader = false
+  pathPrefix = '@/'
+
+  toggleExpand = (item) => {
+    item.expanded = !item.expanded;
+  };
+</script>
+<script>
+  let ofNode = $node.parentNode.closest('*[vref]')
+  pathPrefix = '@/' + ofNode.$env.root
+</script>
+
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vhtmlUI - 高效前端组件库</title>
+  <link href="/v/common.css" rel="stylesheet">
+  <script type="module" key='vhtml' src="/assets/vhtml.min.js"></script>
+  <style>
+    /* 基础布局样式 */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: var(--v-bg-color);
+      color: var(--v-text-color);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--v-border-color);
+    }
+
+    .theme-switcher {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--v-bg-color);
+      padding: 0.5rem;
+      border-radius: var(--v-radius-md);
+      box-shadow: var(--v-shadow-md);
+      border: 1px solid var(--v-border-color);
+      z-index: 100;
+    }
+
+    /* 主题 T1: 默认清爽风格 (覆盖 common.css 中的默认值) */
+    body[theme="t1"] {
+      --v-bg-color: #ffffff;
+      --v-bg-color-secondary: #f9fafb;
+      --v-text-color: #111827;
+      --v-color-primary: #3b82f6;
+      --v-color-primary-hover: #2563eb;
+      --v-radius-md: 4px;
+      --v-font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* 主题 T2: 暗黑/霓虹风格 */
+    body[theme="t2"] {
+      --v-bg-color: #0f172a;
+      --v-bg-color-secondary: #1e293b;
+      --v-text-color: #e2e8f0;
+      --v-text-color-secondary: #94a3b8;
+
+      --v-color-primary: #8b5cf6;
+      /* 紫色主调 */
+      --v-color-primary-hover: #7c3aed;
+      --v-color-primary-text: #ffffff;
+
+      --v-color-success: #10b981;
+      --v-color-danger: #f43f5e;
+
+      --v-border-color: #334155;
+      --v-radius-md: 12px;
+      /* 更大的圆角 */
+      --v-radius-sm: 8px;
+      --v-radius-lg: 16px;
+
+      --v-font-family: "Menlo", "Monaco", "Courier New", monospace;
+      /* 极客字体 */
+    }
+
+    /* 辅助样式 */
+    body .section-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      color: var(--v-text-color);
+      border-left: 4px solid var(--v-color-primary);
+      padding-left: 0.5rem;
+    }
+
+    body .demo-block {
+      background-color: var(--v-bg-color-secondary);
+      padding: 1.5rem;
+      border-radius: var(--v-radius-md);
+      border: 1px solid var(--v-border-color);
+      margin-bottom: 1.5rem;
+    }
+
+    body .demo-label {
+      font-size: 0.875rem;
+      color: var(--v-text-color-secondary);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+  </style>
+</head>
+
+<body :theme="theme" class="h-full w-full">
+
+  <!-- 主题切换器 -->
+  <div class="theme-switcher v-flex v-items-center v-gap-sm">
+    <span class="v-text-secondary v-font-bold">Theme:</span>
+    <div vsrc='/btn.html' size="sm" :type="theme === 't1' ? 'primary' : 'default'" @click="setTheme('t1')">Light (T1)
+    </div>
+    <div vsrc='/btn.html' size="sm" :type="theme === 't2' ? 'primary' : 'default'" @click="setTheme('t2')">Dark (T2)
+    </div>
+  </div>
+
+  <div class="container">
+    <header class="header">
+      <h1 class="v-font-bold" style="font-size: 2.5rem; color: var(--v-color-primary);">vhtmlUI</h1>
+      <p class="v-mt-sm v-text-secondary">一个基于 vhtml 框架构建的高效前端组件库</p>
+    </header>
+
+    <previews-btn class="demo-block"></previews-btn>
+    <previews-tree class="demo-block"></previews-tree>
+    <previews-sidebar class="demo-block"></previews-sidebar>
+    <previews-tabs class="demo-block"></previews-tabs>
+    <previews-dialog class="demo-block"></previews-dialog>
+    <previews-dropdown class="demo-block"></previews-dropdown>
+    <previews-input class="demo-block"></previews-input>
+    <previews-form class="demo-block"></previews-form>
+  </div>
+
+  <script setup>
+    theme = 't1';
+    inputValue1 = '';
+
+    setTheme = (t) => {
+      theme = t;
+    };
+
+  </script>
+
+</html>

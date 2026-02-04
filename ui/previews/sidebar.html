@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sidebar Component Demo">
+  <title>Sidebar Demo</title>
+</head>
+<style>
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .layout-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
+  .main-content {
+    flex: 1;
+    padding: var(--v-spacing-lg);
+    background-color: var(--v-bg-color-secondary);
+    overflow-y: auto;
+    transition: all var(--v-transition-base);
+  }
+
+  .header-logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--v-color-primary);
+    white-space: nowrap;
+  }
+
+  .toggle-btn {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--v-border-color);
+    background: var(--v-bg-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<body layout="default">
+  <div class="layout-container">
+
+    <!-- Sidebar -->
+    <div vsrc="/sidebar" :items="menuItems" v:collapsed="isCollapsed">
+
+      <div vslot="header" class="header-logo">
+        <span v-if="!isCollapsed">Admin</span>
+        <span v-else>V</span>
+      </div>
+
+      <div vslot="footer" class="v-text-center">
+        <div class="toggle-btn" @click="toggleSidebar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path v-if="!isCollapsed" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            <path v-else d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="v-container">
+        <h1>{{ getPageTitle(currentPath) }}</h1>
+        <p class="v-text-secondary">当前路径: {{ currentPath }}</p>
+
+        <div class="v-mt-lg v-p-md" style="background: white; border-radius: 8px; border: 1px solid #eee;">
+          <p>这是内容区域。侧边栏状态: {{ isCollapsed ? '折叠' : '展开' }}</p>
+          <div class="v-mt-md">
+            <button class="toggle-btn" @click="toggleSidebar">切换侧边栏</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+<script setup>
+  isCollapsed = false;
+  currentPath = '/dashboard';
+
+  // Helper icons
+  const iconHome = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
+  const iconUser = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+  const iconSettings = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>';
+
+  menuItems = [
+    {label: '仪表盘', icon: iconHome, path: '/dashboard'},
+    {
+      label: '用户管理',
+      icon: iconUser,
+      path: '/users',
+      children: [
+        {label: '用户列表', path: '/users/list'},
+        {label: '角色权限', path: '/users/roles'}
+      ]
+    },
+    {label: '系统设置', icon: iconSettings, path: '/settings'}
+  ];
+
+  toggleSidebar = () => {
+    isCollapsed = !isCollapsed;
+  };
+
+  getPageTitle = (path) => {
+    if (path === '/dashboard') return '仪表盘';
+    if (path.startsWith('/users')) return '用户管理';
+    if (path === '/settings') return '系统设置';
+    return '未知页面';
+  };
+</script>
+
+</html>

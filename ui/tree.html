@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Tree Component">
+  <title>Tree</title>
+</head>
+<style>
+  /* No visual styles, just structure */
+  vslot {
+    display: contents;
+  }
+
+  .v-tree-children {
+    overflow: hidden;
+  }
+
+  .v-tree {
+    user-select: none;
+    cursor: pointer;
+  }
+</style>
+
+<body>
+  <div class="v-tree">
+    <div v-for="row in data" class="v-tree-node">
+      <div @click="toggle(row)">
+        <vslot name="row" vbind="row, depth">
+          <div :style="{paddingLeft: (depth * 20) + 'px'}">
+            {{ row.name }}
+          </div>
+        </vslot>
+      </div>
+
+      <div v-if="row.children && row.expand" class="v-tree-children">
+        <!-- Recursive call -->
+        <div vsrc="/tree" :data="row.children" :depth="depth + 1">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script setup>
+  data = []
+  depth = 0
+
+  toggle = (node) => {
+    node.expand = !node.expand
+  }
+</script>
+
+</html>

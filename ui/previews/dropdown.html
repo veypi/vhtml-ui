@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div class="section-title">Dropdown 下拉菜单</div>
+
+  <div class="v-mb-md">
+    <span class="demo-label">基础用法</span>
+    <div class="v-flex v-gap-md">
+        <div vsrc='/dropdown.html' :items="menuItems" @command="handleCommand">
+            <div vsrc='/btn.html'>
+                Dropdown List
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="v-ml-xs">
+                    <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div vsrc='/dropdown.html' :items="menuItems" placement="top-end">
+            <div vsrc='/btn.html' variant="outline">Top End</div>
+        </div>
+    </div>
+  </div>
+
+  <div class="v-mb-md">
+    <span class="demo-label">自定义菜单内容</span>
+    <div class="v-flex v-gap-md">
+        <div vsrc='/dropdown.html'>
+            <div vsrc='/btn.html' variant="secondary">Custom Menu</div>
+            <div vslot="menu" class="v-p-sm">
+                <div class="v-text-secondary v-text-xs v-mb-xs">User Info</div>
+                <div class="v-font-bold">Admin</div>
+                <div class="v-my-sm" style="border-top: 1px solid var(--v-border-color)"></div>
+                <div vsrc='/btn.html' size="sm" :block="true">Logout</div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+</body>
+<script setup>
+  menuItems = [
+      { label: "Action 1", value: "1" },
+      { label: "Action 2", value: "2" },
+      { label: "Action 3", value: "3", divided: true },
+      { label: "Disabled", value: "4", disabled: true }
+  ];
+
+  handleCommand = (val) => {
+      $message.info("Selected: " + val);
+  }
+</script>
+</html>

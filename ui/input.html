@@ -1,0 +1,1148 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Unified Input Component">
+  <title>Input</title>
+</head>
+<style>
+  body {
+    display: block;
+    width: 100%;
+  }
+
+  .v-input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--v-spacing-md);
+    width: 100%;
+  }
+
+  .v-label {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color);
+    font-weight: var(--v-font-weight-medium);
+    min-width: 80px;
+    flex-shrink: 0;
+    padding-top: 10px;
+    line-height: 1.5;
+  }
+
+  .v-label.is-required::after {
+    content: "*";
+    color: var(--v-color-danger);
+    margin-left: 4px;
+  }
+
+  .v-input-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  /* Wrapper for Text, Password, Number, Search, etc. */
+  .v-input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    background-color: var(--v-bg-color);
+    border-radius: var(--v-radius-md);
+    border: 1px solid var(--v-border-color);
+    box-sizing: border-box;
+    transition: var(--v-transition-base, all 0.2s);
+    overflow: hidden;
+  }
+
+  .v-input-wrapper:hover:not(.is-disabled) {
+    border-color: var(--v-border-color-hover);
+  }
+
+  .v-input-wrapper:has(:focus-visible):not(.is-disabled) {
+    border-color: var(--v-color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--v-color-primary) 50%, transparent);
+  }
+
+  .v-input-wrapper.is-disabled {
+    background-color: var(--v-bg-color-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .v-input-wrapper.is-error {
+    border-color: var(--v-color-danger);
+  }
+
+  .v-input-wrapper.is-error:has(:focus-visible) {
+    border-color: var(--v-color-danger);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--v-color-danger) 50%, transparent);
+  }
+
+  .v-input__inner {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    color: var(--v-text-color);
+    font-size: var(--v-font-size-md);
+    outline: none;
+    padding: var(--v-spacing-sm) var(--v-spacing-md);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .v-input__inner::placeholder {
+    color: var(--v-text-color-disabled);
+  }
+
+  .v-input__inner:disabled {
+    cursor: not-allowed;
+  }
+
+  .v-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--v-spacing-md);
+    min-height: 40px;
+    align-items: center;
+  }
+
+  .v-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: var(--v-font-size-md);
+    color: var(--v-text-color);
+    user-select: none;
+  }
+
+  .v-checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--v-color-primary);
+  }
+
+  .v-checkbox-label.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .v-checkbox-label.is-disabled input {
+    cursor: not-allowed;
+  }
+
+  .v-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--v-spacing-md);
+    min-height: 40px;
+    align-items: center;
+  }
+
+  .v-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: var(--v-font-size-md);
+    color: var(--v-text-color);
+    user-select: none;
+  }
+
+  .v-radio-label input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--v-color-primary);
+  }
+
+  .v-radio-label.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .v-radio-label.is-disabled input {
+    cursor: not-allowed;
+  }
+
+  .v-error-msg {
+    font-size: var(--v-font-size-xs);
+    color: var(--v-color-danger);
+    min-height: 1.2em;
+  }
+
+  .v-switch {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    font-size: var(--v-font-size-md);
+    line-height: 20px;
+    height: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .v-switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    margin: 0;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .v-switch-core {
+    margin: 0;
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 20px;
+    border: 1px solid var(--v-border-color);
+    outline: none;
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: var(--v-bg-color-secondary);
+    cursor: pointer;
+    transition: border-color .3s, background-color .3s;
+    vertical-align: middle;
+  }
+
+  .v-switch-core:after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    border-radius: 100%;
+    transition: all .3s;
+    width: 16px;
+    height: 16px;
+    background-color: var(--v-bg-color);
+  }
+
+  .v-switch.is-checked .v-switch-core {
+    border-color: var(--v-color-primary);
+    background-color: var(--v-color-primary);
+  }
+
+  .v-switch.is-checked .v-switch-core:after {
+    left: 100%;
+    margin-left: -17px;
+  }
+
+  .v-switch.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .v-switch.is-disabled .v-switch-core {
+    cursor: not-allowed;
+  }
+
+  .v-switch-label {
+    margin-left: 10px;
+    color: var(--v-text-color);
+  }
+
+  .v-slider-wrapper {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    gap: 10px;
+    overflow: visible !important;
+    height: 40px;
+    /* Match standard input height */
+    display: flex;
+    align-items: center;
+  }
+
+  .v-slider__inner {
+    width: 100%;
+    cursor: pointer;
+    accent-color: var(--v-color-primary);
+    height: 6px;
+    background: var(--v-bg-color-secondary);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    /* Override default look */
+  }
+
+  /* Webkit thumb (Chrome, Safari, Edge) */
+  .v-slider__inner::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--v-color-primary);
+    cursor: pointer;
+    border: 2px solid var(--v-bg-color);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s;
+    margin-top: -5px;
+    /* Adjust vertical position because track height is 6px */
+  }
+
+  .v-slider__inner::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+
+  /* Webkit track */
+  .v-slider__inner::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: var(--v-border-color);
+    border-radius: 3px;
+  }
+
+  .v-slider__inner:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    accent-color: var(--v-text-color-disabled);
+  }
+
+  .v-slider-value {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color);
+    min-width: 30px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Range Component Styles */
+  .v-range-wrapper {
+    height: 40px;
+    /* Match standard input height */
+    display: flex;
+    align-items: center;
+    position: relative;
+    user-select: none;
+    touch-action: none;
+    padding: 0 8px !important;
+    /* Add padding for thumbs */
+    border: none !important;
+    /* Remove border from wrapper */
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  .v-range-track {
+    width: 100%;
+    height: 6px;
+    background: var(--v-bg-color-secondary);
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .v-range-progress {
+    position: absolute;
+    height: 100%;
+    background: var(--v-color-primary);
+    border-radius: 3px;
+    top: 0;
+    pointer-events: none;
+  }
+
+  .v-range-thumb {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--v-color-primary);
+    border: 2px solid var(--v-bg-color);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    cursor: grab;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  .v-range-thumb:active {
+    cursor: grabbing;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .v-range-tooltip {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--v-color-text-primary, #333);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    white-space: nowrap;
+    opacity: 0.9;
+    z-index: 10;
+  }
+
+  /* File Component Styles */
+  .v-file-wrapper {
+    padding: 0 !important;
+    min-height: 40px;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: var(--v-bg-color);
+  }
+
+  .v-file-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--v-spacing-md);
+    height: 40px;
+    cursor: pointer;
+    user-select: none;
+    color: var(--v-text-color-secondary);
+  }
+
+  .v-file-trigger:hover {
+    color: var(--v-text-color);
+  }
+
+  .v-file-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--v-border-color);
+    background: var(--v-bg-color-secondary);
+  }
+
+  .v-file-item {
+    display: flex;
+    align-items: center;
+    padding: 8px var(--v-spacing-md);
+    gap: 8px;
+    font-size: var(--v-font-size-sm);
+    border-bottom: 1px solid var(--v-border-color);
+    position: relative;
+  }
+
+  .v-file-item:last-child {
+    border-bottom: none;
+  }
+
+  .v-file-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .v-file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--v-text-color);
+  }
+
+  .v-file-name.is-link {
+    color: var(--v-color-primary);
+    text-decoration: none;
+  }
+
+  .v-file-meta {
+    font-size: 11px;
+    color: var(--v-text-color-tertiary);
+    display: flex;
+    gap: 8px;
+  }
+
+  .v-file-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .v-file-btn {
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    border: 1px solid var(--v-border-color);
+    background: var(--v-bg-color);
+    color: var(--v-text-color-secondary);
+  }
+
+  .v-file-btn:hover {
+    color: var(--v-color-primary);
+    border-color: var(--v-color-primary);
+  }
+
+  .v-file-btn.is-danger:hover {
+    color: var(--v-color-danger);
+    border-color: var(--v-color-danger);
+  }
+
+  .v-file-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--v-color-primary);
+    transition: width 0.2s;
+    opacity: 0.6;
+  }
+
+  .v-file-status-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .v-text-success {
+    color: var(--v-color-success);
+  }
+
+  .v-text-danger {
+    color: var(--v-color-danger);
+  }
+
+  .v-text-warning {
+    color: var(--v-color-warning);
+  }
+
+  .v-input-wrapper.is-no-border {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<body>
+  <div class="v-input-container">
+    <label v-if="label" class="v-label" :class="{ 'is-required': required }">{{ label }}</label>
+
+    <div class="v-input-content">
+      <!-- Basic Input Types -->
+      <div v-if="isBasic()" class="v-input-wrapper" :class="wrapperClass">
+        <input class="v-input__inner" :type="type === 'datetime' ? 'datetime-local' : type" :value="value"
+          :placeholder="placeholder" :disabled="disabled" :required='required' :readonly="readonly" @input="handleInput"
+          @blur="handleBlur" @focus="handleFocus" />
+      </div>
+      <div v-else-if='type==="textarea"' class="v-input-wrapper" :class="wrapperClass">
+        <textarea class="v-input__inner" :value="value" :placeholder="placeholder" :disabled="disabled"
+          :required='required' :readonly="readonly" @input="handleInput" @blur="handleBlur" @focus="handleFocus"
+          :rows="opts.rows || 3" style="resize: vertical;"></textarea>
+      </div>
+      <div v-else-if='type==="select"' class="v-input-wrapper" :class="wrapperClass">
+        <select class="v-input__inner" :value="value" :disabled="disabled" :required="required" @change="handleInput"
+          @blur="handleBlur" @focus="handleFocus" style="cursor: pointer;">
+          <option v-if="placeholder" value="" disabled selected hidden>{{ placeholder }}</option>
+          <option v-for="opt in opts.options" :value="opt.value !== undefined ? opt.value : opt"
+            :selected="(opt.value !== undefined ? opt.value : opt) == value">
+            {{ opt.label !== undefined ? opt.label : opt }}
+          </option>
+        </select>
+      </div>
+      <div v-else-if='type==="checkbox"'>
+        <!-- Checkbox Group -->
+        <div v-if="opts.options" class="v-checkbox-group">
+          <label v-for="(opt, index) in opts.options" :key="index" class="v-checkbox-label"
+            :class="{ 'is-disabled': disabled || opt.disabled }">
+            <input type="checkbox" :value="opt.value !== undefined ? opt.value : opt"
+              :checked="Array.isArray(value) && value.includes(opt.value !== undefined ? opt.value : opt)"
+              :disabled="disabled || opt.disabled" @change="handleCheckboxChange">
+            <span>{{ opt.label !== undefined ? opt.label : opt }}</span>
+          </label>
+        </div>
+        <!-- Single Checkbox -->
+        <div v-else class="v-checkbox-group">
+          <label class="v-checkbox-label" :class="{ 'is-disabled': disabled }">
+            <input type="checkbox" :checked="value" :disabled="disabled" :required="required"
+              @change="handleCheckboxChange">
+            <span>{{ placeholder }}</span>
+          </label>
+        </div>
+      </div>
+      <div v-else-if='type==="radio"'>
+        <div v-if="opts.options" class="v-radio-group">
+          <label v-for="opt in opts.options" class="v-radio-label" :class="{ 'is-disabled': disabled || opt.disabled }">
+            <input type="radio" :name="name || uniqueName" :value="opt.value !== undefined ? opt.value : opt"
+              :checked="value === (opt.value !== undefined ? opt.value : opt)" :disabled="disabled || opt.disabled"
+              :required="required" @change="handleRadioChange">
+            <span>{{ opt.label !== undefined ? opt.label : opt }}</span>
+          </label>
+        </div>
+      </div>
+      <div v-else-if='type==="switch"'>
+        <label class="v-switch" :class="{ 'is-checked': value, 'is-disabled': disabled }">
+          <input type="checkbox" :checked="value" :disabled="disabled" :required="required"
+            @change="handleCheckboxChange">
+          <span class="v-switch-core"></span>
+          <span v-if="placeholder" class="v-switch-label">{{ placeholder }}</span>
+        </label>
+      </div>
+      <div v-else-if='type==="slider"' class="v-input-wrapper v-slider-wrapper" :class="wrapperClass">
+        <input type="range" class="v-slider__inner" :value="value" :min="opts.min !== undefined ? opts.min : 0"
+          :max="opts.max !== undefined ? opts.max : 100" :step="opts.step !== undefined ? opts.step : 1"
+          :disabled="disabled" @input="handleInput" @change="handleInput" @blur="handleBlur" @focus="handleFocus" />
+        <span v-if="opts.showValue" class="v-slider-value">{{ value }}</span>
+      </div>
+      <div v-else-if='type==="range"' class="v-input-wrapper v-range-wrapper" :class="wrapperClass">
+        <div class="v-range-track">
+          <div class="v-range-progress"
+            :style="{left: getRangePct(Array.isArray(value) ? value[0] : 0) + '%', width: (getRangePct(Array.isArray(value) ? value[1] : 100) - getRangePct(Array.isArray(value) ? value[0] : 0)) + '%'}">
+          </div>
+        </div>
+
+        <div class="v-range-thumb" :style="{left: getRangePct(Array.isArray(value) ? value[0] : 0) + '%'}"
+          @mousedown="handleRangeStart($event, 'min')" @touchstart="handleRangeStart($event, 'min')">
+          <div v-if="opts.showValue" class="v-range-tooltip">{{ Array.isArray(value) ? value[0] : 0 }}</div>
+        </div>
+
+        <div class="v-range-thumb" :style="{left: getRangePct(Array.isArray(value) ? value[1] : 100) + '%'}"
+          @mousedown="handleRangeStart($event, 'max')" @touchstart="handleRangeStart($event, 'max')">
+          <div v-if="opts.showValue" class="v-range-tooltip">{{ Array.isArray(value) ? value[1] : 100 }}</div>
+        </div>
+      </div>
+      <div v-else-if='type==="file"' class="v-input-wrapper v-file-wrapper" :class="wrapperClass">
+        <input type="file" style="display: none" :disabled="disabled" :name="name||label" :required="required"
+          :accept="opts.accept" :multiple="opts.multiple" @change="handleFileChange" />
+
+        <!-- Trigger Area -->
+        <div @click="triggerFileSelect" style="cursor: pointer; display: block;">
+          <vslot name="trigger">
+            <div class="v-file-trigger">
+              <span>{{ placeholder || 'Choose file...' }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+          </vslot>
+        </div>
+
+        <!-- File List -->
+        <div v-if="internalFiles.length > 0 && opts.showList !== false" class="v-file-list">
+          <div v-for="file in internalFiles" :key="file.id" class="v-file-item">
+            <!-- Status Icon -->
+            <div class="v-file-status-icon">
+              <svg v-if="file.status === 'success'" class="v-text-success" xmlns="http://www.w3.org/2000/svg" width="14"
+                height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <svg v-else-if="file.status === 'error'" class="v-text-danger" xmlns="http://www.w3.org/2000/svg"
+                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <svg v-else-if="file.status === 'uploading'" class="v-text-warning" xmlns="http://www.w3.org/2000/svg"
+                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="2" x2="12" y2="6"></line>
+                <line x1="12" y1="18" x2="12" y2="22"></line>
+                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                <line x1="2" y1="12" x2="6" y2="12"></line>
+                <line x1="18" y1="12" x2="22" y2="12"></line>
+                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+
+            <!-- File Info -->
+            <div class="v-file-info">
+              <a v-if="file.url" :href="file.url" target="_blank" class="v-file-name is-link">{{ file.name }}</a>
+              <span v-else class="v-file-name">{{ file.name }}</span>
+
+              <div class="v-file-meta">
+                <span v-if="file.status === 'error'" class="v-text-danger">Upload failed</span>
+                <span v-else-if="file.status === 'uploading'" class="v-text-warning">Uploading {{ file.progress
+                  }}%</span>
+                <span v-else-if="file.status === 'pending'">Waiting for upload</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="v-file-actions">
+              <button v-if="file.status === 'pending' || file.status === 'error'" class="v-file-btn"
+                @click.stop="uploadFile(file)">
+                Upload
+              </button>
+              <button class="v-file-btn is-danger" @click.stop="removeFile(file)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div v-if="file.status === 'uploading'" class="v-file-progress-bar" :style="{ width: file.progress + '%' }">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        Not supported input type {{ type }}
+      </div>
+
+      <div v-if="errorMsg" class="v-error-msg">{{ errorMsg }}</div>
+    </div>
+  </div>
+</body>
+<script setup>
+  // Props
+  type = "text"; // text, password, number, etc.
+  value = "";
+  label = "";
+  name = "";
+  placeholder = "";
+  disabled = false;
+  readonly = false;
+  required = false;
+  noborder = false;
+
+  // validation: regex or function(val) -> true/string
+  validate = null;
+
+  // opts: extra options for different input types
+  opts = {};
+
+  // Internal state
+  errorMsg = "";
+  isFocused = false;
+  uniqueName = 'radio_' + Math.random().toString(36).substr(2, 9);
+
+  basicTypes = ['text', 'password', 'number', 'email', 'search', 'tel', 'url', 'date', 'datetime-local', 'time', 'month', 'week', 'datetime'];
+  isBasic = () => basicTypes.includes(type);
+
+  wrapperClass = () => {
+    let cls = [];
+    if (disabled) cls.push("is-disabled");
+    if (errorMsg) cls.push("is-error");
+    if (noborder) cls.push("is-no-border");
+    return cls.join(" ");
+  }
+
+
+  validateValue = (val, target) => {
+    // Reset custom validity to check native validity correctly
+    if (target && target.setCustomValidity) {
+      target.setCustomValidity("");
+    }
+
+    let isValid = true;
+    let msg = "";
+
+    // 1. Required check (Highest priority)
+    if (required) {
+      if (val === "" || val === null || val === undefined) {
+        isValid = false;
+      } else if (Array.isArray(val) && val.length === 0) {
+        isValid = false;
+      } else if ((type === 'checkbox' || type === 'switch') && !opts.options && val === false) {
+        isValid = false;
+      }
+
+      if (!isValid) {
+        if (type === 'file' && internalFiles.some(f => f.status === 'pending' || f.status === 'uploading')) {
+          msg = "Please upload selected files";
+        } else {
+          msg = "Please fill out this field.";
+        }
+      }
+    }
+    // 2. Custom validation (Regex or Function)
+    else if (validate) {
+      if (typeof validate === 'function') {
+        const res = validate(val);
+        if (res === true) {
+          isValid = true;
+        } else {
+          isValid = false;
+          msg = res || "Invalid value";
+        }
+      } else if (validate instanceof RegExp) {
+        if (!validate.test(val)) {
+          isValid = false;
+          msg = "Format incorrect";
+        }
+      } else if (typeof validate === 'string') {
+        const regex = new RegExp(validate);
+        if (!regex.test(val)) {
+          isValid = false;
+          msg = "Format incorrect";
+        }
+      }
+    }
+    // 3. Native validation (Fallback)
+    else if (target && target.validity && !target.validity.valid) {
+      isValid = false;
+      msg = target.validationMessage;
+    }
+
+    // 4. File Pending Check
+    if (type === 'file' && isValid) {
+      const uploading = internalFiles.some(f => f.status === 'uploading');
+      if (uploading) {
+        isValid = false;
+        msg = "Files are uploading, please wait...";
+      } else {
+        const pending = internalFiles.some(f => f.status === 'pending');
+        if (pending) {
+          isValid = false;
+          msg = "Please upload selected files";
+        }
+      }
+
+      if (isValid) { // Only check error if no pending/uploading
+        const error = internalFiles.some(f => f.status === 'error');
+        if (error) {
+          isValid = false;
+          msg = "Some files failed to upload";
+        }
+      }
+    }
+
+    errorMsg = msg;
+    if (target && target.setCustomValidity) {
+      target.setCustomValidity(isValid ? "" : msg);
+    }
+
+    return isValid;
+  }
+
+  handleInput = (e) => {
+    const val = e.target.value;
+    value = val;
+    validateValue(val, e.target);
+  }
+
+  handleCheckboxChange = (e) => {
+    const target = e.target;
+    if (opts.options) {
+      // Group mode
+      const val = target.value;
+      const checked = target.checked;
+      let newValue = Array.isArray(value) ? [...value] : [];
+
+      let originalVal = val;
+      const foundOpt = opts.options.find(opt => {
+        const v = opt.value !== undefined ? opt.value : opt;
+        return String(v) === val;
+      });
+      if (foundOpt) {
+        originalVal = foundOpt.value !== undefined ? foundOpt.value : foundOpt;
+      }
+
+      if (checked) {
+        if (!newValue.includes(originalVal)) newValue.push(originalVal);
+      } else {
+        newValue = newValue.filter(v => v !== originalVal);
+      }
+      value = newValue;
+
+      // Update validity for all checkboxes in the group to ensure consistent state
+      setTimeout(() => {
+        const inputs = $node.querySelectorAll('input[type="checkbox"]');
+        inputs.forEach(input => validateValue(value, input));
+      }, 0);
+    } else {
+      // Single mode
+      value = target.checked;
+      validateValue(value, target);
+    }
+  }
+
+  handleRadioChange = (e) => {
+    const target = e.target;
+    const val = target.value;
+    let originalVal = val;
+
+    if (opts.options) {
+      const foundOpt = opts.options.find(opt => {
+        const v = opt.value !== undefined ? opt.value : opt;
+        return String(v) === val;
+      });
+      if (foundOpt) {
+        originalVal = foundOpt.value !== undefined ? foundOpt.value : foundOpt;
+      }
+    }
+
+    if (target.checked) {
+      value = originalVal;
+      validateValue(value, target);
+    }
+  }
+
+  handleBlur = (e) => {
+    isFocused = false;
+    validateValue(value, e.target);
+    $emit("blur", e);
+  }
+
+  handleFocus = (e) => {
+    isFocused = true;
+    $emit("focus", e);
+  }
+
+  // Range Logic
+  rangeDragState = {active: false};
+
+  // File Logic
+  internalFiles = []; // { id, name, url, file, status, progress }
+
+  syncFilesFromValue = () => {
+    if (type !== 'file') return;
+
+    let valList = [];
+    if (Array.isArray(value)) {
+      valList = value;
+    } else if (value) {
+      valList = [value];
+    }
+
+    // Merge logic: Add files from value that are not in internalFiles (by url)
+    valList.forEach(v => {
+      const url = v.url || v;
+      const name = v.name || url.split('/').pop() || 'File';
+      const exists = internalFiles.find(f => f.url === url);
+      if (!exists) {
+        internalFiles.push({
+          id: Math.random().toString(36).substr(2, 9),
+          name: name,
+          url: url,
+          status: 'success',
+          progress: 100
+        });
+      }
+    });
+
+    // Remove files from internalFiles that are 'success' but not in value
+    if (!value || (Array.isArray(value) && value.length === 0)) {
+      internalFiles = internalFiles.filter(f => {
+        // if (f.status !== 'success') return true; // Keep pending/uploading
+        return valList.some(v => (v.url || v) === f.url);
+      });
+    }
+  }
+
+
+  triggerFileSelect = (e) => {
+    if (disabled) return;
+    const input = e.currentTarget.parentElement.querySelector('input[type="file"]');
+    if (input) input.click();
+  }
+
+  handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    // Clear previous if not multiple
+    if (!opts.multiple) {
+      internalFiles = [];
+    }
+
+    // Add to internalFiles
+    files.forEach(f => {
+      const fileObj = {
+        id: Math.random().toString(36).substr(2, 9),
+        name: f.name,
+        file: f,
+        status: 'pending',
+        progress: 0
+      };
+      internalFiles.push(fileObj);
+
+      if (opts.autoUpload !== false) { // Default true
+        // IMPORTANT: Use the reactive object from the array, not the local plain object 'fileObj'
+        // This ensures that property updates (like progress) trigger view updates.
+        const reactiveFile = internalFiles.find(item => item.id === fileObj.id);
+        if (reactiveFile) {
+          uploadFile(reactiveFile);
+        }
+      }
+    });
+
+    // Reset input
+    e.target.value = "";
+
+    validateValue(value, null);
+  }
+
+  uploadFile = (fileObj) => {
+    if (!opts.uploader) {
+      // Mock success if no uploader provided? Or error?
+      console.warn("No uploader provided in opts");
+      return;
+    }
+
+    fileObj.status = 'uploading';
+    fileObj.progress = 0;
+
+    opts.uploader(fileObj.file, (progress) => {
+      fileObj.progress = progress;
+    }).then(url => {
+      console.log(url)
+      fileObj.status = 'success';
+      fileObj.url = url;
+      fileObj.progress = 100;
+      syncValue();
+    }).catch(err => {
+      console.error(err);
+      fileObj.status = 'error';
+      validateValue(value, null);
+    });
+
+    validateValue(value, null);
+  }
+
+  removeFile = (fileObj) => {
+    internalFiles = internalFiles.filter(f => f.id !== fileObj.id);
+    syncValue();
+  }
+
+  syncValue = () => {
+    // Filter success files
+    const successFiles = internalFiles.filter(f => f.status === 'success');
+    const newVal = successFiles.map(f => ({
+      name: f.name,
+      url: f.url
+    }));
+
+    // Update value
+    value = newVal; // If multiple=false? 
+    // User said value is list [{name, url}]
+
+    $emit("change", value);
+    validateValue(value, null);
+  }
+
+  getRangePct = (val) => {
+    const min = opts.min !== undefined ? opts.min : 0;
+    const max = opts.max !== undefined ? opts.max : 100;
+    let p = (val - min) / (max - min) * 100;
+    if (p < 0) p = 0;
+    if (p > 100) p = 100;
+    return p;
+  }
+
+  handleRangeStart = (e, thumbType) => {
+    e.preventDefault();
+    const touch = e.touches ? e.touches[0] : e;
+    const wrapper = e.target.closest('.v-range-wrapper');
+    const track = wrapper.querySelector('.v-range-track');
+
+    rangeDragState = {
+      active: true,
+      type: thumbType,
+      startX: touch.clientX,
+      rect: track.getBoundingClientRect()
+    };
+
+    document.addEventListener('mousemove', handleRangeMove);
+    document.addEventListener('mouseup', handleRangeEnd);
+    document.addEventListener('touchmove', handleRangeMove, {passive: false});
+    document.addEventListener('touchend', handleRangeEnd);
+  }
+
+  handleRangeMove = (e) => {
+    if (!rangeDragState || !rangeDragState.active) return;
+    if (e.preventDefault) e.preventDefault();
+
+    const touch = e.touches ? e.touches[0] : e;
+    const dx = touch.clientX - rangeDragState.rect.left;
+    const width = rangeDragState.rect.width;
+    let pct = dx / width;
+    if (pct < 0) pct = 0;
+    if (pct > 1) pct = 1;
+
+    const min = opts.min !== undefined ? opts.min : 0;
+    const max = opts.max !== undefined ? opts.max : 100;
+    const step = opts.step !== undefined ? opts.step : 1;
+
+    let rawVal = min + pct * (max - min);
+    let newVal = Math.round(rawVal / step) * step;
+    if (newVal < min) newVal = min;
+    if (newVal > max) newVal = max;
+
+    let currentVal = Array.isArray(value) ? [...value] : [min, max];
+    if (currentVal.length < 2) currentVal = [min, max];
+
+    if (rangeDragState.type === 'min') {
+      if (newVal > currentVal[1]) newVal = currentVal[1];
+      currentVal[0] = newVal;
+    } else {
+      if (newVal < currentVal[0]) newVal = currentVal[0];
+      currentVal[1] = newVal;
+    }
+
+    value = currentVal;
+  }
+
+  handleRangeEnd = () => {
+    rangeDragState = {active: false};
+    document.removeEventListener('mousemove', handleRangeMove);
+    document.removeEventListener('mouseup', handleRangeEnd);
+    document.removeEventListener('touchmove', handleRangeMove);
+    document.removeEventListener('touchend', handleRangeEnd);
+
+    $emit('change', value);
+  }
+
+</script>
+<script>
+  updateCheckboxGroupValidity = () => {
+    if ($data.required && $data.type === 'checkbox' && $data.opts.options) {
+      const val = $data.value;
+      const inputs = $node.querySelectorAll('input[type="checkbox"]');
+      let msg = "";
+      if (!val || !Array.isArray(val) || val.length === 0) {
+        msg = "Please select at least one option.";
+      }
+      if (!msg && $data.validate) {
+      }
+      if (msg) {
+        inputs.forEach(input => {
+          if (input.setCustomValidity) input.setCustomValidity(msg);
+        });
+      }
+    }
+  }
+
+
+  $watch(() => $data.value, () => {
+    if ($data.type === 'file' && $data.syncFilesFromValue) {
+      $data.syncFilesFromValue();
+    }
+    if ($data.type === 'checkbox' && $data.opts.options) {
+      updateCheckboxGroupValidity();
+    }
+  })
+</script>
+
+</html>
