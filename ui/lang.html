@@ -14,57 +14,104 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 36px;
+    height: 36px;
     cursor: pointer;
-    padding: var(--v-spacing-xs) var(--v-spacing-sm);
     border-radius: var(--v-radius-full);
-    background-color: var(--v-bg-color-tertiary);
+    background-color: var(--v-bg-color);
     transition: all var(--v-transition-base);
     border: 1px solid var(--v-border-color);
     user-select: none;
-    min-width: 64px;
+    position: relative;
+    overflow: hidden;
   }
 
   .lang-toggle:hover {
-    background-color: var(--v-bg-color-secondary);
-    border-color: var(--v-border-color-hover);
+    border-color: var(--v-color-primary);
     box-shadow: var(--v-shadow-sm);
+    transform: translateY(-1px);
   }
 
   .lang-toggle:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
   }
 
-  .lang-option {
-    font-size: var(--v-font-size-sm);
-    color: var(--v-text-color-tertiary);
-    font-weight: var(--v-font-weight-medium);
-    transition: all var(--v-transition-fast);
-    line-height: 1;
-    padding: 2px 4px;
-    border-radius: var(--v-radius-sm);
+  .lang-icon {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    transition: all var(--v-transition-base);
   }
 
-  .lang-option.active {
-    color: var(--v-color-primary);
+  /* 中文图标 - 默认显示 */
+  .icon-zh {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .lang-toggle.en .icon-zh {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+
+  /* 英文图标 - 默认隐藏 */
+  .icon-en {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+  }
+
+  .lang-toggle.en .icon-en {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  /* 图标颜色 */
+  .lang-icon :deep(path),
+  .lang-icon :deep(circle),
+  .lang-icon :deep(line),
+  .lang-icon :deep(rect) {
+    stroke: var(--v-text-color-secondary);
+    transition: stroke var(--v-transition-fast);
+  }
+
+  .lang-toggle:hover .lang-icon :deep(path),
+  .lang-toggle:hover .lang-icon :deep(circle),
+  .lang-toggle:hover .lang-icon :deep(line),
+  .lang-toggle:hover .lang-icon :deep(rect) {
+    stroke: var(--v-color-primary);
+  }
+
+  /* 文字样式 */
+  .lang-text {
+    font-size: 11px;
     font-weight: var(--v-font-weight-bold);
-    background-color: var(--v-bg-color);
-    box-shadow: var(--v-shadow-sm);
+    fill: var(--v-text-color-secondary);
+    transition: fill var(--v-transition-fast);
   }
 
-  .lang-divider {
-    margin: 0 var(--v-spacing-xs);
-    color: var(--v-border-color-hover);
-    font-weight: var(--v-font-weight-normal);
-    transform: scaleY(0.9);
-    font-size: var(--v-font-size-xs);
+  .lang-toggle:hover .lang-text {
+    fill: var(--v-color-primary);
   }
 </style>
 
 <body>
-  <div class="lang-toggle" @click="toggleLang" title="点击切换语言 / Click to switch language">
-    <span class="lang-option" :class="{active: currentLang === 'zh-CN'}">中</span>
-    <span class="lang-divider">/</span>
-    <span class="lang-option" :class="{active: currentLang === 'en-US'}">En</span>
+  <div class="lang-toggle" :class="{en: currentLang === 'en-US'}" @click="toggleLang"
+    title="点击切换语言 / Click to switch language">
+    <!-- 中文图标 -->
+    <svg class="lang-icon icon-zh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="6" x2="12" y2="18"></line>
+      <line x1="8" y1="9" x2="16" y2="9"></line>
+      <line x1="7" y1="15" x2="17" y2="15"></line>
+    </svg>
+    <!-- 英文图标 -->
+    <svg class="lang-icon icon-en" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="4" y1="12" x2="20" y2="12"></line>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
   </div>
 </body>
 
