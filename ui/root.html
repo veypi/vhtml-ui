@@ -9,12 +9,34 @@
   <script type="module" key='vhtml' src="/vhtml/vhtml.min.js"></script>
   <style>
     /* 基础布局样式 */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .app-layout {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      flex-shrink: 0;
+      border-right: 1px solid var(--v-border-color);
+      background-color: var(--v-bg-color);
+    }
+
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      background-color: var(--v-bg-color-secondary);
+    }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 2rem;
-      background-color: var(--v-bg-color);
-      color: var(--v-text-color);
     }
 
     .header {
@@ -24,16 +46,30 @@
       border-bottom: 1px solid var(--v-border-color);
     }
 
-    .theme-switcher {
+    .top-bar {
       position: fixed;
       top: 1rem;
       right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 100;
+    }
+
+    .theme-switcher {
       background: var(--v-bg-color);
       padding: 0.5rem;
       border-radius: var(--v-radius-md);
       box-shadow: var(--v-shadow-md);
       border: 1px solid var(--v-border-color);
-      z-index: 100;
+    }
+
+    .lang-wrapper {
+      background: var(--v-bg-color);
+      padding: 0.35rem 0.5rem;
+      border-radius: var(--v-radius-md);
+      box-shadow: var(--v-shadow-md);
+      border: 1px solid var(--v-border-color);
     }
 
     /* 主题 T1: 默认清爽风格 (覆盖 common.css 中的默认值) */
@@ -83,11 +119,12 @@
     }
 
     body .demo-block {
-      background-color: var(--v-bg-color-secondary);
+      background-color: var(--v-bg-color);
       padding: 1.5rem;
       border-radius: var(--v-radius-md);
       border: 1px solid var(--v-border-color);
       margin-bottom: 1.5rem;
+      box-shadow: var(--v-shadow-sm);
     }
 
     body .demo-label {
@@ -96,42 +133,181 @@
       margin-bottom: 0.5rem;
       display: block;
     }
+
+    /* 侧边栏自定义样式 */
+    .sidebar-logo {
+      padding: 1.5rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--v-color-primary);
+      border-bottom: 1px solid var(--v-border-color);
+      text-align: center;
+    }
+
+    .sidebar-menu {
+      padding: 1rem 0;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      color: var(--v-text-color);
+      transition: all 0.2s ease;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-item:hover {
+      background-color: var(--v-bg-color-secondary);
+      color: var(--v-color-primary);
+    }
+
+    .sidebar-item.active {
+      background-color: var(--v-blue-50);
+      color: var(--v-color-primary);
+      border-left-color: var(--v-color-primary);
+      font-weight: 500;
+    }
+
+    .sidebar-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-label {
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 
 <body :theme="theme" class="h-full w-full">
 
-  <!-- 主题切换器 -->
-  <div class="theme-switcher v-flex v-items-center v-gap-sm">
-    <span class="v-text-secondary v-font-bold">Theme:</span>
-    <div vsrc='/btn.html' size="sm" :type="theme === 't1' ? 'primary' : 'default'" @click="setTheme('t1')">Light (T1)
-    </div>
-    <div vsrc='/btn.html' size="sm" :type="theme === 't2' ? 'primary' : 'default'" @click="setTheme('t2')">Dark (T2)
-    </div>
-  </div>
+  <div class="app-layout">
+    <!-- 侧边导航 -->
+    <aside class="sidebar" style="width: 220px;">
+      <div class="sidebar-logo">vhtmlUI</div>
+      <nav class="sidebar-menu">
+        <div v-for="item in menuItems"
+             class="sidebar-item"
+             :class="{active: currentExample === item.value}"
+             @click="selectExample(item.value)">
+          <span class="sidebar-icon" v-html="item.icon"></span>
+          <span class="sidebar-label">{{ item.label }}</span>
+        </div>
+      </nav>
+    </aside>
 
-  <div class="container">
-    <header class="header">
-      <h1 class="v-font-bold" style="font-size: 2.5rem; color: var(--v-color-primary);">vhtmlUI</h1>
-      <p class="v-mt-sm v-text-secondary">一个基于 vhtml 框架构建的高效前端组件库</p>
-    </header>
-    <examples-btn class="demo-block"></examples-btn>
-    <examples-tree class="demo-block"></examples-tree>
-    <examples-sidebar class="demo-block"></examples-sidebar>
-    <examples-tabs class="demo-block"></examples-tabs>
-    <examples-dialog class="demo-block"></examples-dialog>
-    <examples-dropdown class="demo-block"></examples-dropdown>
-    <examples-input class="demo-block"></examples-input>
-    <examples-form class="demo-block"></examples-form>
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <!-- 顶部工具栏 -->
+      <div class="top-bar">
+        <div class="lang-wrapper">
+          <div vsrc='/lang.html'></div>
+        </div>
+        <div class="theme-switcher v-flex v-items-center v-gap-sm">
+          <span class="v-text-secondary v-font-bold">Theme:</span>
+          <div vsrc='/btn.html' size="sm" :type="theme === 't1' ? 'primary' : 'default'" @click="setTheme('t1')">Light (T1)
+          </div>
+          <div vsrc='/btn.html' size="sm" :type="theme === 't2' ? 'primary' : 'default'" @click="setTheme('t2')">Dark (T2)
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <header class="header">
+          <h1 class="v-font-bold" style="font-size: 2.5rem; color: var(--v-color-primary);">vhtmlUI</h1>
+          <p class="v-mt-sm v-text-secondary">一个基于 vhtml 框架构建的高效前端组件库</p>
+        </header>
+
+        <!-- 动态显示选中的示例 -->
+        <div v-if="currentExample === 'btn'" class="demo-block">
+          <examples-btn></examples-btn>
+        </div>
+        <div v-if="currentExample === 'tree'" class="demo-block">
+          <examples-tree></examples-tree>
+        </div>
+        <div v-if="currentExample === 'sidebar'" class="demo-block">
+          <examples-sidebar></examples-sidebar>
+        </div>
+        <div v-if="currentExample === 'tabs'" class="demo-block">
+          <examples-tabs></examples-tabs>
+        </div>
+        <div v-if="currentExample === 'dialog'" class="demo-block">
+          <examples-dialog></examples-dialog>
+        </div>
+        <div v-if="currentExample === 'dropdown'" class="demo-block">
+          <examples-dropdown></examples-dropdown>
+        </div>
+        <div v-if="currentExample === 'input'" class="demo-block">
+          <examples-input></examples-input>
+        </div>
+        <div v-if="currentExample === 'form'" class="demo-block">
+          <examples-form></examples-form>
+        </div>
+      </div>
+    </main>
   </div>
 
   <script setup>
     theme = 't1';
+    currentExample = 'btn';
+
+    menuItems = [
+      {
+        label: 'Button 按钮',
+        value: 'btn',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"></rect></svg>'
+      },
+      {
+        label: 'Tree 树形组件',
+        value: 'tree',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M8 7h8M8 12h8M8 17h8"/></svg>'
+      },
+      {
+        label: 'Sidebar 侧边栏',
+        value: 'sidebar',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>'
+      },
+      {
+        label: 'Tabs 标签页',
+        value: 'tabs',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>'
+      },
+      {
+        label: 'Dialog 对话框',
+        value: 'dialog',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="2"></rect><line x1="5" y1="9" x2="19" y2="9"></line></svg>'
+      },
+      {
+        label: 'Dropdown 下拉菜单',
+        value: 'dropdown',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>'
+      },
+      {
+        label: 'Input 输入框',
+        value: 'input',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"></rect><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="12" y2="14"></line></svg>'
+      },
+      {
+        label: 'Form 表单',
+        value: 'form',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="15" x2="12" y2="15"></line></svg>'
+      }
+    ];
 
     setTheme = (t) => {
       theme = t;
     };
 
+    selectExample = (value) => {
+      currentExample = value;
+    };
   </script>
 
 </html>

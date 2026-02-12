@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+  <link href="./global.css" rel="stylesheet">
+</head>
+
 <style>
   body {
     display: inline-block;
@@ -8,48 +13,61 @@
   .lang-toggle {
     display: flex;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.03);
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
+    padding: var(--v-spacing-xs) var(--v-spacing-sm);
+    border-radius: var(--v-radius-full);
+    background-color: var(--v-bg-color-tertiary);
+    transition: all var(--v-transition-base);
+    border: 1px solid var(--v-border-color);
     user-select: none;
+    min-width: 64px;
   }
 
   .lang-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.06);
-    border-color: var(--border-color);
+    background-color: var(--v-bg-color-secondary);
+    border-color: var(--v-border-color-hover);
+    box-shadow: var(--v-shadow-sm);
   }
 
-  .lang-toggle span {
-    font-size: 13px;
-    color: var(--text-color-tertiary);
-    font-weight: 500;
-    transition: all 0.2s;
+  .lang-toggle:active {
+    transform: scale(0.96);
+  }
+
+  .lang-option {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-tertiary);
+    font-weight: var(--v-font-weight-medium);
+    transition: all var(--v-transition-fast);
     line-height: 1;
+    padding: 2px 4px;
+    border-radius: var(--v-radius-sm);
   }
 
-  .lang-toggle span.active {
-    color: var(--color-primary);
-    font-weight: 700;
-    transform: scale(1.05);
+  .lang-option.active {
+    color: var(--v-color-primary);
+    font-weight: var(--v-font-weight-bold);
+    background-color: var(--v-bg-color);
+    box-shadow: var(--v-shadow-sm);
   }
 
-  .lang-toggle .divider {
-    margin: 0 8px;
-    color: var(--border-color);
-    transform: scaleY(0.8);
+  .lang-divider {
+    margin: 0 var(--v-spacing-xs);
+    color: var(--v-border-color-hover);
+    font-weight: var(--v-font-weight-normal);
+    transform: scaleY(0.9);
+    font-size: var(--v-font-size-xs);
   }
 </style>
 
 <body>
-  <div class="lang-toggle" @click="toggleLang" title="Switch Language">
-    <span :class="{active: currentLang === 'zh-CN'}">中</span>
-    <span class="divider">/</span>
-    <span :class="{active: currentLang === 'en-US'}">En</span>
+  <div class="lang-toggle" @click="toggleLang" title="点击切换语言 / Click to switch language">
+    <span class="lang-option" :class="{active: currentLang === 'zh-CN'}">中</span>
+    <span class="lang-divider">/</span>
+    <span class="lang-option" :class="{active: currentLang === 'en-US'}">En</span>
   </div>
 </body>
+
 <script setup>
   currentLang = $i18n.getLocale()
   toggleLang = () => {
