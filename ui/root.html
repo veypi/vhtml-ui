@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>vhtmlUI - 高效前端组件库</title>
-  <link href="/v/common.css" rel="stylesheet">
-  <script type="module" key='vhtml' src="/assets/vhtml.min.js"></script>
+  <link href="./global.css" rel="stylesheet">
+  <script type="module" key='vhtml' src="/vhtml/vhtml.min.js"></script>
   <style>
     /* 基础布局样式 */
     .container {
@@ -115,20 +115,18 @@
       <h1 class="v-font-bold" style="font-size: 2.5rem; color: var(--v-color-primary);">vhtmlUI</h1>
       <p class="v-mt-sm v-text-secondary">一个基于 vhtml 框架构建的高效前端组件库</p>
     </header>
-
-    <previews-btn class="demo-block"></previews-btn>
-    <previews-tree class="demo-block"></previews-tree>
-    <previews-sidebar class="demo-block"></previews-sidebar>
-    <previews-tabs class="demo-block"></previews-tabs>
-    <previews-dialog class="demo-block"></previews-dialog>
-    <previews-dropdown class="demo-block"></previews-dropdown>
-    <previews-input class="demo-block"></previews-input>
-    <previews-form class="demo-block"></previews-form>
+    <examples-btn class="demo-block"></examples-btn>
+    <examples-tree class="demo-block"></examples-tree>
+    <examples-sidebar class="demo-block"></examples-sidebar>
+    <examples-tabs class="demo-block"></examples-tabs>
+    <examples-dialog class="demo-block"></examples-dialog>
+    <examples-dropdown class="demo-block"></examples-dropdown>
+    <examples-input class="demo-block"></examples-input>
+    <examples-form class="demo-block"></examples-form>
   </div>
 
   <script setup>
     theme = 't1';
-    inputValue1 = '';
 
     setTheme = (t) => {
       theme = t;

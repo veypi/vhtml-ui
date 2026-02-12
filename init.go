@@ -9,9 +9,9 @@ package vhtmlui
 import (
 	"embed"
 
+	"github.com/veypi/vhtml"
 	"github.com/veypi/vigo"
 	"github.com/veypi/vigo/contrib/doc"
-	"github.com/veypi/vigo/contrib/vhtml"
 )
 
 var Router = vigo.NewRouter()
@@ -19,13 +19,11 @@ var Router = vigo.NewRouter()
 //go:embed ui/*
 var uifs embed.FS
 
-//go:embed ui/root.html
-var rootFile []byte
-
-//go:embed ui/*.md ui/**/*.md
+//go:embed ui/*.md
 var mdFiles embed.FS
 
 func init() {
 	doc.New(Router.SubRouter("docs"), mdFiles, "ui")
+	Router.Extend("vhtml", vhtml.Router)
 	vhtml.WrapUI(Router, uifs)
 }

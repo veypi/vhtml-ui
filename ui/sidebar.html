@@ -18,13 +18,7 @@
     color: var(--v-text-color);
   }
 
-  .v-sidebar-header {
-    padding: var(--v-spacing-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid var(--v-border-color);
-  }
+  .v-sidebar-header {}
 
   .v-sidebar-body {
     flex: 1;
@@ -32,10 +26,7 @@
     padding: var(--v-spacing-sm) 0;
   }
 
-  .v-sidebar-footer {
-    padding: var(--v-spacing-xs);
-    border-top: 1px solid var(--v-border-color);
-  }
+  .v-sidebar-footer {}
 
   /* Menu Items */
   .v-menu-item {
@@ -129,7 +120,7 @@
   <div class="v-sidebar" :class="collapsed ? 'is-collapsed' : ''" :style="{width: collapsed ? collapsedWidth : width}">
 
     <!-- Header -->
-    <vslot v-if='!noheader' class="v-sidebar-header" name="header">
+    <vslot class="v-sidebar-header" name="header">
     </vslot>
 
     <!-- Body -->
@@ -166,9 +157,8 @@
     </div>
 
     <!-- Footer -->
-    <div class="v-sidebar-footer">
-      <vslot name="footer"></vslot>
-    </div>
+    <vslot class="v-sidebar-footer" name="footer">
+    </vslot>
   </div>
 </body>
 <script setup>
@@ -176,8 +166,7 @@
   collapsed = false;
   width = '240px';
   collapsedWidth = '64px';
-  noheader = false
-  pathPrefix = '@/'
+  pathPrefix = '@'
 
   toggleExpand = (item) => {
     item.expanded = !item.expanded;
@@ -185,7 +174,9 @@
 </script>
 <script>
   let ofNode = $node.parentNode.closest('*[vref]')
-  pathPrefix = '@/' + ofNode.$env.root
+  if (ofNode.$env.scoped) {
+    pathPrefix = '@' + ofNode.$env.scoped
+  }
 </script>
 
 </html>

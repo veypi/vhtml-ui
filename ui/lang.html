@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body {
+    display: inline-block;
+  }
+
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    user-select: none;
+  }
+
+  .lang-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    border-color: var(--border-color);
+  }
+
+  .lang-toggle span {
+    font-size: 13px;
+    color: var(--text-color-tertiary);
+    font-weight: 500;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+
+  .lang-toggle span.active {
+    color: var(--color-primary);
+    font-weight: 700;
+    transform: scale(1.05);
+  }
+
+  .lang-toggle .divider {
+    margin: 0 8px;
+    color: var(--border-color);
+    transform: scaleY(0.8);
+  }
+</style>
+
+<body>
+  <div class="lang-toggle" @click="toggleLang" title="Switch Language">
+    <span :class="{active: currentLang === 'zh-CN'}">中</span>
+    <span class="divider">/</span>
+    <span :class="{active: currentLang === 'en-US'}">En</span>
+  </div>
+</body>
+<script setup>
+  currentLang = $i18n.getLocale()
+  toggleLang = () => {
+    const newLang = currentLang === 'zh-CN' ? 'en-US' : 'zh-CN';
+    $i18n.setLocale(newLang);
+    currentLang = newLang;
+  };
+</script>
+
+</html>

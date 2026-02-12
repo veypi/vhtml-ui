@@ -493,8 +493,8 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 
 ```html
 <v-sidebar :items="menuItems" v:collapsed="isCollapsed" @select="handleSelect">
-  <div vslot="header">LOGO</div>
-  <div vslot="footer">Footer</div>
+  <div vslot="header" class="****">LOGO</div>
+  <div vslot="footer" class="****">Footer</div>
 </v-sidebar>
 
 <script setup>
@@ -530,6 +530,8 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 | select | 选中菜单项时触发 | item     |
 
 ### Slots
+
+该插槽无内置样式
 
 | 插槽名 | 说明                        |
 | ------ | --------------------------- |
