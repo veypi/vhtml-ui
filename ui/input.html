@@ -541,13 +541,13 @@
       <div v-else-if='type==="textarea"' class="v-input-wrapper" :class="wrapperClass">
         <textarea class="v-input__inner" :value="value" :placeholder="placeholder" :disabled="disabled"
           :required='required' :readonly="readonly" @input="handleInput" @blur="handleBlur" @focus="handleFocus"
-          :rows="opts.rows || 3" style="resize: vertical;"></textarea>
+          :rows="opts?.rows || 3" style="resize: vertical;"></textarea>
       </div>
       <div v-else-if='type==="select"' class="v-input-wrapper" :class="wrapperClass">
         <select class="v-input__inner" :value="value" :disabled="disabled" :required="required" @change="handleInput"
           @blur="handleBlur" @focus="handleFocus" style="cursor: pointer;">
           <option v-if="placeholder" value="" disabled selected hidden>{{ placeholder }}</option>
-          <option v-for="opt in opts.options" :value="opt.value !== undefined ? opt.value : opt"
+          <option v-for="opt in opts?.options" :value="opt.value !== undefined ? opt.value : opt"
             :selected="(opt.value !== undefined ? opt.value : opt) == value">
             {{ opt.label !== undefined ? opt.label : opt }}
           </option>
@@ -555,8 +555,8 @@
       </div>
       <div v-else-if='type==="checkbox"'>
         <!-- Checkbox Group -->
-        <div v-if="opts.options" class="v-checkbox-group">
-          <label v-for="(opt, index) in opts.options" :key="index" class="v-checkbox-label"
+        <div v-if="opts?.options" class="v-checkbox-group">
+          <label v-for="(opt, index) in opts?.options" :key="index" class="v-checkbox-label"
             :class="{ 'is-disabled': disabled || opt.disabled }">
             <input type="checkbox" :value="opt.value !== undefined ? opt.value : opt"
               :checked="Array.isArray(value) && value.includes(opt.value !== undefined ? opt.value : opt)"
@@ -574,8 +574,9 @@
         </div>
       </div>
       <div v-else-if='type==="radio"'>
-        <div v-if="opts.options" class="v-radio-group">
-          <label v-for="opt in opts.options" class="v-radio-label" :class="{ 'is-disabled': disabled || opt.disabled }">
+        <div v-if="opts?.options" class="v-radio-group">
+          <label v-for="opt in opts?.options" class="v-radio-label"
+            :class="{ 'is-disabled': disabled || opt.disabled }">
             <input type="radio" :name="name || uniqueName" :value="opt.value !== undefined ? opt.value : opt"
               :checked="value === (opt.value !== undefined ? opt.value : opt)" :disabled="disabled || opt.disabled"
               :required="required" @change="handleRadioChange">
@@ -592,10 +593,10 @@
         </label>
       </div>
       <div v-else-if='type==="slider"' class="v-input-wrapper v-slider-wrapper" :class="wrapperClass">
-        <input type="range" class="v-slider__inner" :value="value" :min="opts.min !== undefined ? opts.min : 0"
-          :max="opts.max !== undefined ? opts.max : 100" :step="opts.step !== undefined ? opts.step : 1"
+        <input type="range" class="v-slider__inner" :value="value" :min="opts?.min !== undefined ? opts?.min : 0"
+          :max="opts?.max !== undefined ? opts?.max : 100" :step="opts?.step !== undefined ? opts?.step : 1"
           :disabled="disabled" @input="handleInput" @change="handleInput" @blur="handleBlur" @focus="handleFocus" />
-        <span v-if="opts.showValue" class="v-slider-value">{{ value }}</span>
+        <span v-if="opts?.showValue" class="v-slider-value">{{ value }}</span>
       </div>
       <div v-else-if='type==="range"' class="v-input-wrapper v-range-wrapper" :class="wrapperClass">
         <div class="v-range-track">
@@ -606,17 +607,17 @@
 
         <div class="v-range-thumb" :style="{left: getRangePct(Array.isArray(value) ? value[0] : 0) + '%'}"
           @mousedown="handleRangeStart($event, 'min')" @touchstart="handleRangeStart($event, 'min')">
-          <div v-if="opts.showValue" class="v-range-tooltip">{{ Array.isArray(value) ? value[0] : 0 }}</div>
+          <div v-if="opts?.showValue" class="v-range-tooltip">{{ Array.isArray(value) ? value[0] : 0 }}</div>
         </div>
 
         <div class="v-range-thumb" :style="{left: getRangePct(Array.isArray(value) ? value[1] : 100) + '%'}"
           @mousedown="handleRangeStart($event, 'max')" @touchstart="handleRangeStart($event, 'max')">
-          <div v-if="opts.showValue" class="v-range-tooltip">{{ Array.isArray(value) ? value[1] : 100 }}</div>
+          <div v-if="opts?.showValue" class="v-range-tooltip">{{ Array.isArray(value) ? value[1] : 100 }}</div>
         </div>
       </div>
       <div v-else-if='type==="file"' class="v-input-wrapper v-file-wrapper" :class="wrapperClass">
         <input type="file" style="display: none" :disabled="disabled" :name="name||label" :required="required"
-          :accept="opts.accept" :multiple="opts.multiple" @change="handleFileChange" />
+          :accept="opts?.accept" :multiple="opts?.multiple" @change="handleFileChange" />
 
         <!-- Trigger Area -->
         <div @click="triggerFileSelect" style="cursor: pointer; display: block;">
@@ -634,7 +635,7 @@
         </div>
 
         <!-- File List -->
-        <div v-if="internalFiles.length > 0 && opts.showList !== false" class="v-file-list">
+        <div v-if="internalFiles.length > 0 && opts?.showList !== false" class="v-file-list">
           <div v-for="file in internalFiles" :key="file.id" class="v-file-item">
             <!-- Status Icon -->
             <div class="v-file-status-icon">
@@ -764,7 +765,7 @@
         isValid = false;
       } else if (Array.isArray(val) && val.length === 0) {
         isValid = false;
-      } else if ((type === 'checkbox' || type === 'switch') && !opts.options && val === false) {
+      } else if ((type === 'checkbox' || type === 'switch') && !opts?.options && val === false) {
         isValid = false;
       }
 
@@ -844,14 +845,14 @@
 
   handleCheckboxChange = (e) => {
     const target = e.target;
-    if (opts.options) {
+    if (opts?.options) {
       // Group mode
       const val = target.value;
       const checked = target.checked;
       let newValue = Array.isArray(value) ? [...value] : [];
 
       let originalVal = val;
-      const foundOpt = opts.options.find(opt => {
+      const foundOpt = opts?.options.find(opt => {
         const v = opt.value !== undefined ? opt.value : opt;
         return String(v) === val;
       });
@@ -883,8 +884,8 @@
     const val = target.value;
     let originalVal = val;
 
-    if (opts.options) {
-      const foundOpt = opts.options.find(opt => {
+    if (opts?.options) {
+      const foundOpt = opts?.options.find(opt => {
         const v = opt.value !== undefined ? opt.value : opt;
         return String(v) === val;
       });
@@ -963,7 +964,7 @@
     if (!files.length) return;
 
     // Clear previous if not multiple
-    if (!opts.multiple) {
+    if (!opts?.multiple) {
       internalFiles = [];
     }
 
@@ -978,7 +979,7 @@
       };
       internalFiles.push(fileObj);
 
-      if (opts.autoUpload !== false) { // Default true
+      if (opts?.autoUpload !== false) { // Default true
         // IMPORTANT: Use the reactive object from the array, not the local plain object 'fileObj'
         // This ensures that property updates (like progress) trigger view updates.
         const reactiveFile = internalFiles.find(item => item.id === fileObj.id);
@@ -995,7 +996,7 @@
   }
 
   uploadFile = (fileObj) => {
-    if (!opts.uploader) {
+    if (!opts?.uploader) {
       // Mock success if no uploader provided? Or error?
       console.warn("No uploader provided in opts");
       return;
@@ -1004,7 +1005,7 @@
     fileObj.status = 'uploading';
     fileObj.progress = 0;
 
-    opts.uploader(fileObj.file, (progress) => {
+    opts?.uploader(fileObj.file, (progress) => {
       fileObj.progress = progress;
     }).then(url => {
       console.log(url)
@@ -1043,8 +1044,8 @@
   }
 
   getRangePct = (val) => {
-    const min = opts.min !== undefined ? opts.min : 0;
-    const max = opts.max !== undefined ? opts.max : 100;
+    const min = opts?.min !== undefined ? opts?.min : 0;
+    const max = opts?.max !== undefined ? opts?.max : 100;
     let p = (val - min) / (max - min) * 100;
     if (p < 0) p = 0;
     if (p > 100) p = 100;
@@ -1081,9 +1082,9 @@
     if (pct < 0) pct = 0;
     if (pct > 1) pct = 1;
 
-    const min = opts.min !== undefined ? opts.min : 0;
-    const max = opts.max !== undefined ? opts.max : 100;
-    const step = opts.step !== undefined ? opts.step : 1;
+    const min = opts?.min !== undefined ? opts?.min : 0;
+    const max = opts?.max !== undefined ? opts?.max : 100;
+    const step = opts?.step !== undefined ? opts?.step : 1;
 
     let rawVal = min + pct * (max - min);
     let newVal = Math.round(rawVal / step) * step;
@@ -1117,7 +1118,7 @@
 </script>
 <script>
   updateCheckboxGroupValidity = () => {
-    if ($data.required && $data.type === 'checkbox' && $data.opts.options) {
+    if ($data.required && $data.type === 'checkbox' && $data.opts?.options) {
       const val = $data.value;
       const inputs = $node.querySelectorAll('input[type="checkbox"]');
       let msg = "";
@@ -1139,7 +1140,7 @@
     if ($data.type === 'file' && $data.syncFilesFromValue) {
       $data.syncFilesFromValue();
     }
-    if ($data.type === 'checkbox' && $data.opts.options) {
+    if ($data.type === 'checkbox' && $data.opts?.options) {
       updateCheckboxGroupValidity();
     }
   })

@@ -323,17 +323,33 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 
 ## Form 表单
 
-基于配置生成的表单组件，集成了输入验证、布局和操作按钮。
+使用原生 form, 结合 v-input 组件使用，集成了输入验证、布局和操作按钮。
 
 ### 基础用法
 
 ```html
-<v-form
-  :data="formData"
-  :items="formItems"
-  @submit="onSubmit"
-  @reset="onReset"
-></v-form>
+<form
+  @submit.prevent="onSubmit"
+  style="display: grid; gap: 16px; grid-template-columns: 1fr 1fr;"
+>
+  <v-input
+    v-for="item in formItems"
+    :label="item.label"
+    :type="item.type || 'text'"
+    :required="item.required"
+    :placeholder="item.placeholder"
+    :opts="item.opts"
+    v:value="formData[item.name]"
+    :style="item.full ? 'grid-column: span 2;' : ''"
+  ></v-input>
+
+  <div
+    style="grid-column: span 2; display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;"
+  >
+    <v-btn variant="text" @click="xxx">xxx</v-btn>
+    <v-btn type="submit">xxx</v-btn>
+  </div>
+</form>
 
 <script setup>
   formData = {
@@ -359,44 +375,6 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
   onSubmit = () => {};
 </script>
 ```
-
-### Props
-
-| 参数     | 说明                    | 类型    | 默认值 |
-| -------- | ----------------------- | ------- | ------ |
-| data     | 表单数据对象 (Reactive) | Object  | {}     |
-| items    | 表单项配置列表          | Array   | []     |
-| disabled | 是否全局禁用            | Boolean | false  |
-
-### Item Configuration
-
-`items` 数组中的每个对象支持以下属性：
-
-| 属性        | 说明                               | 类型               |
-| ----------- | ---------------------------------- | ------------------ |
-| name        | 数据字段名 (对应 data 中的 key)    | String             |
-| type        | 输入类型 (text, select, etc.)      | String             |
-| label       | 标签文本                           | String             |
-| placeholder | 占位符                             | String             |
-| required    | 是否必填                           | Boolean            |
-| disabled    | 是否禁用                           | Boolean            |
-| readonly    | 是否只读                           | Boolean            |
-| noborder    | 是否无边框                         | Boolean            |
-| validate    | 校验规则                           | RegExp \| Function |
-| opts        | 特定类型的额外配置 (见 Input 组件) | Object             |
-
-### Events
-
-| 事件名 | 说明           | 回调参数 |
-| ------ | -------------- | -------- |
-| submit | 表单提交时触发 | -        |
-| reset  | 表单重置时触发 | -        |
-
-### Slots
-
-| 插槽名  | 说明                                         |
-| ------- | -------------------------------------------- |
-| actions | 自定义操作按钮区域 (覆盖默认的提交/重置按钮) |
 
 ## Dialog 对话框
 
@@ -656,6 +634,7 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 - 自动同步 $i18n 状态
 - 显示当前激活语言
 - 圆角标签式设计
+- size: 36px \* 36px
 
 ### 样式说明
 

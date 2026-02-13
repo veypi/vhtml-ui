@@ -33,8 +33,17 @@
   <div class="demo-section">
     <div class="demo-title">基础表单 (Basic Form)</div>
 
-    <div vsrc="/form" :data="formData" :items="formItems" @submit="onSubmit" @reset="onReset">
-    </div>
+    <form @submit.prevent="onSubmit" @reset.prevent='onReset'
+      style="display: grid; gap: 16px; grid-template-columns: 1fr 1fr;">
+      <div vsrc='input' v-for="item in formItems" :label="item.label" :type="item.type || 'text'"
+        :required="item.required" :placeholder="item.placeholder" :opts="item.opts" v:value="formData[item.name]"
+        :style="item.full ? 'grid-column: span 2;' : ''"></div>
+
+      <div style="grid-column: span 2; display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
+        <div vsrc='btn' type='reset'>reset</div>
+        <div vsrc='btn' type="submit">ok</div>
+      </div>
+    </form>
 
     <div style="margin-top: 30px; padding: 16px; background: #f9f9f9; border-radius: 8px;">
       <h4 style="margin-top: 0;">实时数据 (Live Data):</h4>

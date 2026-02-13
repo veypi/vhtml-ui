@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <link href="./global.css" rel="stylesheet">
-</head>
-
 <style>
   body {
     display: inline-block;
@@ -74,11 +69,20 @@
     transition: stroke var(--v-transition-fast);
   }
 
+  .lang-icon :deep(text) {
+    fill: var(--v-text-color-secondary);
+    transition: fill var(--v-transition-fast);
+  }
+
   .lang-toggle:hover .lang-icon :deep(path),
   .lang-toggle:hover .lang-icon :deep(circle),
   .lang-toggle:hover .lang-icon :deep(line),
   .lang-toggle:hover .lang-icon :deep(rect) {
     stroke: var(--v-color-primary);
+  }
+
+  .lang-toggle:hover .icon-zh :deep(text) {
+    fill: var(--v-color-primary) !important;
   }
 
   /* 文字样式 */
@@ -98,15 +102,11 @@
   <div class="lang-toggle" :class="{en: currentLang === 'en-US'}" @click="toggleLang"
     title="点击切换语言 / Click to switch language">
     <!-- 中文图标 -->
-    <svg class="lang-icon icon-zh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="6" x2="12" y2="18"></line>
-      <line x1="8" y1="9" x2="16" y2="9"></line>
-      <line x1="7" y1="15" x2="17" y2="15"></line>
+    <svg class="lang-icon icon-zh" viewBox="0 0 24 24" fill="none">
+      <text x="12" y="17.5" font-size="16" font-weight="600" text-anchor="middle" fill="var(--v-color-primary)">中</text>
     </svg>
     <!-- 英文图标 -->
-    <svg class="lang-icon icon-en" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    <svg class="lang-icon icon-en" viewBox="0 0 24 24" fill="none" stroke="var(--v-color-primary)" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="4" y1="12" x2="20" y2="12"></line>
