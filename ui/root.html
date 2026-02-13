@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vhtmlUI - 高效前端组件库</title>
+  <title>{{$t('app.title')}}</title>
   <link href="./global.css" rel="stylesheet">
   <script type="module" key='vhtml' src="/vhtml/vhtml.min.js"></script>
   <style>
     /* 基础布局样式 */
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
       overflow: hidden;
@@ -191,12 +192,10 @@
   <div class="app-layout">
     <!-- 侧边导航 -->
     <aside class="sidebar" style="width: 220px;">
-      <div class="sidebar-logo">vhtmlUI</div>
+      <div class="sidebar-logo">{{$t('app.logo')}}</div>
       <nav class="sidebar-menu">
-        <div v-for="item in menuItems"
-             class="sidebar-item"
-             :class="{active: currentExample === item.value}"
-             @click="selectExample(item.value)">
+        <div v-for="item in menuItems" class="sidebar-item" :class="{active: currentExample === item.value}"
+          @click="selectExample(item.value)">
           <span class="sidebar-icon" v-html="item.icon"></span>
           <span class="sidebar-label">{{ item.label }}</span>
         </div>
@@ -208,21 +207,23 @@
       <!-- 顶部工具栏 -->
       <div class="top-bar">
         <div class="lang-wrapper">
-          <div vsrc='/lang.html'></div>
+          <div vsrc='lang'></div>
         </div>
         <div class="theme-switcher v-flex v-items-center v-gap-sm">
-          <span class="v-text-secondary v-font-bold">Theme:</span>
-          <div vsrc='/btn.html' size="sm" :type="theme === 't1' ? 'primary' : 'default'" @click="setTheme('t1')">Light (T1)
+          <span class="v-text-secondary v-font-bold">{{$t('theme.label')}}</span>
+          <div vsrc='/btn.html' size="sm" :type="theme === 't1' ? 'primary' : 'default'" @click="setTheme('t1')">
+            {{$t('theme.light')}}
           </div>
-          <div vsrc='/btn.html' size="sm" :type="theme === 't2' ? 'primary' : 'default'" @click="setTheme('t2')">Dark (T2)
+          <div vsrc='/btn.html' size="sm" :type="theme === 't2' ? 'primary' : 'default'" @click="setTheme('t2')">
+            {{$t('theme.dark')}}
           </div>
         </div>
       </div>
 
       <div class="container">
         <header class="header">
-          <h1 class="v-font-bold" style="font-size: 2.5rem; color: var(--v-color-primary);">vhtmlUI</h1>
-          <p class="v-mt-sm v-text-secondary">一个基于 vhtml 框架构建的高效前端组件库</p>
+          <h1 class="v-font-bold" style="font-size: 2.5rem; color: var(--v-color-primary);">{{$t('app.logo')}}</h1>
+          <p class="v-mt-sm v-text-secondary">{{$t('app.subtitle')}}</p>
         </header>
 
         <!-- 动态显示选中的示例 -->
@@ -260,42 +261,42 @@
 
     menuItems = [
       {
-        label: 'Button 按钮',
+        label: () => $t('menu.btn'),
         value: 'btn',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"></rect></svg>'
       },
       {
-        label: 'Tree 树形组件',
+        label: () => $t('menu.tree'),
         value: 'tree',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M8 7h8M8 12h8M8 17h8"/></svg>'
       },
       {
-        label: 'Sidebar 侧边栏',
+        label: () => $t('menu.sidebar'),
         value: 'sidebar',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>'
       },
       {
-        label: 'Tabs 标签页',
+        label: () => $t('menu.tabs'),
         value: 'tabs',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>'
       },
       {
-        label: 'Dialog 对话框',
+        label: () => $t('menu.dialog'),
         value: 'dialog',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="2"></rect><line x1="5" y1="9" x2="19" y2="9"></line></svg>'
       },
       {
-        label: 'Dropdown 下拉菜单',
+        label: () => $t('menu.dropdown'),
         value: 'dropdown',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>'
       },
       {
-        label: 'Input 输入框',
+        label: () => $t('menu.input'),
         value: 'input',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"></rect><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="12" y2="14"></line></svg>'
       },
       {
-        label: 'Form 表单',
+        label: () => $t('menu.form'),
         value: 'form',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="15" x2="12" y2="15"></line></svg>'
       }

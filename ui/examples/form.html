@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Form Component Demo">
-  <title>Form Demo</title>
+  <title>{{$t('form.title')}}</title>
 </head>
 <style>
   body {
@@ -31,7 +31,7 @@
 
 <body layout="default">
   <div class="demo-section">
-    <div class="demo-title">基础表单 (Basic Form)</div>
+    <div class="demo-title">{{$t('form.title')}}</div>
 
     <form @submit.prevent="onSubmit" @reset.prevent='onReset'
       style="display: grid; gap: 16px; grid-template-columns: 1fr 1fr;">
@@ -40,13 +40,13 @@
         :style="item.full ? 'grid-column: span 2;' : ''"></div>
 
       <div style="grid-column: span 2; display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
-        <div vsrc='btn' type='reset'>reset</div>
-        <div vsrc='btn' type="submit">ok</div>
+        <div vsrc='btn' type='reset'>{{$t('form.reset')}}</div>
+        <div vsrc='btn' type="submit">{{$t('form.ok')}}</div>
       </div>
     </form>
 
     <div style="margin-top: 30px; padding: 16px; background: #f9f9f9; border-radius: 8px;">
-      <h4 style="margin-top: 0;">实时数据 (Live Data):</h4>
+      <h4 style="margin-top: 0;">{{$t('form.liveData')}}:</h4>
       <pre style="margin: 0; font-size: 12px; color: #666;">{{ JSON.stringify(formData, null, 2) }}</pre>
     </div>
   </div>
@@ -65,59 +65,61 @@
   formItems = [
     {
       name: 'name',
-      label: '姓名',
-      placeholder: '请输入姓名',
+      label: () => $t('form.name'),
+      placeholder: () => $t('form.namePlaceholder'),
       required: true
     },
     {
       name: 'age',
       type: 'number',
-      label: '年龄',
-      placeholder: '请输入年龄',
+      label: () => $t('form.age'),
+      placeholder: () => $t('form.agePlaceholder'),
       validate: /^\d+$/
     },
     {
       name: 'city',
       type: 'select',
-      label: '城市',
+      label: () => $t('form.city'),
       opts: {
         options: [
-          {label: '北京', value: 'bj'},
-          {label: '上海', value: 'sh'},
-          {label: '广州', value: 'gz'}
+          {label: () => $t('form.beijing'), value: 'bj'},
+          {label: () => $t('form.shanghai'), value: 'sh'},
+          {label: () => $t('form.guangzhou'), value: 'gz'}
         ]
       }
     },
     {
       name: 'roles',
       type: 'checkbox',
-      label: '角色',
+      label: () => $t('form.roles'),
       opts: {
         options: [
-          {label: '开发者', value: 'dev'},
-          {label: '设计师', value: 'des'},
-          {label: '产品经理', value: 'pm'}
+          {label: () => $t('form.dev'), value: 'dev'},
+          {label: () => $t('form.des'), value: 'des'},
+          {label: () => $t('form.pm'), value: 'pm'}
         ]
       }
     },
     {
       name: 'bio',
       type: 'textarea',
-      label: '个人简介',
-      placeholder: '请简要介绍自己...',
-      opts: {rows: 4}
+      label: () => $t('form.bio'),
+      placeholder: () => $t('form.bioPlaceholder'),
+      opts: {rows: 4},
+      full: true
     },
     {
       name: 'agree',
       type: 'checkbox',
-      placeholder: '我已阅读并同意相关协议',
-      required: true
+      placeholder: () => $t('form.agreeProtocol'),
+      required: true,
+      full: true
     }
   ];
 
   onSubmit = () => {
     console.log("Form submitted:", formData);
-    $message.success("提交成功！请查看控制台");
+    $message.success($t('form.submitSuccess'));
   };
 
   onReset = () => {
@@ -130,7 +132,7 @@
       agree: false,
       bio: ''
     };
-    $message.info("表单已重置");
+    $message.info($t('form.resetMsg'));
   };
 </script>
 

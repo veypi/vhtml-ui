@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+  <meta name="description" content="Dialog Component Demo" />
+  <title>{{$t('dialog.title')}}</title>
+</head>
+
 <body>
-  <div class="section-title">Dialog 对话框</div>
+  <div class="section-title">{{$t('dialog.title')}}</div>
 
   <div class="v-mb-md">
-    <span class="demo-label">基础用法</span>
+    <span class="demo-label">{{$t('dialog.basic')}}</span>
     <div class="v-flex v-gap-sm">
-      <div vsrc='/btn' @click="visible = true">点击打开 Dialog</div>
+      <div vsrc='/btn' @click="visible = true">{{$t('dialog.clickToOpen')}}</div>
     </div>
   </div>
 
-  <div vsrc='/dialog.html' v:visible="visible" title="提示" width="30%">
-    <span>这是一段信息</span>
+  <div vsrc='/dialog.html' v:visible="visible" :title="$t('dialog.hint')" width="30%">
+    <span>{{$t('dialog.message')}}</span>
     <div vslot="footer">
-      <div vsrc='/btn' @click="visible = false">取消</div>
-      <div vsrc='/btn' variant="default" @click="visible = false">确定</div>
+      <div vsrc='/btn' @click="visible = false">{{$t('dialog.cancel')}}</div>
+      <div vsrc='/btn' variant="default" @click="visible = false">{{$t('dialog.confirm')}}</div>
     </div>
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">自定义内容</span>
+    <span class="demo-label">{{$t('dialog.customContent')}}</span>
     <div class="v-flex v-gap-sm">
-      <div vsrc='/btn' @click="visible2 = true">自定义内容</div>
+      <div vsrc='/btn' @click="visible2 = true">{{$t('dialog.customContent')}}</div>
     </div>
   </div>
 
-  <div vsrc='/dialog.html' v:visible="visible2" title="自定义内容" width="50%">
+  <div vsrc='/dialog.html' v:visible="visible2" :title="$t('dialog.customContent')" width="50%">
     <div class="v-flex v-flex-col v-gap-md">
-      <p>这里可以放表格、表单等复杂内容。</p>
+      <p>{{$t('dialog.customDesc')}}</p>
       <div class="v-p-md v-bg-secondary v-rounded-md">
-        模拟表单内容...
+        {{$t('dialog.mockForm')}}
       </div>
     </div>
     <div vslot="footer">
-      <div vsrc='/btn' @click="visible2 = false">关闭</div>
+      <div vsrc='/btn' @click="visible2 = false">{{$t('dialog.close')}}</div>
     </div>
   </div>
 

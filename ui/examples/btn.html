@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+  <meta name="description" content="Button Component Demo" />
+  <title>{{$t('btn.title')}}</title>
+</head>
+
 <body>
-  <div class="section-title">Buttons 按钮</div>
-  <div vsrc='/btn' variant="ghost" size='sm'>Ghost</div>
+  <div class="section-title">{{$t('btn.title')}}</div>
+  <div vsrc='/btn' variant="ghost" size='sm'>{{$t('btn.ghost')}}</div>
   <div class="v-mb-md">
-    <span class="demo-label">变体 (Variants)</span>
+    <span class="demo-label">{{$t('btn.variant')}}</span>
     <div class="v-flex v-gap-sm v-flex-wrap">
-      <div vsrc='/btn'>Default</div>
-      <div vsrc='/btn' variant="destructive">Destructive</div>
-      <div vsrc='/btn' variant="outline">Outline</div>
-      <div vsrc='/btn' variant="ghost">Ghost</div>
+      <div vsrc='/btn'>{{$t('btn.default')}}</div>
+      <div vsrc='/btn' variant="destructive">{{$t('btn.destructive')}}</div>
+      <div vsrc='/btn' variant="outline">{{$t('btn.outline')}}</div>
+      <div vsrc='/btn' variant="ghost">{{$t('btn.ghost')}}</div>
     </div>
     <div class="v-mt-sm v-flex v-gap-sm v-flex-wrap">
-       <span class="v-text-secondary v-text-sm">Colors: </span>
-       <div vsrc='/btn' variant="outline" color="success">Success Outline</div>
-       <div vsrc='/btn' variant="ghost" color="danger">Danger Ghost</div>
-       <div vsrc='/btn' variant="outline" color="warning">Warning Outline</div>
-       <div vsrc='/btn' variant="ghost" color="#9333ea">Custom Hex Ghost</div>
+      <span class="v-text-secondary v-text-sm">{{$t('btn.colors')}}</span>
+      <div vsrc='/btn' variant="outline" color="success">{{$t('btn.successOutline')}}</div>
+      <div vsrc='/btn' variant="ghost" color="danger">{{$t('btn.dangerGhost')}}</div>
+      <div vsrc='/btn' variant="outline" color="warning">{{$t('btn.warningOutline')}}</div>
+      <div vsrc='/btn' variant="ghost" color="#9333ea">{{$t('btn.customHex')}}</div>
     </div>
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">尺寸 (Sizes)</span>
+    <span class="demo-label">{{$t('btn.size')}}</span>
     <div class="v-flex v-gap-sm v-items-center">
-      <div vsrc='/btn' size="sm">Small</div>
-      <div vsrc='/btn' size="default">Default</div>
-      <div vsrc='/btn' size="lg">Large</div>
+      <div vsrc='/btn' size="sm">{{$t('btn.small')}}</div>
+      <div vsrc='/btn' size="default">{{$t('btn.default')}}</div>
+      <div vsrc='/btn' size="lg">{{$t('btn.large')}}</div>
     </div>
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">带图标 (With Icon)</span>
+    <span class="demo-label">{{$t('btn.withIcon')}}</span>
     <div class="v-flex v-gap-sm v-flex-wrap v-items-center">
       <div vsrc='/btn'>
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +44,7 @@
             d="M3 2.5C3 2.22386 3.22386 2 3.5 2H11.5C11.7761 2 12 2.22386 12 2.5V13.5C12 13.6818 11.9014 13.8492 11.7424 13.9373C11.5834 14.0254 11.3891 14.0203 11.235 13.924L7.5 11.5896L3.765 13.924C3.61087 14.0203 3.41659 14.0254 3.25762 13.9373C3.09864 13.8492 3 13.6818 3 13.5V2.5ZM4 3V12.5978L6.97 10.7416C7.29427 10.5389 7.70573 10.5389 8.03 10.7416L11 12.5978V3H4Z"
             fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        Bookmark
+        {{$t('btn.bookmark')}}
       </div>
       <div vsrc='/btn' variant="outline">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -47,10 +52,10 @@
             d="M7.49991 0.876892C3.84222 0.876892 0.877075 3.84204 0.877075 7.49972C0.877075 11.1574 3.84222 14.1226 7.49991 14.1226C11.1576 14.1226 14.1227 11.1574 14.1227 7.49972C14.1227 3.84204 11.1576 0.876892 7.49991 0.876892ZM1.82707 7.49972C1.82707 4.36671 4.36689 1.82689 7.49991 1.82689C10.6329 1.82689 13.1727 4.36671 13.1727 7.49972C13.1727 10.6327 10.6329 13.1726 7.49991 13.1726C4.36689 13.1726 1.82707 10.6327 1.82707 7.49972ZM8.24992 4.49972H6.74992V7.49972H8.24992V4.49972ZM8.24992 8.99972H6.74992V10.4997H8.24992V8.99972Z"
             fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        Alert
+        {{$t('btn.alert')}}
       </div>
       <div vsrc='/btn' variant="secondary">
-        Next
+        {{$t('btn.next')}}
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M6.1584 3.13508C6.35985 2.94621 6.67627 2.95642 6.86514 3.15788L10.6151 7.15788C10.7954 7.3502 10.7954 7.64949 10.6151 7.84182L6.86514 11.8418C6.67627 12.0433 6.35985 12.0535 6.1584 11.8646C5.95694 11.6757 5.94673 11.3593 6.1356 11.1579L9.565 7.49985L6.1356 3.84182C5.94673 3.64036 5.95694 3.32394 6.1584 3.13508Z"
@@ -61,7 +66,7 @@
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">纯图标 (Icon Only)</span>
+    <span class="demo-label">{{$t('btn.iconOnly')}}</span>
     <div class="v-flex v-gap-sm v-flex-wrap v-items-center">
       <div vsrc='/btn' size="icon" variant="outline">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -91,25 +96,25 @@
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">状态 (State)</span>
+    <span class="demo-label">{{$t('btn.state')}}</span>
     <div class="v-flex v-gap-sm">
-      <div vsrc='/btn' :disabled="true">Disabled</div>
-      <div vsrc='/btn' variant="default" :disabled="true">Disabled Default</div>
-      <div vsrc='/btn' :loading="true">Loading</div>
+      <div vsrc='/btn' :disabled="true">{{$t('btn.disabled')}}</div>
+      <div vsrc='/btn' variant="default" :disabled="true">{{$t('btn.disabledDefault')}}</div>
+      <div vsrc='/btn' :loading="true">{{$t('btn.loading')}}</div>
     </div>
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">块级 (Block)</span>
+    <span class="demo-label">{{$t('btn.block')}}</span>
     <div style="width: 300px;">
-      <div vsrc='/btn' :block="true" variant="default">Block Button</div>
+      <div vsrc='/btn' :block="true" variant="default">{{$t('btn.blockBtn')}}</div>
     </div>
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">圆角按钮 (Round)</span>
+    <span class="demo-label">{{$t('btn.round')}}</span>
     <div class="v-flex v-gap-sm v-items-center">
-      <div vsrc='/btn' round>Round Button</div>
+      <div vsrc='/btn' round>{{$t('btn.roundBtn')}}</div>
       <div vsrc='/btn' round size="icon" variant="outline">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -121,15 +126,16 @@
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">异步加载 (Async Loading)</span>
+    <span class="demo-label">{{$t('btn.async')}}</span>
     <div class="v-flex v-gap-sm">
-      <div vsrc='/btn' variant="default" :click="handleAsyncClick">Click to Load (2s)</div>
+      <div vsrc='/btn' variant="default" :click="handleAsyncClick">{{$t('btn.clickToLoad')}}</div>
     </div>
   </div>
   </div>
 
 </body>
 <script setup>
+  console.log($t("app.title"))
   handleAsyncClick = () => {
     return new Promise(resolve => setTimeout(resolve, 2000));
   };

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <meta name="description" content="Dropdown Component Demo" />
+  <title>{{$t('dropdown.title')}}</title>
+</head>
 <body>
-  <div class="section-title">Dropdown 下拉菜单</div>
+  <div class="section-title">{{$t('dropdown.title')}}</div>
 
   <div class="v-mb-md">
-    <span class="demo-label">基础用法</span>
+    <span class="demo-label">{{$t('dropdown.basic')}}</span>
     <div class="v-flex v-gap-md">
         <div vsrc='/dropdown.html' :items="menuItems" @command="handleCommand">
             <div vsrc='/btn.html'>
@@ -14,23 +18,23 @@
                 </svg>
             </div>
         </div>
-        
+
         <div vsrc='/dropdown.html' :items="menuItems" placement="top-end">
-            <div vsrc='/btn.html' variant="outline">Top End</div>
+            <div vsrc='/btn.html' variant="outline">{{$t('dropdown.topEnd')}}</div>
         </div>
     </div>
   </div>
 
   <div class="v-mb-md">
-    <span class="demo-label">自定义菜单内容</span>
+    <span class="demo-label">{{$t('dropdown.customMenu')}}</span>
     <div class="v-flex v-gap-md">
         <div vsrc='/dropdown.html'>
-            <div vsrc='/btn.html' variant="secondary">Custom Menu</div>
+            <div vsrc='/btn.html' variant="secondary">{{$t('dropdown.customMenuBtn')}}</div>
             <div vslot="menu" class="v-p-sm">
-                <div class="v-text-secondary v-text-xs v-mb-xs">User Info</div>
-                <div class="v-font-bold">Admin</div>
+                <div class="v-text-secondary v-text-xs v-mb-xs">{{$t('dropdown.userInfo')}}</div>
+                <div class="v-font-bold">{{$t('dropdown.admin')}}</div>
                 <div class="v-my-sm" style="border-top: 1px solid var(--v-border-color)"></div>
-                <div vsrc='/btn.html' size="sm" :block="true">Logout</div>
+                <div vsrc='/btn.html' size="sm" :block="true">{{$t('dropdown.logout')}}</div>
             </div>
         </div>
     </div>
@@ -39,14 +43,14 @@
 </body>
 <script setup>
   menuItems = [
-      { label: "Action 1", value: "1" },
-      { label: "Action 2", value: "2" },
-      { label: "Action 3", value: "3", divided: true },
-      { label: "Disabled", value: "4", disabled: true }
+      { label: () => $t('dropdown.action1'), value: "1" },
+      { label: () => $t('dropdown.action2'), value: "2" },
+      { label: () => $t('dropdown.action3'), value: "3", divided: true },
+      { label: () => $t('dropdown.disabled'), value: "4", disabled: true }
   ];
 
   handleCommand = (val) => {
-      $message.info("Selected: " + val);
+      $message.info($t('dropdown.selected') + ": " + val);
   }
 </script>
 </html>
