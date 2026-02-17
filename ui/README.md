@@ -479,7 +479,11 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 <script setup>
   isCollapsed = false;
   menuItems = [
-    { label: "仪表盘", icon: "<svg>...</svg>", path: "/dashboard" },
+    {
+      label: () => $t("dashboard"),
+      icon: "<svg>...</svg>",
+      path: "/dashboard",
+    },
     {
       label: "用户管理",
       icon: "<svg>...</svg>", // <i class='fas fa-XXX' />

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{$t('app.title')}}</title>
+  <title>vhtml-ui</title>
   <link href="./global.css" rel="stylesheet">
   <script type="module" key='vhtml' src="/vhtml/vhtml.min.js"></script>
   <style>
@@ -258,6 +258,7 @@
   <script setup>
     theme = 't1';
     currentExample = 'btn';
+    await fetch($env.scoped + '/langs.json').then(e => e.json().then(e => $env.$i18n.load(e)))
 
     menuItems = [
       {
