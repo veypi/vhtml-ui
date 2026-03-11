@@ -405,7 +405,6 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 | visible           | 是否显示 Dialog，支持 `v:visible` 双向绑定 | Boolean | false  |
 | title             | Dialog 的标题                              | String  | Dialog |
 | width             | Dialog 的宽度                              | String  | 50%    |
-| top               | Dialog CSS 中的 margin-top 值              | String  | 15vh   |
 | closeOnClickModal | 是否可以通过点击 modal 关闭 Dialog         | Boolean | true   |
 
 ### Events

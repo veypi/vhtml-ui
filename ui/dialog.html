@@ -14,10 +14,10 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
+    z-index: 999999;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .v-dialog {
@@ -88,30 +88,20 @@
     justify-content: flex-end;
     gap: var(--v-spacing-sm);
   }
-
-  vslot {
-    display: contents;
-  }
 </style>
 
 <body>
   <div v-show="visible" class="v-dialog-overlay" @click="handleOverlayClick">
-    <div class="v-dialog" :style="'width:' + width + '; margin-top:' + top" @click="stopProp">
-      <div v-if='!noheader' class="v-dialog-header">
-        <span class="v-dialog-title">
-          <vslot name="title">{{ title }}</vslot>
-        </span>
+    <div class="v-dialog" :style="'width:' + width" @click="stopProp">
+      <vslot name='title' class="v-dialog-header">
+        <span class="v-dialog-title">{{ title }}</span>
         <button class="v-dialog-close" @click="handleClose">×</button>
-      </div>
+      </vslot>
 
-      <div class="v-dialog-body">
-        <vslot></vslot>
-      </div>
+      <vslot class="v-dialog-body"></vslot>
 
-      <div class="v-dialog-footer">
-        <vslot name="footer">
-        </vslot>
-      </div>
+      <vslot class="v-dialog-footer" name="footer">
+      </vslot>
     </div>
   </div>
 </body>
@@ -119,8 +109,6 @@
   visible = false;
   title = 'Dialog';
   width = '50%';
-  top = '15vh';
-  noheader = false
   closeOnClickModal = true;
 
   handleClose = () => {
