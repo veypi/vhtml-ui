@@ -258,7 +258,7 @@
   <script setup>
     theme = 't1';
     currentExample = 'btn';
-    await fetch($env.scoped + '/langs.json').then(e => e.json().then(e => $env.$i18n.load(e)))
+    await fetch($mod.scoped + '/langs.json').then(e => e.json().then(e => $env.$i18n.load(e)))
 
     menuItems = [
       {

@@ -174,8 +174,8 @@
 </script>
 <script>
   let ofNode = $node.parentNode.closest('*[vref]')
-  if (ofNode.$env.scoped) {
-    pathPrefix = '@' + ofNode.$env.scoped
+  if (ofNode.$mod.scoped) {
+    pathPrefix = '@' + ofNode.$mod.scoped
   }
 </script>
 
