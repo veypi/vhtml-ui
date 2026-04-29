@@ -536,8 +536,9 @@
       <!-- Basic Input Types -->
       <div v-if="isBasic()" class="v-input-wrapper" :class="wrapperClass">
         <input class="v-input__inner" :type="type === 'datetime' ? 'datetime-local' : type" :value="value"
-          :placeholder="placeholder" :disabled="disabled" :required='required' :readonly="readonly" @input="handleInput"
-          @blur="handleBlur" @focus="handleFocus" />
+          :placeholder="placeholder" :disabled="disabled" :required='required' :readonly="readonly"
+          :step="type === 'number' ? (opts?.step !== undefined ? opts?.step : 'any') : opts?.step"
+          @input="handleInput" @blur="handleBlur" @focus="handleFocus" />
       </div>
       <div v-else-if='type==="textarea"' class="v-input-wrapper" :class="wrapperClass">
         <textarea class="v-input__inner" :value="value" :placeholder="placeholder" :disabled="disabled"
