@@ -1,19 +1,9 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Tree Component">
-  <title>Tree</title>
-</head>
 <style>
   /* No visual styles, just structure */
   vslot {
     display: contents;
-  }
-
-  .v-tree-children {
-    overflow: hidden;
   }
 
   .v-tree {
@@ -23,29 +13,18 @@
 </style>
 
 <body class="v-tree">
-  <div v-for="row in data" class="v-tree-node">
-    <div @click="toggle(row)">
-      <vslot name="row" vbind="row, depth">
-        <div :style="{paddingLeft: (depth * 20) + 'px'}">
-          {{ row.name }}
-        </div>
-      </vslot>
-    </div>
-
-    <div v-if="row.children && row.expand" class="v-tree-children">
-      <!-- Recursive call -->
-      <div vsrc="/tree" :data="row.children" :depth="depth + 1">
+  <div v-for="row in items" class="v-tree-node">
+    <vslot vbind="row, depth">
+      <div :style="{paddingLeft: (depth * 20) + 'px'}">
+        {{ row.name }}
       </div>
-    </div>
+    </vslot>
+    <div vsrc='/tree' vslot-inherit v-if='row.items && row.expand' :items="row.items" :depth="depth + 1"></div>
   </div>
 </body>
 <script setup>
-  data = []
+  items = []
   depth = 0
-
-  toggle = (node) => {
-    node.expand = !node.expand
-  }
 </script>
 
 </html>
