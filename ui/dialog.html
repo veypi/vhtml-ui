@@ -13,7 +13,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: color-mix(in srgb, var(--v-text-color) 38%, transparent);
     z-index: 999999;
     display: flex;
     justify-content: center;
@@ -123,9 +123,21 @@
   };
 
   stopProp = (e) => {
-    // vhtml event binding @click="stopProp"
-    // e is the event object
     e.stopPropagation();
+  }
+  overlayEl = null
+</script>
+
+<script>
+  overlayEl = $node.querySelector('.v-dialog-overlay')
+  if (overlayEl) {
+    document.body.appendChild(overlayEl)
+  }
+</script>
+
+<script dispose>
+  if (overlayEl && overlayEl.parentNode === document.body) {
+    document.body.removeChild(overlayEl)
   }
 </script>
 
