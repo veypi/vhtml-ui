@@ -109,7 +109,91 @@
     margin-right: 0;
   }
 
-  /* Tooltip logic for collapsed state could be added here or via title attribute */
+  /* Overlay mode (mobile) */
+  .v-sidebar.is-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform var(--v-transition-base);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .v-sidebar.is-overlay.is-open {
+    transform: translateX(0);
+  }
+
+  .v-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity var(--v-transition-base);
+    pointer-events: none;
+  }
+
+  .v-sidebar-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .v-sidebar-pull-tab {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 997;
+    width: 32px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--v-text-color-secondary);
+    transition: opacity var(--v-transition-base);
+    user-select: none;
+  }
+
+  .v-sidebar-pull-tab:hover {
+    color: var(--v-color-primary);
+  }
+
+  .v-pull-arrow {
+    position: relative;
+    width: 18px;
+    height: 44px;
+  }
+
+  .v-pull-arrow::before,
+  .v-pull-arrow::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    opacity: 0.45;
+  }
+
+  .v-pull-arrow::before {
+    top: 0;
+    height: 22px;
+    transform: rotate(-15deg);
+  }
+
+  .v-pull-arrow::after {
+    top: 22px;
+    height: 22px;
+    transform: rotate(15deg);
+  }
+
+  .v-sidebar-pull-tab:hover .v-pull-arrow::before,
+  .v-sidebar-pull-tab:hover .v-pull-arrow::after {
+    opacity: 0.7;
+  }
 
   vslot {
     display: contents;
@@ -117,7 +201,17 @@
 </style>
 
 <body>
-  <div class="v-sidebar" :class="collapsed ? 'is-collapsed' : ''" :style="{width: collapsed ? collapsedWidth : width}">
+  <!-- Overlay backdrop (mobile) -->
+  <div v-if="overlay" class="v-sidebar-overlay" :class="open ? 'is-open' : ''" @click="close"></div>
+
+  <!-- Pull tab (mobile, visible when closed) -->
+  <div v-if="overlay && !open" class="v-sidebar-pull-tab" @click="open = true">
+    <div class="v-pull-arrow"></div>
+  </div>
+
+  <div class="v-sidebar"
+    :class="overlay ? (open ? 'is-overlay is-open' : 'is-overlay') : (collapsed ? 'is-collapsed' : '')"
+    :style="{width: overlay ? width : (collapsed ? collapsedWidth : width)}">
 
     <!-- Header -->
     <vslot class="v-sidebar-header" name="header">
@@ -138,7 +232,7 @@
         </div>
 
         <!-- Leaf Item (Link) -->
-        <a v-else class="v-menu-item" :href="pathPrefix + item.path" @click="$emit('select', item)"
+        <a v-else class="v-menu-item" :href="pathPrefix + item.path" @click="onSelect(item)"
           :title="collapsed ? item.label : ''">
           <div class="v-menu-icon" v-if="item.icon" v-html="item.icon"></div>
           <span class="v-menu-label">{{ item.label }}</span>
@@ -147,7 +241,7 @@
         <!-- Children -->
         <div v-if="item.children && !collapsed" class="v-submenu" :style="{maxHeight: item.expanded ? '500px' : '0'}">
           <a v-for="subItem in item.children" class="v-menu-item" :href="pathPrefix + subItem.path"
-            @click="$emit('select', subItem)" :title="subItem.label">
+            @click="onSelect(subItem)" :title="subItem.label">
             <div class="v-menu-icon" v-if="subItem.icon" v-html="subItem.icon"></div>
             <span class="v-menu-label">{{ subItem.label }}</span>
           </a>
@@ -167,9 +261,18 @@
   width = '240px';
   collapsedWidth = '64px';
   pathPrefix = '@'
+  overlay = window.innerWidth < 768;
+  open = false;
 
   toggleExpand = (item) => {
     item.expanded = !item.expanded;
+  };
+
+  close = () => {open = false;};
+
+  onSelect = (item) => {
+    $emit('select', item);
+    if (overlay) open = false;
   };
 </script>
 <script>
@@ -177,6 +280,13 @@
   if (ofNode.$mod.scoped) {
     pathPrefix = '@' + ofNode.$mod.scoped
   }
+
+  const mq = window.matchMedia('(max-width: 767px)');
+  overlay = mq.matches;
+  mq.addEventListener('change', (e) => {
+    overlay = e.matches;
+    if (!e.matches) open = false;
+  });
 </script>
 
 </html>
