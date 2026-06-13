@@ -905,12 +905,12 @@
   handleBlur = (e) => {
     isFocused = false;
     validateValue(value, e.target);
-    $emit("blur", e);
+    $emit("v-blur", e);
   }
 
   handleFocus = (e) => {
     isFocused = true;
-    $emit("focus", e);
+    $emit("v-focus", e);
   }
 
   // Range Logic
