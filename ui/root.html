@@ -3,11 +3,14 @@
 
 <head>
   <link href="{{.scoped}}/global.css" rel="stylesheet">
-  <script type="module" key='vhtml' src="{{.scoped}}/vhtml/vhtml.min.js"></script>
 </head>
 
 <body>
   <page-index></page-index>
 </body>
+<script type="module">
+  import VHTML from "{{.scoped}}/vhtml/vhtml.min.js"
+  window.$vhtml = new VHTML(document.body, "{{.scoped}}")
+</script>
 
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="description" content="Dropdown Menu Component">
@@ -31,24 +32,33 @@
     animation: v-dropdown-fade-in 0.2s ease-out;
     white-space: nowrap;
   }
-  
+
   .v-dropdown-menu[placement^="bottom"] {
-      top: 100%;
+    top: 100%;
   }
+
   .v-dropdown-menu[placement^="top"] {
-      top: auto;
-      bottom: 100%;
-      margin-top: 0;
-      margin-bottom: var(--v-spacing-xs);
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: var(--v-spacing-xs);
   }
+
   .v-dropdown-menu[placement$="end"] {
-      left: auto;
-      right: 0;
+    left: auto;
+    right: 0;
   }
 
   @keyframes v-dropdown-fade-in {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .v-dropdown-item {
@@ -66,36 +76,25 @@
   .v-dropdown-item:hover {
     background-color: var(--v-bg-color-secondary);
   }
-  
+
   .v-dropdown-item.is-disabled {
-      color: var(--v-text-color-disabled);
-      cursor: not-allowed;
-      pointer-events: none;
-  }
-  
-  .v-dropdown-item.is-divided {
-      border-top: 1px solid var(--v-border-color);
-      margin-top: 4px;
-      padding-top: 4px; 
+    color: var(--v-text-color-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
-  .v-dropdown-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 90;
-    background: transparent;
+  .v-dropdown-item.is-divided {
+    border-top: 1px solid var(--v-border-color);
+    margin-top: 4px;
+    padding-top: 4px;
   }
-  
+
   vslot {
-      display: contents;
+    display: contents;
   }
 </style>
+
 <body>
-  <!-- Overlay for handling click outside -->
-  <div v-if="visible" class="v-dropdown-overlay" @click="handleClose"></div>
 
   <div class="v-dropdown">
     <!-- Trigger -->
@@ -104,15 +103,12 @@
     </div>
 
     <!-- Menu -->
-    <div v-if="visible" class="v-dropdown-menu" :placement="placement">
+    <div v-if="visible" class="v-dropdown-menu" @outerclick='handleClose' :placement="placement">
       <!-- Custom Menu Slot -->
       <vslot name="menu"></vslot>
-      
+
       <!-- Generated Items -->
-      <div v-for="item in items" 
-           class="v-dropdown-item" 
-           :class="computeItemClass(item)"
-           @click="handleItemClick(item)">
+      <div v-for="item in items" class="v-dropdown-item" :class="computeItemClass(item)" @click="handleItemClick(item)">
         {{ item.label }}
       </div>
     </div>
@@ -124,11 +120,11 @@
   items = []; // Array of { label, value, disabled, divided }
 
   toggle = () => {
-      visible = !visible;
+    visible = !visible;
   };
-  
+
   handleClose = () => {
-      visible = false;
+    visible = false;
   };
 
   computeItemClass = (item) => {
@@ -139,9 +135,10 @@
   };
 
   handleItemClick = (item) => {
-      if (item.disabled) return;
-      $emit('command', item.value !== undefined ? item.value : item);
-      visible = false;
+    if (item.disabled) return;
+    $emit('command', item.value !== undefined ? item.value : item);
+    visible = false;
   };
 </script>
+
 </html>

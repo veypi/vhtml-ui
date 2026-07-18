@@ -360,7 +360,6 @@
       e.preventDefault();
       return;
     }
-
     // Handle async click
     if (typeof click === 'function') {
       const result = click(e);
@@ -372,8 +371,6 @@
           loading = false;
         }
       }
-    } else {
-      $emit('click', e);
     }
   };
 </script>
