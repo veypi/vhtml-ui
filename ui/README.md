@@ -7,6 +7,19 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 - [Button 按钮](#button-按钮)
 - [Input 输入框](#input-输入框)
 - [Form 表单](#form-表单)
+- [Card 卡片](#card-卡片)
+- [Tag 标签](#tag-标签)
+- [Alert 警告提示](#alert-警告提示)
+- [Spinner 加载](#spinner-加载)
+- [Empty 空状态](#empty-空状态)
+- [Tooltip 文字提示](#tooltip-文字提示)
+- [Table 表格](#table-表格)
+- [Pagination 分页](#pagination-分页)
+- [Badge 徽标](#badge-徽标)
+- [Avatar 头像](#avatar-头像)
+- [Popover 气泡卡片](#popover-气泡卡片)
+- [Skeleton 骨架屏](#skeleton-骨架屏)
+- [Breadcrumb 面包屑](#breadcrumb-面包屑)
 - [Dialog 对话框](#dialog-对话框)
 - [Dropdown 下拉菜单](#dropdown-下拉菜单)
 - [Sidebar 侧边栏](#sidebar-侧边栏)
@@ -78,7 +91,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 | 参数     | 说明                                        | 类型     | 可选值                                                                 | 默认值  |
 | -------- | ------------------------------------------- | -------- | ---------------------------------------------------------------------- | ------- |
-| variant  | 按钮变体样式                                | String   | default / destructive / outline / ghost                                | default |
+| variant  | 按钮变体样式                                | String   | default / outline / ghost                                              | default |
 | size     | 按钮尺寸                                    | String   | xxs / xs / sm / md / lg / xl / xxl                                     | md      |
 | color    | 按钮颜色                                    | String   | primary / secondary / success / danger / warning / info / 自定义颜色值 | primary |
 | icon     | 是否为图标按钮                              | Boolean  | -                                                                      | false   |
@@ -87,6 +100,8 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 | disabled | 是否禁用                                    | Boolean  | -                                                                      | false   |
 | loading  | 是否加载中                                  | Boolean  | -                                                                      | false   |
 | click    | 点击回调，若返回 Promise 则自动出现加载动画 | Function | -                                                                      | null    |
+
+危险按钮使用 `color="danger"`（实心）或 `variant="outline" color="danger"`（描边），不存在 `variant="destructive"`。
 
 click 尽量使用:click 传递给组件，而不是@click，因为@click 会触发组件的系统点击事件，而:click 会触发组件的自定义点击事件
 
@@ -323,33 +338,12 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 
 ## Form 表单
 
-使用原生 form, 结合 v-input 组件使用，集成了输入验证、布局和操作按钮。
+表单生成器：按字段配置渲染一组 `v-input`，内置栅格布局、聚合校验（提交时逐字段校验，全部通过才触发 `submit`）与重置快照。
 
 ### 基础用法
 
 ```html
-<form
-  @submit.prevent="onSubmit"
-  style="display: grid; gap: 16px; grid-template-columns: 1fr 1fr;"
->
-  <v-input
-    v-for="item in formItems"
-    :label="item.label"
-    :type="item.type || 'text'"
-    :required="item.required"
-    :placeholder="item.placeholder"
-    :opts="item.opts"
-    v:value="formData[item.name]"
-    :style="item.full ? 'grid-column: span 2;' : ''"
-  ></v-input>
-
-  <div
-    style="grid-column: span 2; display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;"
-  >
-    <v-btn variant="text" @click="xxx">xxx</v-btn>
-    <v-btn type="submit">xxx</v-btn>
-  </div>
-</form>
+<v-form :items="formItems" v:data="formData" :cols="2" @submit="onSubmit" @reset="onReset"></v-form>
 
 <script setup>
   formData = {
@@ -370,11 +364,380 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
         ],
       },
     },
+    { name: "bio", type: "textarea", label: "简介", full: true },
   ];
 
-  onSubmit = () => {};
+  onSubmit = (data) => {};
 </script>
 ```
+
+### Props
+
+| 参数     | 说明                                   | 类型    | 默认值 |
+| -------- | -------------------------------------- | ------- | ------ |
+| items    | 字段配置列表（见下）                   | Array   | []     |
+| data     | 表单数据对象（支持 v:data 双向绑定）   | Object  | {}     |
+| cols     | 栅格列数                               | Number  | 1      |
+| disabled | 整体禁用                               | Boolean | false  |
+
+字段配置项： `{ name, type, label, placeholder, required, disabled, readonly, noborder, validate, opts, span, full }`，其中 `span` 为占据栅格列数、`full` 为整行。
+
+### Events
+
+| 事件名 | 说明                             | 回调参数 |
+| ------ | -------------------------------- | -------- |
+| submit | 聚合校验全部通过后触发           | data     |
+| reset  | 重置（恢复初始快照并清空错误态） | -        |
+
+### Slots
+
+| 插槽名  | 说明                                   |
+| ------- | -------------------------------------- |
+| actions | 操作按钮区（默认渲染 提交/重置 按钮） |
+
+## Card 卡片
+
+通用内容容器，支持头部、底部插槽与阴影模式。
+
+### 基础用法
+
+```html
+<v-card title="简单卡片">卡片内容</v-card>
+
+<v-card>
+  <div vslot="header">自定义头部</div>
+  卡片内容
+  <div vslot="footer">底部区域</div>
+</v-card>
+```
+
+### Props
+
+| 参数     | 说明             | 类型    | 可选值                | 默认值 |
+| -------- | ---------------- | ------- | --------------------- | ------ |
+| title    | 标题（便捷头部） | String  | -                     | ''     |
+| shadow   | 阴影显示时机     | String  | always / hover / never | hover  |
+| bordered | 是否显示边框     | Boolean | -                     | true   |
+
+### Slots
+
+| 插槽名 | 说明     |
+| ------ | -------- |
+| header | 头部区域 |
+| -      | 主体内容 |
+| footer | 底部区域 |
+
+## Tag 标签
+
+用于标记和分类的小型标签。
+
+### 基础用法
+
+```html
+<v-tag color="primary">Primary</v-tag>
+<v-tag variant="filled" color="success">Success</v-tag>
+<v-tag variant="outline" color="danger">Danger</v-tag>
+<v-tag closable @close="onClose">可关闭</v-tag>
+```
+
+### Props
+
+| 参数     | 说明         | 类型    | 可选值                                                   | 默认值  |
+| -------- | ------------ | ------- | -------------------------------------------------------- | ------- |
+| color    | 颜色         | String  | default / primary / success / warning / danger / info / 自定义色值 | default |
+| variant  | 变体         | String  | light / filled / outline                                 | light   |
+| size     | 尺寸         | String  | sm / md / lg                                             | md      |
+| closable | 是否可关闭   | Boolean | -                                                        | false   |
+| round    | 是否圆角胶囊 | Boolean | -                                                        | false   |
+
+### Events
+
+| 事件名 | 说明         |
+| ------ | ------------ |
+| close  | 点击关闭按钮 |
+
+## Alert 警告提示
+
+页面内警告提示条，四种语义类型。
+
+### 基础用法
+
+```html
+<v-alert type="success" title="成功" description="操作已完成"></v-alert>
+<v-alert type="danger" title="错误" closable>自定义描述内容</v-alert>
+```
+
+### Props
+
+| 参数        | 说明     | 类型    | 可选值                             | 默认值 |
+| ----------- | -------- | ------- | ---------------------------------- | ------ |
+| type        | 类型     | String  | info / success / warning / danger  | info   |
+| title       | 标题     | String  | -                                  | ''     |
+| description | 描述文字 | String  | -                                  | ''     |
+| closable    | 可关闭   | Boolean | -                                  | false  |
+
+### Slots / Events
+
+| 名称 | 说明                     |
+| ---- | ------------------------ |
+| icon | 自定义图标插槽           |
+| -    | 描述内容（默认插槽）     |
+| close | 关闭时触发（事件）      |
+
+## Spinner 加载
+
+加载状态指示器。
+
+### 基础用法
+
+```html
+<v-spinner></v-spinner>
+<v-spinner size="lg" color="var(--v-color-success)" text="加载中..."></v-spinner>
+```
+
+### Props
+
+| 参数  | 说明 | 类型           | 可选值             | 默认值 |
+| ----- | ---- | -------------- | ------------------ | ------ |
+| size  | 尺寸 | String / Number | sm / md / lg / px 数值 | md     |
+| color | 颜色 | String         | 任意 CSS 色值      | primary |
+| text  | 文案 | String         | -                  | ''     |
+
+## Empty 空状态
+
+空数据占位组件，内置 SVG 插画。
+
+### 基础用法
+
+```html
+<v-empty></v-empty>
+<v-empty description="没有找到相关结果">
+  <v-btn size="sm" variant="outline">重置筛选</v-btn>
+</v-empty>
+```
+
+### Props
+
+| 参数        | 说明           | 类型   | 默认值          |
+| ----------- | -------------- | ------ | --------------- |
+| description | 描述文字       | String | $t('empty.noData') |
+| image       | 自定义图片地址 | String | ''（内置插画）  |
+
+### Slots
+
+| 插槽名 | 说明               |
+| ------ | ------------------ |
+| image  | 自定义插画区域     |
+| -      | 底部操作区         |
+
+## Tooltip 文字提示
+
+悬停或点击触发的气泡提示。
+
+### 基础用法
+
+```html
+<v-tooltip content="提示文字" placement="top">
+  <v-btn>Hover</v-btn>
+</v-tooltip>
+```
+
+### Props
+
+| 参数      | 说明     | 类型   | 可选值                        | 默认值 |
+| --------- | -------- | ------ | ----------------------------- | ------ |
+| content   | 提示内容 | String | -                             | ''     |
+| placement | 出现方向 | String | top / bottom / left / right   | top    |
+| trigger   | 触发方式 | String | hover / click                 | hover  |
+| delay     | 悬停延迟 | Number | ms                            | 100    |
+
+## Table 表格
+
+数据表格，支持自定义单元格、条纹、边框、加载与空状态。
+
+### 基础用法
+
+```html
+<v-table :columns="columns" :data="tableData" striped></v-table>
+
+<script setup>
+  columns = [
+    { key: "name", label: "姓名" },
+    { key: "role", label: "角色" },
+  ];
+  tableData = [{ name: "Alice", role: "Developer" }];
+</script>
+```
+
+### 自定义单元格
+
+`cell` 插槽通过 `vbind` 暴露 `row` 与 `col`：
+
+```html
+<v-table :columns="columns" :data="tableData">
+  <template vslot="cell">
+    <div v-if="col.key === 'status'"><v-tag color="success">在职</v-tag></div>
+    <template v-else>{{ row[col.key] }}</template>
+  </template>
+</v-table>
+```
+
+### Props
+
+| 参数      | 说明           | 类型    | 默认值 |
+| --------- | -------------- | ------- | ------ |
+| columns   | 列配置 [{key, label, width, align}] | Array | [] |
+| data      | 行数据         | Array   | []     |
+| striped   | 斑马纹         | Boolean | false  |
+| bordered  | 边框           | Boolean | false  |
+| loading   | 加载中         | Boolean | false  |
+| emptyText | 空态文案       | String  | 暂无数据 |
+
+## Pagination 分页
+
+分页导航，支持省略与总数显示。
+
+### 基础用法
+
+```html
+<v-pagination v:value="page" :total="500" showTotal></v-pagination>
+```
+
+### Props
+
+| 参数       | 说明                     | 类型    | 默认值 |
+| ---------- | ------------------------ | ------- | ------ |
+| value      | 当前页（v:value 双向）   | Number  | 1      |
+| total      | 总条数                   | Number  | 0      |
+| pageSize   | 每页条数                 | Number  | 10     |
+| maxButtons | 页码按钮上限             | Number  | 7      |
+| showTotal  | 显示总数                 | Boolean | false  |
+
+### Events
+
+| 事件名 | 说明       | 回调参数 |
+| ------ | ---------- | -------- |
+| change | 页码变化时 | page     |
+
+## Badge 徽标
+
+右上角数字或小红点标记，可包裹任意内容或独立使用。
+
+### 基础用法
+
+```html
+<v-badge :count="5"><v-btn>消息</v-btn></v-badge>
+<v-badge dot><v-avatar name="A"></v-avatar></v-badge>
+<v-badge :count="120" :max="99"></v-badge>
+```
+
+### Props
+
+| 参数   | 说明               | 类型    | 默认值 |
+| ------ | ------------------ | ------- | ------ |
+| count  | 数字（0 不显示）   | Number  | 0      |
+| dot    | 小红点模式         | Boolean | false  |
+| max    | 超过显示 max+      | Number  | 99     |
+| hidden | 隐藏徽标           | Boolean | false  |
+
+## Avatar 头像
+
+图片或字符头像，图片加载失败自动回退到首字符。
+
+### 基础用法
+
+```html
+<v-avatar src="/user.jpg" name="Alice"></v-avatar>
+<v-avatar name="Bob" size="lg" shape="square"></v-avatar>
+```
+
+### Props
+
+| 参数  | 说明                   | 类型            | 可选值              | 默认值 |
+| ----- | ---------------------- | --------------- | ------------------- | ------ |
+| src   | 图片地址               | String          | -                   | ''     |
+| name  | 名称（兜底首字符）     | String          | -                   | ''     |
+| size  | 尺寸                   | String / Number | sm / md / lg / px 数值 | md  |
+| shape | 形状                   | String          | circle / square     | circle |
+
+## Popover 气泡卡片
+
+点击或悬停弹出的富内容气泡卡片。
+
+### 基础用法
+
+```html
+<v-popover title="标题" content="内容">
+  <v-btn>点击</v-btn>
+</v-popover>
+
+<v-popover trigger="hover" placement="right" title="用户卡片">
+  <v-avatar name="A"></v-avatar>
+  <div vslot="content">自定义内容</div>
+</v-popover>
+```
+
+### Props
+
+| 参数      | 说明         | 类型   | 可选值                      | 默认值 |
+| --------- | ------------ | ------ | --------------------------- | ------ |
+| title     | 标题         | String | -                           | ''     |
+| content   | 内容         | String | -                           | ''     |
+| placement | 弹出方向     | String | top / bottom / left / right | top    |
+| trigger   | 触发方式     | String | click / hover               | click  |
+
+### Slots
+
+| 插槽名  | 说明           |
+| ------- | -------------- |
+| -       | 触发元素       |
+| content | 自定义气泡内容 |
+
+## Skeleton 骨架屏
+
+加载占位骨架屏，`loading` 为 false 时显示真实内容。
+
+### 基础用法
+
+```html
+<v-skeleton :loading="loading" avatar :rows="2">
+  <div>真实内容</div>
+</v-skeleton>
+```
+
+### Props
+
+| 参数    | 说明           | 类型    | 默认值 |
+| ------- | -------------- | ------- | ------ |
+| loading | 是否显示骨架   | Boolean | true   |
+| rows    | 文本行数       | Number  | 3      |
+| avatar  | 显示头像占位   | Boolean | false  |
+| title   | 显示标题占位   | Boolean | true   |
+
+## Breadcrumb 面包屑
+
+层级导航面包屑，链接自动接入 vrouter。
+
+### 基础用法
+
+```html
+<v-breadcrumb :items="items" separator="/"></v-breadcrumb>
+
+<script setup>
+  items = [
+    { label: "首页", path: "/" },
+    { label: "组件", path: "/c/breadcrumb" },
+    { label: "面包屑" },
+  ];
+</script>
+```
+
+### Props
+
+| 参数      | 说明                          | 类型   | 默认值 |
+| --------- | ----------------------------- | ------ | ------ |
+| items     | 项配置 [{label, path}]，末项不渲染链接 | Array | []  |
+| separator | 分隔符                        | String | /      |
 
 ## Dialog 对话框
 
@@ -507,12 +870,15 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 
 ### Props
 
-| 参数           | 说明                    | 类型                                 | 默认值 |
-| -------------- | ----------------------- | ------------------------------------ | ------ |
-| items          | 菜单项配置列表          | Array<{label, icon, path, children}> | []     |
-| collapsed      | 是否折叠 (支持双向绑定) | Boolean                              | false  |
-| width          | 展开时的宽度            | String                               | 240px  |
-| collapsedWidth | 折叠时的宽度            | String                               | 64px   |
+| 参数           | 说明                                                             | 类型                                 | 默认值 |
+| -------------- | ---------------------------------------------------------------- | ------------------------------------ | ------ |
+| items          | 菜单项配置列表                                                   | Array<{label, icon, path, children}> | []     |
+| collapsed      | 是否折叠 (支持双向绑定)                                          | Boolean                              | false  |
+| width          | 展开时的宽度                                                     | String                               | 240px  |
+| collapsedWidth | 折叠时的宽度                                                     | String                               | 64px   |
+| value          | 当前路径 (支持 v:value 双向绑定)，绑定后点击不跳转、仅更新 value | String                               | null   |
+
+绑定 `v:value` 后菜单项根据 `item.path === value` 自动高亮（受控模式，适用于演示与 SPA）；不绑定时点击走正常链接跳转（MPA），在 `<vrouter>` 内由路由拦截并实现 `active` 高亮。
 
 ### Events
 
@@ -588,21 +954,12 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 
 ## Tree 树形组件
 
-无样式树形组件，提供树形结构容器。
+轻量树形组件，默认渲染带展开/收起箭头，也可通过插槽完全自定义行内容。
 
-### 基础用法
+### 基础用法（默认渲染）
 
 ```html
-<v-tree :data="treeData">
-  <div vslot="row">
-    <div :style="{paddingLeft: (depth * 20) + 'px'}">
-      <span v-if="row.children && row.children.length">
-        {{ row.expand ? '[-]' : '[+]' }}
-      </span>
-      {{ row.name }}
-    </div>
-  </div>
-</v-tree>
+<v-tree :items="treeData"></v-tree>
 
 <script setup>
   treeData = [
@@ -618,17 +975,31 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 </script>
 ```
 
+节点字段：`name`（显示文本）、`children`（子节点数组）、`expand`（是否展开）。
+
+### 自定义行渲染
+
+默认插槽通过 `vbind` 暴露 `row`（节点数据）和 `depth`（深度），展开/收起由调用方控制：
+
+```html
+<v-tree :items="treeData">
+  <div :style="{paddingLeft: (depth * 20) + 'px'}" @click="row.expand = !row.expand">
+    {{ row.name }}
+  </div>
+</v-tree>
+```
+
 ### Props
 
-| 参数 | 说明     | 类型  | 默认值 |
-| ---- | -------- | ----- | ------ |
-| data | 树形数据 | Array | []     |
+| 参数  | 说明     | 类型  | 默认值 |
+| ----- | -------- | ----- | ------ |
+| items | 树形数据 | Array | []     |
 
 ### Slots
 
-| 插槽名 | 说明       | 参数                         |
-| ------ | ---------- | ---------------------------- |
-| row    | 行内容定义 | row (节点数据), depth (深度) |
+| 插槽名 | 说明       | 绑定                       |
+| ------ | ---------- | -------------------------- |
+| -      | 行内容定义 | row (节点数据), depth (深度) |
 
 ## Lang 语言切换
 
