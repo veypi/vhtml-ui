@@ -61,27 +61,27 @@
   }
 
   /* 图标颜色 */
-  .lang-icon :deep(path),
-  .lang-icon :deep(circle),
-  .lang-icon :deep(line),
-  .lang-icon :deep(rect) {
+  .lang-icon path,
+  .lang-icon circle,
+  .lang-icon line,
+  .lang-icon rect {
     stroke: var(--v-text-color-secondary);
     transition: stroke var(--v-transition-fast);
   }
 
-  .lang-icon :deep(text) {
+  .lang-icon text {
     fill: var(--v-text-color-secondary);
     transition: fill var(--v-transition-fast);
   }
 
-  .lang-toggle:hover .lang-icon :deep(path),
-  .lang-toggle:hover .lang-icon :deep(circle),
-  .lang-toggle:hover .lang-icon :deep(line),
-  .lang-toggle:hover .lang-icon :deep(rect) {
+  .lang-toggle:hover .lang-icon path,
+  .lang-toggle:hover .lang-icon circle,
+  .lang-toggle:hover .lang-icon line,
+  .lang-toggle:hover .lang-icon rect {
     stroke: var(--v-color-primary);
   }
 
-  .lang-toggle:hover .icon-zh :deep(text) {
+  .lang-toggle:hover .icon-zh text {
     fill: var(--v-color-primary) !important;
   }
 
@@ -122,6 +122,10 @@
     $i18n.setLocale(newLang);
     currentLang = newLang;
   };
+</script>
+<script>
+  // 外部调用 $i18n.setLocale 时同步图标状态
+  $watch(() => $i18n.getLocale(), (v) => { currentLang = v })
 </script>
 
 </html>

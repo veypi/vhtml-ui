@@ -19,6 +19,47 @@ body {
 }
 
 /* ==========================================================================
+   1.1 Global Polish (滚动条 / 选区 / 焦点)
+   ========================================================================== */
+:root {
+  color-scheme: light;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--v-border-color-hover);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--v-text-color-tertiary);
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--v-color-primary) 25%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--v-color-primary) 60%, transparent);
+  outline-offset: 1px;
+}
+
+/* 自定义焦点样式的组件关闭默认 outline，避免双重焦点环 */
+.v-btn:focus-visible,
+.v-input__inner:focus-visible,
+.v-switch-core:focus-visible {
+  outline: none;
+}
+
+/* ==========================================================================
    2. Design Tokens (设计令牌)
    命名规范: --v-[category]-[name]
    ========================================================================== */
@@ -123,6 +164,72 @@ body {
   --v-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --v-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --v-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Z-index Scale (层级) --- */
+  --v-z-dropdown: 100;
+  --v-z-sticky: 200;
+  --v-z-overlay: 900;
+  --v-z-modal: 1000;
+  --v-z-toast: 2000;
+}
+
+/* ==========================================================================
+   2.1 Themes (主题)
+   通过 documentElement 的 theme 属性切换（$mod.theme.set('t2')）。
+   挂在 :root 而非组件宿主，确保 teleport 到 body 的弹层也能继承。
+   t1 为默认主题（:root 基础值），无需覆盖块。
+   ========================================================================== */
+
+/* 主题 T2: 暗黑/霓虹风格 */
+:root[theme='t2'] {
+  color-scheme: dark;
+
+  /* Backgrounds */
+  --v-bg-color: #0f172a;
+  --v-bg-color-secondary: #1e293b;
+  --v-bg-color-tertiary: #334155;
+
+  /* Text */
+  --v-text-color: #e2e8f0;
+  --v-text-color-secondary: #94a3b8;
+  --v-text-color-tertiary: #64748b;
+  --v-text-color-disabled: #475569;
+
+  /* Primary: 紫色主调 */
+  --v-color-primary: #8b5cf6;
+  --v-color-primary-hover: #7c3aed;
+  --v-color-primary-active: #6d28d9;
+  --v-color-primary-text: #ffffff;
+
+  /* Secondary */
+  --v-color-secondary: #64748b;
+  --v-color-secondary-hover: #475569;
+  --v-color-secondary-active: #334155;
+
+  /* Feedback */
+  --v-color-info: #8b5cf6;
+  --v-color-success: #10b981;
+  --v-color-warning: #f59e0b;
+  --v-color-danger: #f43f5e;
+  --v-color-danger-hover: #e11d48;
+
+  /* Borders */
+  --v-border-color: #334155;
+  --v-border-color-hover: #475569;
+
+  /* Radius: 更大的圆角 */
+  --v-radius-sm: 8px;
+  --v-radius-md: 12px;
+  --v-radius-lg: 16px;
+  --v-radius-xl: 20px;
+
+  /* Typography: 极客字体 */
+  --v-font-family: "Menlo", "Monaco", "Courier New", monospace;
+
+  /* Shadows: 暗色下加深 */
+  --v-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --v-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --v-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
 }
 
 /* ==========================================================================
@@ -193,9 +300,21 @@ body {
   gap: var(--v-spacing-md);
 }
 
+.v-gap-xs {
+  gap: var(--v-spacing-xs);
+}
+
+.v-gap-lg {
+  gap: var(--v-spacing-lg);
+}
+
 /* Spacing Utilities */
 .v-m-0 {
   margin: 0;
+}
+
+.v-mt-xs {
+  margin-top: var(--v-spacing-xs);
 }
 
 .v-mt-sm {
@@ -206,12 +325,41 @@ body {
   margin-top: var(--v-spacing-md);
 }
 
+.v-mt-lg {
+  margin-top: var(--v-spacing-lg);
+}
+
+.v-mb-xs {
+  margin-bottom: var(--v-spacing-xs);
+}
+
 .v-mb-sm {
   margin-bottom: var(--v-spacing-sm);
 }
 
 .v-mb-md {
   margin-bottom: var(--v-spacing-md);
+}
+
+.v-mb-lg {
+  margin-bottom: var(--v-spacing-lg);
+}
+
+.v-ml-xs {
+  margin-left: var(--v-spacing-xs);
+}
+
+.v-mr-sm {
+  margin-right: var(--v-spacing-sm);
+}
+
+.v-my-sm {
+  margin-top: var(--v-spacing-sm);
+  margin-bottom: var(--v-spacing-sm);
+}
+
+.v-p-xs {
+  padding: var(--v-spacing-xs);
 }
 
 .v-p-sm {
@@ -235,6 +383,18 @@ body {
   text-align: right;
 }
 
+.v-text-xs {
+  font-size: var(--v-font-size-xs);
+}
+
+.v-text-sm {
+  font-size: var(--v-font-size-sm);
+}
+
+.v-text-lg {
+  font-size: var(--v-font-size-lg);
+}
+
 .v-font-bold {
   font-weight: var(--v-font-weight-bold);
 }
@@ -251,8 +411,118 @@ body {
   color: var(--v-color-success);
 }
 
+.v-text-warning {
+  color: var(--v-color-warning);
+}
+
 .v-text-secondary {
   color: var(--v-text-color-secondary);
+}
+
+/* Border & Radius Utilities */
+.v-border {
+  border: 1px solid var(--v-border-color);
+}
+
+.v-rounded-sm {
+  border-radius: var(--v-radius-sm);
+}
+
+.v-rounded-md {
+  border-radius: var(--v-radius-md);
+}
+
+.v-rounded-lg {
+  border-radius: var(--v-radius-lg);
+}
+
+/* Background Utilities */
+.v-bg-secondary {
+  background-color: var(--v-bg-color-secondary);
+}
+
+.v-hover-bg-secondary:hover {
+  background-color: var(--v-bg-color-secondary);
+}
+
+/* Cursor Utilities */
+.v-cursor-pointer {
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   4. Form Control Base (表单控件基础样式，供 input 系组件共用)
+   ========================================================================== */
+.v-input-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  background-color: var(--v-bg-color);
+  border-radius: var(--v-radius-md);
+  border: 1px solid var(--v-border-color);
+  box-sizing: border-box;
+  transition: var(--v-transition-base, all 0.2s);
+  overflow: hidden;
+}
+
+.v-input-wrapper:hover:not(.is-disabled) {
+  border-color: var(--v-border-color-hover);
+}
+
+.v-input-wrapper:has(:focus-visible):not(.is-disabled) {
+  border-color: var(--v-color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--v-color-primary) 50%, transparent);
+}
+
+.v-input-wrapper.is-disabled {
+  background-color: var(--v-bg-color-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.v-input-wrapper.is-error {
+  border-color: var(--v-color-danger);
+}
+
+.v-input-wrapper.is-error:has(:focus-visible) {
+  border-color: var(--v-color-danger);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--v-color-danger) 50%, transparent);
+}
+
+.v-input-wrapper.is-no-border {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.v-input__inner {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--v-text-color);
+  font-size: var(--v-font-size-md);
+  outline: none;
+  padding: var(--v-spacing-sm) var(--v-spacing-md);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.v-input__inner::placeholder {
+  color: var(--v-text-color-disabled);
+}
+
+.v-input__inner:disabled {
+  cursor: not-allowed;
+}
+
+.v-error-msg {
+  font-size: var(--v-font-size-xs);
+  color: var(--v-color-danger);
+  min-height: 1.2em;
 }
 
 /* Display/Visibility */
@@ -263,3 +533,50 @@ body {
 .v-block {
   display: block;
 }
+
+/* ==========================================================================
+   5. Demo Helpers (演示站点共用样式)
+   ========================================================================== */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: var(--v-text-color);
+  border-left: 4px solid var(--v-color-primary);
+  padding-left: 0.5rem;
+}
+
+.demo-label {
+  font-size: 0.875rem;
+  color: var(--v-text-color-secondary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.demo-section {
+  margin-bottom: var(--v-spacing-xl);
+  padding: var(--v-spacing-lg);
+  border: 1px solid var(--v-border-color);
+  border-radius: var(--v-radius-lg);
+  background-color: var(--v-bg-color);
+}
+
+.demo-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: var(--v-spacing-md);
+  padding-bottom: var(--v-spacing-sm);
+  border-bottom: 1px solid var(--v-border-color);
+  color: var(--v-text-color);
+}
+
+.value-display {
+  font-family: ui-monospace, monospace;
+  font-size: var(--v-font-size-xs);
+  background: var(--v-bg-color-secondary);
+  color: var(--v-text-color-secondary);
+  padding: var(--v-spacing-sm);
+  border-radius: var(--v-radius-sm);
+  margin-top: var(--v-spacing-xs);
+}
+
