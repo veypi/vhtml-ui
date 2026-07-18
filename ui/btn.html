@@ -175,12 +175,6 @@
   }
 
   /* Icon Sizes - Optional, derived from height */
-  .v-btn--size-icon {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-  }
-
   .v-btn--size-icon-xxs {
     width: 20px;
     height: 20px;
@@ -270,11 +264,11 @@
   </button>
 </body>
 <script setup>
-  variant = 'default'; // default, destructive, outline, ghost
+  variant = 'default'; // default, outline, ghost
   size = 'md';         // xxs, xs, sm, md, lg, xl, xxl
   icon = false;        // if true, sets size to icon-{size}
   type = 'button';     // button, submit, reset
-  color = 'primary';   // primary，secondary, success, danger, warning, info, #XXXXXX, rgba(0,0,0,0.5)
+  color = 'primary';   // primary, secondary, success, danger, warning, info, #XXXXXX, rgba(0,0,0,0.5)
   block = false;
   round = false;
   disabled = false;
@@ -283,8 +277,7 @@
 
 
   computeClass = () => {
-    // Handle backward compatibility or default 'default' to 'md'
-    let currentSize = size === 'default' ? 'md' : size;
+    let currentSize = size;
 
     // If icon prop is true, use icon size variant
     if (icon) {
@@ -299,10 +292,8 @@
     if (round) classes.push('rounded-full');
     if (disabled) classes.push('v-btn--disabled');
 
-    // Check if using color (either custom or semantic, but not default/primary for basic variants unless we want them colored)
-    // Actually, we want 'primary', 'success' etc to also trigger the colored behavior for ghost/outline.
-    // So we just check if color is present and valid.
-    if (color && color !== 'default') {
+    // Semantic and custom colors drive outline/ghost foreground via --v-btn-color
+    if (color) {
       classes.push('v-btn--colored');
     }
 
@@ -326,7 +317,6 @@
         baseColor = 'var(--v-color-success)';
         break;
       case 'danger':
-      case 'destructive':
         baseColor = 'var(--v-color-danger)';
         break;
       case 'warning':

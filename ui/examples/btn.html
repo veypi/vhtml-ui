@@ -8,12 +8,11 @@
 
 <body>
   <div class="section-title">{{$t('btn.title')}}</div>
-  <div vsrc='/btn' variant="ghost" size='sm'>{{$t('btn.ghost')}}</div>
   <div class="v-mb-md">
     <span class="demo-label">{{$t('btn.variant')}}</span>
     <div class="v-flex v-gap-sm v-flex-wrap">
       <div vsrc='/btn'>{{$t('btn.default')}}</div>
-      <div vsrc='/btn' variant="destructive">{{$t('btn.destructive')}}</div>
+      <div vsrc='/btn' color="danger">{{$t('btn.destructive')}}</div>
       <div vsrc='/btn' variant="outline">{{$t('btn.outline')}}</div>
       <div vsrc='/btn' variant="ghost">{{$t('btn.ghost')}}</div>
     </div>
@@ -30,7 +29,7 @@
     <span class="demo-label">{{$t('btn.size')}}</span>
     <div class="v-flex v-gap-sm v-items-center">
       <div vsrc='/btn' size="sm">{{$t('btn.small')}}</div>
-      <div vsrc='/btn' size="default">{{$t('btn.default')}}</div>
+      <div vsrc='/btn'>{{$t('btn.default')}}</div>
       <div vsrc='/btn' size="lg">{{$t('btn.large')}}</div>
     </div>
   </div>
@@ -54,7 +53,7 @@
         </svg>
         {{$t('btn.alert')}}
       </div>
-      <div vsrc='/btn' variant="secondary">
+      <div vsrc='/btn' color="secondary">
         {{$t('btn.next')}}
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -68,21 +67,21 @@
   <div class="v-mb-md">
     <span class="demo-label">{{$t('btn.iconOnly')}}</span>
     <div class="v-flex v-gap-sm v-flex-wrap v-items-center">
-      <div vsrc='/btn' size="icon" variant="outline">
+      <div vsrc='/btn' icon variant="outline">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M3 2.5C3 2.22386 3.22386 2 3.5 2H11.5C11.7761 2 12 2.22386 12 2.5V13.5C12 13.6818 11.9014 13.8492 11.7424 13.9373C11.5834 14.0254 11.3891 14.0203 11.235 13.924L7.5 11.5896L3.765 13.924C3.61087 14.0203 3.41659 14.0254 3.25762 13.9373C3.09864 13.8492 3 13.6818 3 13.5V2.5ZM4 3V12.5978L6.97 10.7416C7.29427 10.5389 7.70573 10.5389 8.03 10.7416L11 12.5978V3H4Z"
             fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
       </div>
-      <div vsrc='/btn' size="icon-sm" variant="ghost">
+      <div vsrc='/btn' icon size="sm" variant="ghost">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M1.5 7.5C1.5 7.22386 1.72386 7 2 7H13C13.2761 7 13.5 7.22386 13.5 7.5C13.5 7.77614 13.2761 8 13 8H2C1.72386 8 1.5 7.77614 1.5 7.5Z"
             fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
       </div>
-      <div vsrc='/btn' size="icon-lg" variant="secondary">
+      <div vsrc='/btn' icon size="lg" color="secondary">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M7.5 1.5C7.77614 1.5 8 1.72386 8 2V13C8 13.2761 7.77614 13.5 7.5 13.5C7.22386 13.5 7 13.2761 7 13V2C7 1.72386 7.22386 1.5 7.5 1.5Z"
@@ -115,7 +114,7 @@
     <span class="demo-label">{{$t('btn.round')}}</span>
     <div class="v-flex v-gap-sm v-items-center">
       <div vsrc='/btn' round>{{$t('btn.roundBtn')}}</div>
-      <div vsrc='/btn' round size="icon" variant="outline">
+      <div vsrc='/btn' round icon variant="outline">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M3 2.5C3 2.22386 3.22386 2 3.5 2H11.5C11.7761 2 12 2.22386 12 2.5V13.5C12 13.6818 11.9014 13.8492 11.7424 13.9373C11.5834 14.0254 11.3891 14.0203 11.235 13.924L7.5 11.5896L3.765 13.924C3.61087 14.0203 3.41659 14.0254 3.25762 13.9373C3.09864 13.8492 3 13.6818 3 13.5V2.5ZM4 3V12.5978L6.97 10.7416C7.29427 10.5389 7.70573 10.5389 8.03 10.7416L11 12.5978V3H4Z"
@@ -131,11 +130,9 @@
       <div vsrc='/btn' variant="default" :click="handleAsyncClick">{{$t('btn.clickToLoad')}}</div>
     </div>
   </div>
-  </div>
 
 </body>
 <script setup>
-  console.log($t("app.title"))
   handleAsyncClick = () => {
     return new Promise(resolve => setTimeout(resolve, 2000));
   };

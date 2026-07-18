@@ -17,7 +17,7 @@
         var(--v-text-color) 38%,
         transparent
       );
-      z-index: 999999;
+      z-index: var(--v-z-modal, 1000);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -136,7 +136,6 @@
       class="v-dialog-overlay"
       :class="{ 'v-dialog-overlay--compact': compact }"
       @click="handleOverlayClick"
-      @keyup.escape="handleClose"
       :style="compact ? '' : 'background-color:' + background"
     >
       <div
@@ -184,6 +183,8 @@
       e.stopPropagation();
     };
     overlayEl = null;
+    prevOverflow = "";
+    onKeydown = null;
   </script>
 
   <script>
@@ -191,9 +192,29 @@
     if (overlayEl) {
       document.body.appendChild(overlayEl);
     }
+
+    // Esc 关闭与 body 滚动锁：仅 visible 期间生效
+    onKeydown = (e) => {
+      if (e.key === "Escape" && visible) handleClose();
+    };
+    $watch(
+      () => $data.visible,
+      (v) => {
+        if (v) {
+          prevOverflow = document.body.style.overflow;
+          document.body.style.overflow = "hidden";
+          document.addEventListener("keydown", onKeydown);
+        } else {
+          document.body.style.overflow = prevOverflow;
+          document.removeEventListener("keydown", onKeydown);
+        }
+      }
+    );
   </script>
 
   <script dispose>
+    document.body.style.overflow = prevOverflow || "";
+    document.removeEventListener("keydown", onKeydown);
     if (overlayEl && overlayEl.parentNode === document.body) {
       document.body.removeChild(overlayEl);
     }
