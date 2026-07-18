@@ -8,17 +8,17 @@
   <title>{{$t('sidebar.title')}}</title>
 </head>
 <style>
-  html,
   body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
+    display: block;
   }
 
   .layout-container {
     display: flex;
-    height: 100%;
+    height: 480px;
     width: 100%;
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-md);
+    overflow: hidden;
   }
 
   .main-content {
@@ -52,7 +52,7 @@
   <div class="layout-container">
 
     <!-- Sidebar -->
-    <div vsrc="/sidebar" :items="menuItems" v:collapsed="isCollapsed">
+    <div vsrc="/sidebar" :items="menuItems" v:collapsed="isCollapsed" v:value="currentPath">
 
       <div vslot="header" class="header-logo">
         <span v-if="!isCollapsed">{{$t('sidebar.admin')}}</span>
@@ -76,7 +76,7 @@
         <h1>{{ getPageTitle(currentPath) }}</h1>
         <p class="v-text-secondary">{{$t('sidebar.currentPath')}}: {{ currentPath }}</p>
 
-        <div class="v-mt-lg v-p-md" style="background: white; border-radius: 8px; border: 1px solid #eee;">
+        <div class="v-mt-lg v-p-md v-border v-rounded-lg" style="background: var(--v-bg-color);">
           <p>{{$t('sidebar.contentArea')}} {{$t(isCollapsed ? 'sidebar.collapsed' : 'sidebar.expanded')}}</p>
           <div class="v-mt-md">
             <button class="toggle-btn" @click="toggleSidebar">{{$t('sidebar.toggle')}}</button>
@@ -102,7 +102,7 @@
     {
       label: () => $t('sidebar.userMgmt'),
       icon: iconUser,
-      path: '/users',
+      expanded: true,
       children: [
         {label: () => $t('sidebar.userList'), path: '/users/list'},
         {label: () => $t('sidebar.roles'), path: '/users/roles'}

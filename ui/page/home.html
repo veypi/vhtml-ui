@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Components Overview">
+  <title>{{$t('menu.home')}}</title>
+</head>
+<style>
+  body {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .home-hero {
+    text-align: center;
+    padding: var(--v-spacing-xl) 0;
+    margin-bottom: var(--v-spacing-lg);
+    border-bottom: 1px solid var(--v-border-color);
+  }
+
+  .home-hero h1 {
+    font-size: 2.5rem;
+    color: var(--v-color-primary);
+    margin-bottom: var(--v-spacing-sm);
+  }
+
+  .home-hero p {
+    color: var(--v-text-color-secondary);
+  }
+
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--v-spacing-md);
+  }
+
+  .home-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--v-spacing-sm);
+    padding: var(--v-spacing-lg);
+    background: var(--v-bg-color);
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-lg);
+    text-decoration: none;
+    color: var(--v-text-color);
+    transition: all var(--v-transition-base);
+  }
+
+  .home-card:hover {
+    border-color: var(--v-color-primary);
+    box-shadow: var(--v-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .home-card-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--v-color-primary);
+    background: color-mix(in srgb, var(--v-color-primary) 10%, transparent);
+    border-radius: var(--v-radius-md);
+    transition: all var(--v-transition-base);
+  }
+
+  .home-card:hover .home-card-icon {
+    background: var(--v-color-primary);
+    color: var(--v-color-primary-text);
+  }
+
+  .home-card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .home-card-name {
+    font-weight: var(--v-font-weight-bold);
+    font-size: var(--v-font-size-lg);
+  }
+
+  .home-card-desc {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+    line-height: 1.5;
+  }
+</style>
+
+<body>
+  <div class="home-hero">
+    <h1>{{ $t('app.logo') }}</h1>
+    <p>{{ $t('app.subtitle') }}</p>
+  </div>
+
+  <div class="home-grid">
+    <a :key="item.name" v-for="item in items" class="home-card" :href="'/c/' + item.name">
+      <span class="home-card-icon" v-html="item.icon"></span>
+      <span class="home-card-name">{{ $t(item.labelKey) }}</span>
+      <span class="home-card-desc">{{ $t(item.descKey) }}</span>
+    </a>
+  </div>
+</body>
+<script setup>
+  items = $mod.navItems;
+</script>
+
+</html>

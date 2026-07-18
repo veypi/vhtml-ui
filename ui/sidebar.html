@@ -49,8 +49,9 @@
     color: var(--v-color-primary);
   }
 
+  .v-menu-item.is-active,
   .v-menu-item[active] {
-    background-color: var(--v-blue-50);
+    background-color: color-mix(in srgb, var(--v-color-primary) 10%, transparent);
     color: var(--v-color-primary);
     font-weight: var(--v-font-weight-medium);
   }
@@ -115,7 +116,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    z-index: 999;
+    z-index: var(--v-z-overlay);
     transform: translateX(-100%);
     transition: transform var(--v-transition-base);
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
@@ -129,7 +130,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 998;
+    z-index: calc(var(--v-z-overlay) - 1);
     opacity: 0;
     transition: opacity var(--v-transition-base);
     pointer-events: none;
@@ -145,7 +146,7 @@
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 997;
+    z-index: calc(var(--v-z-overlay) - 2);
     width: 32px;
     height: 110px;
     display: flex;
@@ -232,16 +233,16 @@
         </div>
 
         <!-- Leaf Item (Link) -->
-        <a v-else class="v-menu-item" :href="pathPrefix + item.path" @click="onSelect(item)"
-          :title="collapsed ? item.label : ''">
+        <a v-else class="v-menu-item" :class="{ 'is-active': isActive(item) }" :href="pathPrefix + item.path"
+          @click="onLeafClick(item, $event)" :title="collapsed ? item.label : ''">
           <div class="v-menu-icon" v-if="item.icon" v-html="item.icon"></div>
           <span class="v-menu-label">{{ item.label }}</span>
         </a>
 
         <!-- Children -->
         <div v-if="item.children && !collapsed" class="v-submenu" :style="{maxHeight: item.expanded ? '500px' : '0'}">
-          <a v-for="subItem in item.children" class="v-menu-item" :href="pathPrefix + subItem.path"
-            @click="onSelect(subItem)" :title="subItem.label">
+          <a v-for="subItem in item.children" class="v-menu-item" :class="{ 'is-active': isActive(subItem) }"
+            :href="pathPrefix + subItem.path" @click="onLeafClick(subItem, $event)" :title="subItem.label">
             <div class="v-menu-icon" v-if="subItem.icon" v-html="subItem.icon"></div>
             <span class="v-menu-label">{{ subItem.label }}</span>
           </a>
@@ -260,9 +261,12 @@
   collapsed = false;
   width = '240px';
   collapsedWidth = '64px';
-  pathPrefix = '@'
-  overlay = window.innerWidth < 768;
+  value = null; // 受控当前路径（v:value），非 null 时点击不跳转、仅更新 value
+  pathPrefix = ''; // 链接前缀：'' = 普通路径（vrouter 拦截）；'@' 前缀 = 跳出路由整页跳转（MPA）
+  overlay = false;
   open = false;
+  mq = null;
+  mqHandler = null;
 
   toggleExpand = (item) => {
     item.expanded = !item.expanded;
@@ -270,23 +274,30 @@
 
   close = () => {open = false;};
 
-  onSelect = (item) => {
+  isActive = (item) => {
+    return value !== null && value !== undefined && item.path === value;
+  };
+
+  onLeafClick = (item, e) => {
+    if (value !== null && value !== undefined) {
+      e.preventDefault();
+      value = item.path;
+    }
     $emit('select', item);
     if (overlay) open = false;
   };
 </script>
 <script>
-  let ofNode = $node.parentNode.closest('*[vref]')
-  if (ofNode.$mod.scoped) {
-    pathPrefix = '@' + ofNode.$mod.scoped
-  }
-
-  const mq = window.matchMedia('(max-width: 767px)');
-  overlay = mq.matches;
-  mq.addEventListener('change', (e) => {
+  mq = window.matchMedia('(max-width: 767px)');
+  mqHandler = (e) => {
     overlay = e.matches;
     if (!e.matches) open = false;
-  });
+  };
+  overlay = mq.matches;
+  mq.addEventListener('change', mqHandler);
+</script>
+<script dispose>
+  mq.removeEventListener('change', mqHandler);
 </script>
 
 </html>

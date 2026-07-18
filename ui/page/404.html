@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="404 Not Found">
+  <title>404</title>
+</head>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--v-spacing-xl);
+    text-align: center;
+    min-height: 50vh;
+  }
+
+  .nf-code {
+    font-size: 4rem;
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-color-primary);
+    line-height: 1;
+  }
+
+  .nf-msg {
+    margin: var(--v-spacing-md) 0 var(--v-spacing-lg);
+    color: var(--v-text-color-secondary);
+  }
+
+  .nf-link {
+    color: var(--v-color-primary);
+    text-decoration: none;
+  }
+
+  .nf-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<body>
+  <div class="nf-code">404</div>
+  <div class="nf-msg">{{ $t('notfound.title') }}</div>
+  <a class="nf-link" href="/">{{ $t('notfound.back') }}</a>
+</body>
+
+</html>
