@@ -398,14 +398,23 @@ click 尽量使用:click 传递给组件，而不是@click，因为@click 会触
 </script>
 ```
 
+### 紧凑模式
+
+```html
+<v-dialog v:visible="showDialog" compact="true">
+  <div>紧凑模式无 header、footer、背景和内边距，宽高由内容决定</div>
+</v-dialog>
+```
+
 ### Props
 
-| 参数              | 说明                                       | 类型    | 默认值 |
-| ----------------- | ------------------------------------------ | ------- | ------ |
-| visible           | 是否显示 Dialog，支持 `v:visible` 双向绑定 | Boolean | false  |
-| title             | Dialog 的标题                              | String  | Dialog |
-| width             | Dialog 的宽度                              | String  | 50%    |
-| closeOnClickModal | 是否可以通过点击 modal 关闭 Dialog         | Boolean | true   |
+| 参数              | 说明                                                         | 类型    | 默认值 |
+| ----------------- | ------------------------------------------------------------ | ------- | ------ |
+| visible           | 是否显示 Dialog，支持 `v:visible` 双向绑定                   | Boolean | false  |
+| title             | Dialog 的标题                                                | String  | Dialog |
+| width             | Dialog 的宽度（compact 模式下无效）                          | String  | 50%    |
+| closeOnClickModal | 是否可以通过点击 modal 关闭 Dialog                           | Boolean | true   |
+| compact           | 紧凑模式，无 header/footer/背景/内边距，宽高由内容自适应     | Boolean | false  |
 
 ### Events
 

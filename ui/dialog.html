@@ -1,144 +1,201 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Dialog Modal Component">
-  <title>Dialog</title>
-</head>
-<style>
-  .v-dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: color-mix(in srgb, var(--v-text-color) 38%, transparent);
-    z-index: 999999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .v-dialog {
-    background-color: var(--v-bg-color);
-    border-radius: var(--v-radius-lg);
-    box-shadow: var(--v-shadow-lg);
-    display: flex;
-    flex-direction: column;
-    max-width: 90vw;
-    max-height: 85vh;
-    animation: v-dialog-fade-in 0.3s ease-out;
-    position: relative;
-  }
-
-  @keyframes v-dialog-fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Dialog Modal Component" />
+    <title>Dialog</title>
+  </head>
+  <style>
+    .v-dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: color-mix(
+        in srgb,
+        var(--v-text-color) 38%,
+        transparent
+      );
+      z-index: 999999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    to {
-      opacity: 1;
-      transform: translateY(0);
+    .v-dialog {
+      background-color: var(--v-bg-color);
+      border-radius: var(--v-radius-lg);
+      box-shadow: var(--v-shadow-lg);
+      display: flex;
+      flex-direction: column;
+      max-width: 90vw;
+      max-height: 85vh;
+      animation: v-dialog-fade-in 0.3s ease-out;
+      position: relative;
     }
-  }
 
-  .v-dialog-header {
-    padding: var(--v-spacing-md) var(--v-spacing-lg);
-    border-bottom: 1px solid var(--v-border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    @keyframes v-dialog-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
 
-  .v-dialog-title {
-    font-size: var(--v-font-size-lg);
-    font-weight: var(--v-font-weight-bold);
-    color: var(--v-text-color);
-  }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-  .v-dialog-close {
-    cursor: pointer;
-    color: var(--v-text-color-secondary);
-    font-size: 1.5rem;
-    line-height: 1;
-    transition: color 0.2s;
-    background: transparent;
-    border: none;
-    padding: 0;
-  }
+    .v-dialog-header {
+      padding: var(--v-spacing-md) var(--v-spacing-lg);
+      border-bottom: 1px solid var(--v-border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-  .v-dialog-close:hover {
-    color: var(--v-text-color);
-  }
+    .v-dialog-title {
+      font-size: var(--v-font-size-lg);
+      font-weight: var(--v-font-weight-bold);
+      color: var(--v-text-color);
+    }
 
-  .v-dialog-body {
-    padding: var(--v-spacing-lg);
-    overflow-y: auto;
-    flex: 1;
-    color: var(--v-text-color);
-  }
+    .v-dialog-close {
+      cursor: pointer;
+      color: var(--v-text-color-secondary);
+      font-size: 1.5rem;
+      line-height: 1;
+      transition: color 0.2s;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
 
-  .v-dialog-footer {
-    padding: var(--v-spacing-md) var(--v-spacing-lg);
-    border-top: 1px solid var(--v-border-color);
-    text-align: right;
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--v-spacing-sm);
-  }
-</style>
+    .v-dialog-close:hover {
+      color: var(--v-text-color);
+    }
 
-<body>
-  <div v-show="visible" class="v-dialog-overlay" @click="handleOverlayClick">
-    <div class="v-dialog" :style="'width:' + width" @click="stopProp">
-      <vslot name='title' class="v-dialog-header">
-        <span class="v-dialog-title">{{ title }}</span>
-        <button class="v-dialog-close" @click="handleClose">×</button>
-      </vslot>
+    .v-dialog-body {
+      padding: var(--v-spacing-lg);
+      overflow-y: auto;
+      flex: 1;
+      color: var(--v-text-color);
+    }
 
-      <vslot class="v-dialog-body"></vslot>
+    .v-dialog-footer {
+      padding: var(--v-spacing-md) var(--v-spacing-lg);
+      border-top: 1px solid var(--v-border-color);
+      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--v-spacing-sm);
+    }
 
-      <vslot class="v-dialog-footer" name="footer">
-      </vslot>
+    .v-dialog--compact {
+      background-color: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      max-width: none;
+      max-height: none;
+      animation: none;
+    }
+
+    .v-dialog-body--compact {
+      padding: 0;
+      overflow-y: visible;
+    }
+
+    .v-dialog-close--compact {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      z-index: 1;
+      color: var(--v-text-color);
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      background: var(--v-bg-color);
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .v-dialog-close--compact:hover {
+      opacity: 0.7;
+    }
+  </style>
+
+  <body>
+    <div
+      v-show="visible"
+      class="v-dialog-overlay"
+      :class="{ 'v-dialog-overlay--compact': compact }"
+      @click="handleOverlayClick"
+      @keyup.escape="handleClose"
+      :style="compact ? '' : 'background-color:' + background"
+    >
+      <div
+        class="v-dialog"
+        :class="{ 'v-dialog--compact': compact }"
+        :style="compact ? '' : 'width:' + width"
+        @click="stopProp"
+      >
+        <vslot v-if="!compact" name="title" class="v-dialog-header">
+          <span class="v-dialog-title">{{ title }}</span>
+          <button class="v-dialog-close" @click="handleClose">×</button>
+        </vslot>
+
+        <vslot
+          class="v-dialog-body"
+          :class="{ 'v-dialog-body--compact': compact }"
+        ></vslot>
+
+        <vslot v-if="!compact" class="v-dialog-footer" name="footer"> </vslot>
+
+        <button v-if="compact" class="v-dialog-close--compact" @click="handleClose">×</button>
+      </div>
     </div>
-  </div>
-</body>
-<script setup>
-  visible = false;
-  title = 'Dialog';
-  width = '50%';
-  closeOnClickModal = true;
-
-  handleClose = () => {
+  </body>
+  <script setup>
     visible = false;
-    $emit('close');
-  };
+    title = "Dialog";
+    width = "50%";
+    closeOnClickModal = true;
+    compact = false;
+    background = "color-mix(in srgb, var(--v-text-color) 38%, transparent)";
 
-  handleOverlayClick = () => {
-    if (closeOnClickModal) {
-      handleClose();
+    handleClose = () => {
+      visible = false;
+      $emit("close");
+    };
+
+    handleOverlayClick = () => {
+      if (closeOnClickModal) {
+        handleClose();
+      }
+    };
+
+    stopProp = (e) => {
+      e.stopPropagation();
+    };
+    overlayEl = null;
+  </script>
+
+  <script>
+    overlayEl = $node.querySelector(".v-dialog-overlay");
+    if (overlayEl) {
+      document.body.appendChild(overlayEl);
     }
-  };
+  </script>
 
-  stopProp = (e) => {
-    e.stopPropagation();
-  }
-  overlayEl = null
-</script>
-
-<script>
-  overlayEl = $node.querySelector('.v-dialog-overlay')
-  if (overlayEl) {
-    document.body.appendChild(overlayEl)
-  }
-</script>
-
-<script dispose>
-  if (overlayEl && overlayEl.parentNode === document.body) {
-    document.body.removeChild(overlayEl)
-  }
-</script>
-
+  <script dispose>
+    if (overlayEl && overlayEl.parentNode === document.body) {
+      document.body.removeChild(overlayEl);
+    }
+  </script>
 </html>
