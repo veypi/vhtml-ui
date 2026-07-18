@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Switch Control">
+  <title>Switch</title>
+</head>
+<style>
+  body {
+    display: block;
+    width: 100%;
+  }
+
+  .v-switch {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    font-size: var(--v-font-size-md);
+    line-height: 20px;
+    height: 40px;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .v-switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    margin: 0;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .v-switch-core {
+    margin: 0;
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 20px;
+    border: 1px solid var(--v-border-color);
+    outline: none;
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: var(--v-bg-color-secondary);
+    cursor: pointer;
+    transition: border-color .3s, background-color .3s;
+    vertical-align: middle;
+  }
+
+  .v-switch-core:after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    border-radius: 100%;
+    transition: all .3s;
+    width: 16px;
+    height: 16px;
+    background-color: var(--v-bg-color);
+  }
+
+  .v-switch.is-checked .v-switch-core {
+    border-color: var(--v-color-primary);
+    background-color: var(--v-color-primary);
+  }
+
+  .v-switch.is-checked .v-switch-core:after {
+    left: 100%;
+    margin-left: -17px;
+  }
+
+  .v-switch.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .v-switch.is-disabled .v-switch-core {
+    cursor: not-allowed;
+  }
+
+  .v-switch-label {
+    margin-left: 10px;
+    color: var(--v-text-color);
+  }
+</style>
+
+<body>
+  <label class="v-switch" :class="{ 'is-checked': value, 'is-disabled': disabled }">
+    <input type="checkbox" :checked="value" :disabled="disabled" :required="required" @change="handleChange">
+    <span class="v-switch-core"></span>
+    <span v-if="placeholder" class="v-switch-label">{{ placeholder }}</span>
+  </label>
+  <div v-if="errorMsg" class="v-error-msg">{{ errorMsg }}</div>
+</body>
+<script setup>
+  value = false;
+  placeholder = "";
+  disabled = false;
+  required = false;
+  validate = null;
+  opts = {};
+  name = "";
+  errorMsg = "";
+
+  validateField = () => {
+    const r = $mod.checkValue({ val: value, required, type: 'switch', validate, opts, $t });
+    errorMsg = r.msg;
+    return r;
+  }
+
+  handleChange = (e) => {
+    value = e.target.checked;
+    validateField();
+    $emit('change', value);
+  }
+</script>
+
+</html>

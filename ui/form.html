@@ -12,43 +12,85 @@
     width: 100%;
   }
 
-  .v-form-item {
-    margin-bottom: var(--v-spacing-lg, 16px);
+  .v-form-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--v-form-cols, 1), 1fr);
+    gap: var(--v-spacing-sm) var(--v-spacing-md);
   }
 
   .v-form-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 16px;
-    margin-top: 24px;
+    gap: var(--v-spacing-md);
+    margin-top: var(--v-spacing-lg);
+  }
+
+  vslot {
+    display: contents;
   }
 </style>
 
 <body>
-  <form class="v-form">
-    <div v-for="(item, index) in items" :key="item.name || index" class="v-form-item">
-      <!-- Dynamic Input Component -->
-      <div vsrc="/input.html" :type="item.type || 'text'" :label="item.label" :placeholder="item.placeholder"
-        :required="item.required" :disabled="item.disabled || disabled" :readonly="item.readonly"
-        :noborder="item.noborder" :validate="item.validate" :opts="item.opts || {}" :name="item.name"
-        v:value="data[item.name]">
+  <form class="v-form" :style="{ '--v-form-cols': cols }" @submit.prevent="handleSubmit">
+    <div class="v-form-grid">
+      <div :key="item.name || index" v-for="(item, index) in items" class="v-form-item"
+        :style="item.full ? 'grid-column: 1 / -1;' : (item.span ? 'grid-column: span ' + item.span + ';' : '')">
+        <!-- Dynamic Input Component -->
+        <div vsrc="/input.html" class="v-form-field" :type="item.type || 'text'" :label="item.label"
+          :placeholder="item.placeholder" :required="item.required" :disabled="item.disabled || disabled"
+          :readonly="item.readonly" :noborder="item.noborder" :validate="item.validate" :opts="item.opts || {}"
+          :name="item.name" v:value="data[item.name]">
+        </div>
       </div>
     </div>
 
     <div class="v-form-actions">
       <vslot name="actions">
-        <div vsrc="/btn.html" type="submit">提交</div>
-        <div vsrc="/btn.html" variant="outline" type="reset">重置</div>
+        <div vsrc="/btn.html" type="submit">{{ $t('form.submit') }}</div>
+        <div vsrc="/btn.html" variant="outline" @click="handleReset">{{ $t('form.reset') }}</div>
       </vslot>
     </div>
   </form>
 </body>
 <script setup>
-  items = []; // Field configurations: [{name, type, label, ...}]
-  data = {};  // Form data object
+  items = []; // Field configurations: [{name, type, label, span, full, ...}]
+  data = {};  // Form data object (v:data)
+  cols = 1;   // Grid columns
   disabled = false;
+  snapshot = null;
 
+  validateAll = () => {
+    let allValid = true;
+    $node.querySelectorAll('.v-form-field').forEach(el => {
+      if (el.$data && el.$data.validateField) {
+        const r = el.$data.validateField();
+        if (!r.valid) allValid = false;
+      }
+    });
+    return allValid;
+  }
+
+  handleSubmit = () => {
+    if (validateAll()) {
+      $emit('submit', data);
+    }
+  }
+
+  handleReset = () => {
+    if (snapshot) {
+      data = JSON.parse(JSON.stringify(snapshot));
+    }
+    // 清理各字段错误状态
+    $node.querySelectorAll('.v-form-field').forEach(el => {
+      if (el.$data) el.$data.errorMsg = '';
+    });
+    $emit('reset');
+  }
+</script>
+<script>
+  // 挂载后捕获初始数据快照，供 reset 恢复
+  snapshot = JSON.parse(JSON.stringify(data || {}));
 </script>
 
 </html>

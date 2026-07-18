@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Radio Group Control">
+  <title>Radio</title>
+</head>
+<style>
+  body {
+    display: block;
+    width: 100%;
+  }
+
+  .v-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--v-spacing-md);
+    min-height: 40px;
+    align-items: center;
+  }
+
+  .v-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: var(--v-font-size-md);
+    color: var(--v-text-color);
+    user-select: none;
+  }
+
+  .v-radio-label input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--v-color-primary);
+  }
+
+  .v-radio-label.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .v-radio-label.is-disabled input {
+    cursor: not-allowed;
+  }
+</style>
+
+<body>
+  <div class="v-radio-group">
+    <label :key="idx" v-for="(opt, idx) in opts?.options" class="v-radio-label"
+      :class="{ 'is-disabled': disabled || opt.disabled }">
+      <input type="radio" :name="name || uniqueName" :value="opt.value !== undefined ? opt.value : opt"
+        :checked="value === (opt.value !== undefined ? opt.value : opt)" :disabled="disabled || opt.disabled"
+        :required="required" @change="handleChange">
+      <span>{{ opt.label !== undefined ? opt.label : opt }}</span>
+    </label>
+  </div>
+  <div v-if="errorMsg" class="v-error-msg">{{ errorMsg }}</div>
+</body>
+<script setup>
+  value = "";
+  disabled = false;
+  required = false;
+  validate = null;
+  opts = {};
+  name = "";
+  errorMsg = "";
+  uniqueName = 'radio_' + Math.random().toString(36).substr(2, 9);
+
+  validateField = () => {
+    const r = $mod.checkValue({ val: value, required, type: 'radio', validate, opts, $t });
+    errorMsg = r.msg;
+    return r;
+  }
+
+  handleChange = (e) => {
+    const target = e.target;
+    const val = target.value;
+    let originalVal = val;
+
+    const foundOpt = opts?.options?.find(opt => {
+      const v = opt.value !== undefined ? opt.value : opt;
+      return String(v) === val;
+    });
+    if (foundOpt) {
+      originalVal = foundOpt.value !== undefined ? foundOpt.value : foundOpt;
+    }
+
+    if (target.checked) {
+      value = originalVal;
+      validateField();
+      $emit('change', value);
+    }
+  }
+</script>
+
+</html>

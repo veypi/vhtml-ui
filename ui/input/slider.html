@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Slider Control">
+  <title>Slider</title>
+</head>
+<style>
+  body {
+    display: block;
+    width: 100%;
+  }
+
+  .v-slider-wrapper {
+    padding: 0;
+    gap: 10px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  .v-slider__inner {
+    width: 100%;
+    cursor: pointer;
+    accent-color: var(--v-color-primary);
+    height: 6px;
+    background: var(--v-bg-color-secondary);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  /* Webkit thumb (Chrome, Safari, Edge) */
+  .v-slider__inner::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--v-color-primary);
+    cursor: pointer;
+    border: 2px solid var(--v-bg-color);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s;
+    margin-top: -5px;
+  }
+
+  .v-slider__inner::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+
+  /* Webkit track */
+  .v-slider__inner::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: var(--v-border-color);
+    border-radius: 3px;
+  }
+
+  .v-slider__inner:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    accent-color: var(--v-text-color-disabled);
+  }
+
+  .v-slider-value {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color);
+    min-width: 30px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+
+<body>
+  <div class="v-slider-wrapper">
+    <input type="range" class="v-slider__inner" :value="value" :min="opts?.min !== undefined ? opts?.min : 0"
+      :max="opts?.max !== undefined ? opts?.max : 100" :step="opts?.step !== undefined ? opts?.step : 1"
+      :disabled="disabled" @input="handleInput" />
+    <span v-if="opts?.showValue" class="v-slider-value">{{ value }}</span>
+  </div>
+  <div v-if="errorMsg" class="v-error-msg">{{ errorMsg }}</div>
+</body>
+<script setup>
+  value = 0;
+  disabled = false;
+  required = false;
+  validate = null;
+  opts = {};
+  name = "";
+  errorMsg = "";
+
+  validateField = () => {
+    const r = $mod.checkValue({ val: value, required, type: 'slider', validate, opts, $t });
+    errorMsg = r.msg;
+    return r;
+  }
+
+  handleInput = (e) => {
+    value = e.target.value;
+    validateField();
+    $emit('change', value);
+  }
+</script>
+
+</html>

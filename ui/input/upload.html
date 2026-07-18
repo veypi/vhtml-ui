@@ -1,0 +1,376 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="File Upload Control">
+  <title>Upload</title>
+</head>
+<style>
+  body {
+    display: block;
+    width: 100%;
+  }
+
+  .v-file-wrapper {
+    padding: 0 !important;
+    min-height: 40px;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .v-file-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--v-spacing-md);
+    height: 40px;
+    cursor: pointer;
+    user-select: none;
+    color: var(--v-text-color-secondary);
+  }
+
+  .v-file-trigger:hover {
+    color: var(--v-text-color);
+  }
+
+  .v-file-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--v-border-color);
+    background: var(--v-bg-color-secondary);
+  }
+
+  .v-file-item {
+    display: flex;
+    align-items: center;
+    padding: 8px var(--v-spacing-md);
+    gap: 8px;
+    font-size: var(--v-font-size-sm);
+    border-bottom: 1px solid var(--v-border-color);
+    position: relative;
+  }
+
+  .v-file-item:last-child {
+    border-bottom: none;
+  }
+
+  .v-file-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .v-file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--v-text-color);
+  }
+
+  .v-file-name.is-link {
+    color: var(--v-color-primary);
+    text-decoration: none;
+  }
+
+  .v-file-meta {
+    font-size: 11px;
+    color: var(--v-text-color-tertiary);
+    display: flex;
+    gap: 8px;
+  }
+
+  .v-file-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .v-file-btn {
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    border: 1px solid var(--v-border-color);
+    background: var(--v-bg-color);
+    color: var(--v-text-color-secondary);
+  }
+
+  .v-file-btn:hover {
+    color: var(--v-color-primary);
+    border-color: var(--v-color-primary);
+  }
+
+  .v-file-btn.is-danger:hover {
+    color: var(--v-color-danger);
+    border-color: var(--v-color-danger);
+  }
+
+  .v-file-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--v-color-primary);
+    transition: width 0.2s;
+    opacity: 0.6;
+  }
+
+  .v-file-status-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<body>
+  <div class="v-input-wrapper v-file-wrapper" :class="wrapperClass">
+    <input type="file" style="display: none" :disabled="disabled" :name="name" :required="required"
+      :accept="opts?.accept" :multiple="opts?.multiple" @change="handleFileChange" />
+
+    <!-- Trigger Area -->
+    <div @click="triggerFileSelect" style="cursor: pointer; display: block;">
+      <vslot name="trigger">
+        <div class="v-file-trigger">
+          <span>{{ placeholder || $t('input.upload.choose') }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+        </div>
+      </vslot>
+    </div>
+
+    <!-- File List -->
+    <div v-if="internalFiles.length > 0 && opts?.showList !== false" class="v-file-list">
+      <div v-for="file in internalFiles" :key="file.id" class="v-file-item">
+        <!-- Status Icon -->
+        <div class="v-file-status-icon">
+          <svg v-if="file.status === 'success'" class="v-text-success" xmlns="http://www.w3.org/2000/svg" width="14"
+            height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <svg v-else-if="file.status === 'error'" class="v-text-danger" xmlns="http://www.w3.org/2000/svg" width="14"
+            height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <svg v-else-if="file.status === 'uploading'" class="v-text-warning" xmlns="http://www.w3.org/2000/svg"
+            width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="2" x2="12" y2="6"></line>
+            <line x1="12" y1="18" x2="12" y2="22"></line>
+            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+            <line x1="2" y1="12" x2="6" y2="12"></line>
+            <line x1="18" y1="12" x2="22" y2="12"></line>
+            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+
+        <!-- File Info -->
+        <div class="v-file-info">
+          <a v-if="file.url" :href="file.url" target="_blank" class="v-file-name is-link">{{ file.name }}</a>
+          <span v-else class="v-file-name">{{ file.name }}</span>
+
+          <div class="v-file-meta">
+            <span v-if="file.status === 'error'" class="v-text-danger">{{ $t('input.upload.failed') }}</span>
+            <span v-else-if="file.status === 'uploading'" class="v-text-warning">{{ $t('input.upload.uploading') }} {{
+              file.progress }}%</span>
+            <span v-else-if="file.status === 'pending'">{{ $t('input.upload.pending') }}</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="v-file-actions">
+          <button v-if="file.status === 'pending' || file.status === 'error'" class="v-file-btn"
+            @click.stop="uploadFile(file)">
+            {{ $t('input.upload.button') }}
+          </button>
+          <button class="v-file-btn is-danger" @click.stop="removeFile(file)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div v-if="file.status === 'uploading'" class="v-file-progress-bar" :style="{ width: file.progress + '%' }">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-if="errorMsg" class="v-error-msg">{{ errorMsg }}</div>
+</body>
+<script setup>
+  value = []; // [{name, url}]
+  placeholder = "";
+  disabled = false;
+  required = false;
+  validate = null;
+  opts = {}; // {uploader, multiple, accept, autoUpload, showList}
+  name = "";
+  noborder = false;
+  errorMsg = "";
+
+  internalFiles = []; // { id, name, url, file, status, progress }
+
+  wrapperClass = () => {
+    let cls = [];
+    if (disabled) cls.push("is-disabled");
+    if (errorMsg) cls.push("is-error");
+    if (noborder) cls.push("is-no-border");
+    return cls.join(" ");
+  }
+
+  validateField = () => {
+    const r = $mod.checkValue({
+      val: value,
+      required,
+      type: 'file',
+      validate,
+      opts,
+      files: internalFiles,
+      $t
+    });
+    errorMsg = r.msg;
+    return r;
+  }
+
+  syncFilesFromValue = () => {
+    let valList = [];
+    if (Array.isArray(value)) {
+      valList = value;
+    } else if (value) {
+      valList = [value];
+    }
+
+    // Merge: add files from value that are not in internalFiles (by url)
+    valList.forEach(v => {
+      const url = v.url || v;
+      const name = v.name || url.split('/').pop() || 'File';
+      const exists = internalFiles.find(f => f.url === url);
+      if (!exists) {
+        internalFiles.push({
+          id: Math.random().toString(36).substr(2, 9),
+          name: name,
+          url: url,
+          status: 'success',
+          progress: 100
+        });
+      }
+    });
+
+    // Remove files that are no longer in value
+    if (!value || (Array.isArray(value) && value.length === 0)) {
+      internalFiles = internalFiles.filter(f => valList.some(v => (v.url || v) === f.url));
+    }
+  }
+
+  triggerFileSelect = (e) => {
+    if (disabled) return;
+    const input = e.currentTarget.parentElement.querySelector('input[type="file"]');
+    if (input) input.click();
+  }
+
+  handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    if (!opts?.multiple) {
+      internalFiles = [];
+    }
+
+    files.forEach(f => {
+      const fileObj = {
+        id: Math.random().toString(36).substr(2, 9),
+        name: f.name,
+        file: f,
+        status: 'pending',
+        progress: 0
+      };
+      internalFiles.push(fileObj);
+
+      if (opts?.autoUpload !== false) {
+        // 必须使用数组中的响应式对象，属性更新才能触发视图刷新
+        const reactiveFile = internalFiles.find(item => item.id === fileObj.id);
+        if (reactiveFile) {
+          uploadFile(reactiveFile);
+        }
+      }
+    });
+
+    e.target.value = "";
+    validateField();
+  }
+
+  uploadFile = (fileObj) => {
+    if (!opts?.uploader) {
+      console.warn("No uploader provided in opts");
+      return;
+    }
+
+    fileObj.status = 'uploading';
+    fileObj.progress = 0;
+
+    opts.uploader(fileObj.file, (progress) => {
+      fileObj.progress = progress;
+    }).then(url => {
+      fileObj.status = 'success';
+      fileObj.url = url;
+      fileObj.progress = 100;
+      syncValue();
+    }).catch(err => {
+      console.error(err);
+      fileObj.status = 'error';
+      validateField();
+    });
+
+    validateField();
+  }
+
+  removeFile = (fileObj) => {
+    internalFiles = internalFiles.filter(f => f.id !== fileObj.id);
+    syncValue();
+  }
+
+  syncValue = () => {
+    const successFiles = internalFiles.filter(f => f.status === 'success');
+    value = successFiles.map(f => ({
+      name: f.name,
+      url: f.url
+    }));
+    $emit("change", value);
+    validateField();
+  }
+</script>
+<script>
+  syncFilesFromValue();
+  $watch(() => $data.value, () => {
+    $data.syncFilesFromValue();
+  })
+</script>
+
+</html>
