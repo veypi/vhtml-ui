@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Table Component Demo" />
+  <title>{{$t('table.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('table.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('table.basic')}}</span>
+    <div vsrc="/table.html" :columns="columns" :data="tableData" striped></div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('table.customCell')}}</span>
+    <div vsrc="/table.html" :columns="columnsWithActions" :data="tableData" bordered>
+      <template vslot="cell">
+        <div v-if="col.key === 'status'">
+          <div vsrc="/tag.html" :color="row.status === 'active' ? 'success' : 'danger'" size="sm">
+            {{ row.status === 'active' ? $t('table.active') : $t('table.inactive') }}
+          </div>
+        </div>
+        <div v-else-if="col.key === 'actions'">
+          <div vsrc="/btn.html" size="xs" variant="ghost" @click="onEdit(row)">{{$t('table.edit')}}</div>
+        </div>
+        <template v-else>{{ row[col.key] }}</template>
+      </template>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('table.states')}}</span>
+    <div class="v-flex v-gap-sm v-mb-md">
+      <div vsrc="/btn.html" size="sm" variant="outline" @click="toggleLoading">{{$t('table.toggleLoading')}}</div>
+      <div vsrc="/btn.html" size="sm" variant="outline" @click="toggleEmpty">{{$t('table.toggleEmpty')}}</div>
+    </div>
+    <div vsrc="/table.html" :columns="columns" :data="demo2Data" :loading="loading"></div>
+  </div>
+</body>
+<script setup>
+  loading = false;
+
+  columns = [
+    { key: 'name', label: () => $t('table.name') },
+    { key: 'role', label: () => $t('table.role') },
+    { key: 'city', label: () => $t('table.city') }
+  ];
+
+  columnsWithActions = [
+    { key: 'name', label: () => $t('table.name') },
+    { key: 'role', label: () => $t('table.role') },
+    { key: 'status', label: () => $t('table.status'), width: '100px' },
+    { key: 'actions', label: () => $t('table.actions'), width: '80px' }
+  ];
+
+  tableData = [
+    { name: 'Alice', role: 'Developer', city: 'Beijing', status: 'active' },
+    { name: 'Bob', role: 'Designer', city: 'Shanghai', status: 'inactive' },
+    { name: 'Carol', role: 'Manager', city: 'Guangzhou', status: 'active' }
+  ];
+
+  demo2Data = tableData;
+
+  onEdit = (row) => {
+    $message.info($t('table.edit') + ': ' + row.name);
+  }
+
+  toggleLoading = () => {
+    loading = true;
+    setTimeout(() => { loading = false; }, 1500);
+  }
+
+  toggleEmpty = () => {
+    demo2Data = demo2Data.length ? [] : tableData;
+  }
+</script>
+
+</html>

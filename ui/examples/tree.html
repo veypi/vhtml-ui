@@ -6,76 +6,117 @@
   <meta name="description" content="Tree Component Demo">
   <title>{{$t('tree.title')}}</title>
 </head>
+<style>
+  .tree-demo-panel {
+    max-width: 420px;
+    padding: var(--v-spacing-md);
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-md);
+    background: var(--v-bg-color);
+    margin-bottom: var(--v-spacing-md);
+  }
+
+  .tree-custom-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: var(--v-radius-sm);
+    cursor: pointer;
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color);
+  }
+
+  .tree-custom-row:hover {
+    background: var(--v-bg-color-secondary);
+  }
+
+  .tree-custom-row .tree-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .tree-custom-row .tree-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .tree-custom-row .tree-arrow {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    color: var(--v-text-color-tertiary);
+    transition: transform var(--v-transition-fast);
+  }
+
+  .tree-custom-row .tree-arrow.is-expanded {
+    transform: rotate(90deg);
+  }
+</style>
 
 <body>
   <div class="section-title">{{$t('tree.title')}}</div>
-  <div class="v-mb-md">
-    <div class="v-p-md v-border v-rounded-md" style="max-width: 400px;">
-      <div vsrc='/tree' :data="fileTreeData">
-        <div vslot='row' class="v-flex v-items-center v-hover-bg-secondary v-cursor-pointer v-p-xs v-rounded-sm"
-          :style="{paddingLeft: (depth * 20 + 8) + 'px'}">
-          <span class="v-mr-sm" style="width: 20px; text-align: center;">
-            <i v-if="row.children" class="fa-solid"
-              :class="row.expand ? 'fa-folder-open v-text-yellow-500' : 'fa-folder v-text-yellow-500'">
-            </i>
-            <i v-else class="fa-regular fa-file v-text-gray-400"></i>
-          </span>
-          <span class="v-text-sm">{{ row.name }}</span>
-        </div>
-      </div>
-    </div>
+
+  <span class="demo-label">{{$t('tree.default')}}</span>
+  <div class="tree-demo-panel">
+    <div vsrc='/tree' :items="fileTreeData"></div>
   </div>
-  <div vsrc="/tree" :data="fileTreeData">
-    <div vslot="row">
-      <div :style="{paddingLeft: (depth * 20) + 'px'}">
-        <span v-if="row.children && row.children.length">
-          {{ row.expand ? '[-]' : '[+]' }}
+
+  <span class="demo-label">{{$t('tree.custom')}}</span>
+  <div class="tree-demo-panel">
+    <div vsrc='/tree' :items="fileTreeData">
+      <div class="tree-custom-row" :style="{paddingLeft: (depth * 20) + 'px'}" @click="toggleRow(row)">
+        <span class="tree-arrow" :class="{ 'is-expanded': row.expand }">
+          <svg v-if="row.children && row.children.length" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
         </span>
-        {{ row.name }}
+        <span class="tree-icon" v-html="row.children ? iconFolder : iconFile"></span>
+        <span>{{ row.name }}</span>
       </div>
     </div>
   </div>
 </body>
 <script setup>
+  iconFolder = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--v-color-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>'
+  iconFile = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--v-text-color-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>'
+
+  toggleRow = (row) => {
+    if (row.children && row.children.length) {
+      row.expand = !row.expand
+    }
+  }
+
   fileTreeData = [
     {
       name: 'vhtml-ui',
       expand: true,
       children: [
         {
-          name: 'src',
+          name: 'ui',
           expand: true,
           children: [
-            {
-              name: 'assets',
-              children: [
-                {name: 'logo.png'},
-                {name: 'common.css'}
-              ]
-            },
-            {
-              name: 'components',
-              expand: true,
-              children: [
-                {name: 'Button.html'},
-                {name: 'Input.html'},
-                {name: 'Tree.html'}
-              ]
-            },
-            {name: 'main.js'},
-            {name: 'App.html'}
+            { name: 'btn.html' },
+            { name: 'input.html' },
+            { name: 'tree.html' },
+            { name: 'global.css' }
           ]
         },
         {
-          name: 'public',
+          name: 'examples',
           children: [
-            {name: 'index.html'},
-            {name: 'favicon.ico'}
+            { name: 'btn.html' },
+            { name: 'tree.html' }
           ]
         },
-        {name: 'package.json'},
-        {name: 'README.md'},
-        {name: '.gitignore'}
+        { name: 'README.md' },
+        { name: '.gitignore' }
       ]
     }
   ]

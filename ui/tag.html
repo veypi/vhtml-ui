@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Tag Component">
+  <title>Tag</title>
+</head>
+<style>
+  body {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .v-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: var(--v-radius-sm);
+    font-weight: var(--v-font-weight-medium);
+    line-height: 1;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    background: var(--v-tag-bg);
+    color: var(--v-tag-text);
+    border-color: var(--v-tag-border, transparent);
+  }
+
+  .v-tag--sm {
+    height: 20px;
+    padding: 0 6px;
+    font-size: var(--v-font-size-xs);
+  }
+
+  .v-tag--md {
+    height: 24px;
+    padding: 0 8px;
+    font-size: var(--v-font-size-xs);
+  }
+
+  .v-tag--lg {
+    height: 28px;
+    padding: 0 10px;
+    font-size: var(--v-font-size-sm);
+  }
+
+  .v-tag.is-round {
+    border-radius: var(--v-radius-full);
+  }
+
+  .v-tag-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: 12px;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity var(--v-transition-fast);
+  }
+
+  .v-tag-close:hover {
+    opacity: 1;
+  }
+
+  vslot {
+    display: contents;
+  }
+</style>
+
+<body>
+  <span v-show="visible" class="v-tag" :class="['v-tag--' + size, { 'is-round': round }]" :style="computeStyle">
+    <vslot></vslot>
+    <button v-if="closable" class="v-tag-close" @click="handleClose">×</button>
+  </span>
+</body>
+<script setup>
+  color = 'default'; // default | primary | success | warning | danger | info | 任意 CSS 色值
+  variant = 'light'; // light | filled | outline
+  size = 'md';       // sm | md | lg
+  closable = false;
+  round = false;
+
+  visible = true;
+
+  resolveColor = () => {
+    switch (color) {
+      case 'primary': return 'var(--v-color-primary)';
+      case 'success': return 'var(--v-color-success)';
+      case 'warning': return 'var(--v-color-warning)';
+      case 'danger': return 'var(--v-color-danger)';
+      case 'info': return 'var(--v-color-info)';
+      case 'default': return 'var(--v-text-color-secondary)';
+      default: return color;
+    }
+  }
+
+  computeStyle = () => {
+    const c = resolveColor();
+    if (variant === 'filled') {
+      return {
+        '--v-tag-bg': c,
+        '--v-tag-text': '#fff'
+      };
+    }
+    if (variant === 'outline') {
+      return {
+        '--v-tag-bg': 'transparent',
+        '--v-tag-text': c,
+        '--v-tag-border': c
+      };
+    }
+    // light
+    return {
+      '--v-tag-bg': `color-mix(in srgb, ${c} 12%, transparent)`,
+      '--v-tag-text': c
+    };
+  }
+
+  handleClose = (e) => {
+    e.stopPropagation();
+    visible = false;
+    $emit('close');
+  }
+</script>
+
+</html>

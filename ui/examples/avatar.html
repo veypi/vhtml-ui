@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Avatar Component Demo" />
+  <title>{{$t('avatar.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('avatar.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('avatar.sizes')}}</span>
+    <div class="v-flex v-gap-md v-items-end v-mb-md">
+      <div vsrc="/avatar.html" name="Alice" size="sm"></div>
+      <div vsrc="/avatar.html" name="Bob" size="md"></div>
+      <div vsrc="/avatar.html" name="Carol" size="lg"></div>
+      <div vsrc="/avatar.html" name="David" :size="64"></div>
+    </div>
+
+    <span class="demo-label">{{$t('avatar.shapes')}}</span>
+    <div class="v-flex v-gap-md v-items-center v-mb-md">
+      <div vsrc="/avatar.html" name="Circle" shape="circle"></div>
+      <div vsrc="/avatar.html" name="Square" shape="square"></div>
+    </div>
+
+    <span class="demo-label">{{$t('avatar.imageFallback')}}</span>
+    <div class="v-flex v-gap-md v-items-center">
+      <div vsrc="/avatar.html" src="https://public.veypi.com/img/avatar/0145.jpg" name="User"></div>
+      <div vsrc="/avatar.html" src="https://invalid.example.com/x.jpg" name="Fallback"></div>
+      <div vsrc="/avatar.html"></div>
+    </div>
+  </div>
+</body>
+
+</html>

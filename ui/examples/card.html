@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Card Component Demo" />
+  <title>{{$t('card.title')}}</title>
+</head>
+<style>
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--v-spacing-md);
+  }
+</style>
+
+<body>
+  <div class="section-title">{{$t('card.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('card.basic')}}</span>
+    <div class="card-grid">
+      <div vsrc="/card.html" :title="$t('card.simpleTitle')">
+        <p class="v-m-0">{{$t('card.content')}}</p>
+      </div>
+
+      <div vsrc="/card.html">
+        <div vslot="header">
+          <span>{{$t('card.customHeader')}}</span>
+          <div vsrc="/btn.html" size="sm" variant="ghost">{{$t('card.more')}}</div>
+        </div>
+        <p class="v-m-0">{{$t('card.content')}}</p>
+        <div vslot="footer">{{$t('card.footer')}}</div>
+      </div>
+
+      <div vsrc="/card.html" shadow="always" :bordered="false" :title="$t('card.shadowAlways')">
+        <p class="v-m-0">{{$t('card.content')}}</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

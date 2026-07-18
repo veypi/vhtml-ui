@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Breadcrumb Component">
+  <title>Breadcrumb</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .v-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--v-spacing-sm);
+    font-size: var(--v-font-size-md);
+  }
+
+  .v-breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .v-breadcrumb-link {
+    color: var(--v-text-color-secondary);
+    text-decoration: none;
+    transition: color var(--v-transition-fast);
+  }
+
+  .v-breadcrumb-link:hover {
+    color: var(--v-color-primary);
+  }
+
+  .v-breadcrumb-current {
+    color: var(--v-text-color);
+    font-weight: var(--v-font-weight-medium);
+  }
+
+  .v-breadcrumb-separator {
+    color: var(--v-text-color-disabled);
+    user-select: none;
+  }
+</style>
+
+<body>
+  <nav class="v-breadcrumb">
+    <template :key="idx" v-for="(item, idx) in items">
+      <span class="v-breadcrumb-item">
+        <a v-if="item.path && idx < items.length - 1" class="v-breadcrumb-link" :href="item.path">{{ item.label }}</a>
+        <span v-else class="v-breadcrumb-current">{{ item.label }}</span>
+      </span>
+      <span v-if="idx < items.length - 1" class="v-breadcrumb-separator">{{ separator }}</span>
+    </template>
+  </nav>
+</body>
+<script setup>
+  items = []; // [{label, path}]，最后一项为当前页（不渲染链接）
+  separator = '/';
+</script>
+
+</html>

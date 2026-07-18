@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Empty Component Demo" />
+  <title>{{$t('empty.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('empty.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('empty.basic')}}</span>
+    <div vsrc="/empty.html"></div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('empty.withAction')}}</span>
+    <div vsrc="/empty.html" :description="$t('empty.noResult')">
+      <div vsrc="/btn.html" size="sm" variant="outline" @click="onReset">{{$t('empty.resetFilter')}}</div>
+    </div>
+  </div>
+</body>
+<script setup>
+  onReset = () => {
+    $message.success($t('empty.resetDone'));
+  }
+</script>
+
+</html>

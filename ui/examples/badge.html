@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Badge Component Demo" />
+  <title>{{$t('badge.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('badge.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('badge.basic')}}</span>
+    <div class="v-flex v-gap-lg v-items-center v-mb-md">
+      <div vsrc="/badge.html" :count="5">
+        <div vsrc="/btn.html" variant="outline">{{$t('badge.messages')}}</div>
+      </div>
+      <div vsrc="/badge.html" :count="100">
+        <div vsrc="/btn.html" variant="outline">{{$t('badge.messages')}}</div>
+      </div>
+      <div vsrc="/badge.html" dot>
+        <div vsrc="/btn.html" variant="outline">{{$t('badge.messages')}}</div>
+      </div>
+      <div vsrc="/badge.html" :count="3">
+        <div vsrc="/avatar.html" name="Alice"></div>
+      </div>
+    </div>
+
+    <span class="demo-label">{{$t('badge.standalone')}}</span>
+    <div class="v-flex v-gap-md v-items-center">
+      <div vsrc="/badge.html" :count="12"></div>
+      <div vsrc="/badge.html" :count="120" :max="99"></div>
+      <div vsrc="/badge.html" dot></div>
+    </div>
+  </div>
+</body>
+
+</html>

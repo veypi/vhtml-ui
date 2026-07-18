@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Data Table Component">
+  <title>Table</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .v-table-wrapper {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--v-radius-md);
+  }
+
+  .v-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--v-font-size-md);
+    color: var(--v-text-color);
+  }
+
+  .v-table th {
+    text-align: left;
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color-secondary);
+    background: var(--v-bg-color-secondary);
+    padding: 10px var(--v-spacing-md);
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .v-table td {
+    padding: 10px var(--v-spacing-md);
+    border-top: 1px solid var(--v-border-color);
+  }
+
+  .v-table.is-bordered,
+  .v-table.is-bordered th,
+  .v-table.is-bordered td {
+    border: 1px solid var(--v-border-color);
+  }
+
+  .v-table.is-striped tbody tr:nth-child(even) {
+    background: var(--v-bg-color-secondary);
+  }
+
+  .v-table tbody tr {
+    transition: background-color var(--v-transition-fast);
+  }
+
+  .v-table tbody tr:hover {
+    background: color-mix(in srgb, var(--v-color-primary) 5%, transparent);
+  }
+
+  .v-table-empty {
+    padding: var(--v-spacing-md) 0;
+    border-top: 1px solid var(--v-border-color);
+  }
+
+  .v-table-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--v-bg-color) 70%, transparent);
+    z-index: 1;
+  }
+
+  vslot {
+    display: contents;
+  }
+</style>
+
+<body>
+  <div class="v-table-wrapper">
+    <table class="v-table" :class="{ 'is-striped': striped, 'is-bordered': bordered }">
+      <thead>
+        <tr>
+          <th :key="col.key" v-for="col in columns" :style="cellStyle(col)">{{ col.label }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr :key="ri" v-for="(row, ri) in data">
+          <td :key="col.key" v-for="col in columns" :style="cellStyle(col)">
+            <vslot name="cell" vbind="row, col">{{ row[col.key] }}</vslot>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div v-if="!loading && (!data || data.length === 0)" class="v-table-empty">
+      <div vsrc="/empty.html" :description="emptyText"></div>
+    </div>
+
+    <div v-if="loading" class="v-table-loading">
+      <div vsrc="/spinner.html"></div>
+    </div>
+  </div>
+</body>
+<script setup>
+  columns = []; // [{key, label, width, align}]
+  data = [];
+  striped = false;
+  bordered = false;
+  loading = false;
+  emptyText = ''; // 默认 $t('empty.noData')
+
+  cellStyle = (col) => {
+    const s = {};
+    if (col.width) s.width = col.width;
+    if (col.align) s['text-align'] = col.align;
+    return s;
+  }
+</script>
+
+</html>

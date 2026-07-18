@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Badge Component">
+  <title>Badge</title>
+</head>
+<style>
+  body {
+    display: inline-block;
+  }
+
+  .v-badge {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .v-badge-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: var(--v-radius-full);
+    background: var(--v-color-danger);
+    color: #fff;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+    white-space: nowrap;
+    font-weight: var(--v-font-weight-medium);
+    box-sizing: border-box;
+    box-shadow: 0 0 0 2px var(--v-bg-color);
+  }
+
+  .v-badge-count.is-dot {
+    min-width: 8px;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    line-height: 8px;
+  }
+
+  vslot {
+    display: contents;
+  }
+</style>
+
+<body>
+  <span class="v-badge">
+    <vslot></vslot>
+    <sup v-if="!hidden && (dot || showCount())" class="v-badge-count" :class="{ 'is-dot': dot }">{{ dot ? '' : displayCount() }}</sup>
+  </span>
+</body>
+<script setup>
+  count = 0;   // 数字；0 默认不显示
+  dot = false; // 小红点模式
+  max = 99;
+  hidden = false;
+
+  showCount = () => count > 0;
+
+  displayCount = () => count > max ? max + '+' : count;
+</script>
+
+</html>

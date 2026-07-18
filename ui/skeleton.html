@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Skeleton Loading Component">
+  <title>Skeleton</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .v-skeleton {
+    display: flex;
+    gap: var(--v-spacing-md);
+    width: 100%;
+  }
+
+  .v-skeleton-avatar {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .v-skeleton-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--v-spacing-sm);
+  }
+
+  .v-skeleton-title {
+    height: 20px;
+    width: 40%;
+    border-radius: var(--v-radius-sm);
+  }
+
+  .v-skeleton-row {
+    height: 14px;
+    border-radius: var(--v-radius-sm);
+  }
+
+  .v-skeleton-row:last-child {
+    width: 65%;
+  }
+
+  .v-skeleton-avatar,
+  .v-skeleton-title,
+  .v-skeleton-row {
+    background: linear-gradient(
+      90deg,
+      var(--v-bg-color-tertiary) 25%,
+      var(--v-bg-color-secondary) 50%,
+      var(--v-bg-color-tertiary) 75%
+    );
+    background-size: 200% 100%;
+    animation: v-skeleton-wave 1.4s ease infinite;
+  }
+
+  @keyframes v-skeleton-wave {
+    0% {
+      background-position: 200% 0;
+    }
+
+    100% {
+      background-position: -200% 0;
+    }
+  }
+</style>
+
+<body>
+  <div v-if="loading" class="v-skeleton">
+    <div v-if="avatar" class="v-skeleton-avatar"></div>
+    <div class="v-skeleton-content">
+      <div v-if="title" class="v-skeleton-title"></div>
+      <div :key="i" v-for="i in rows" class="v-skeleton-row"></div>
+    </div>
+  </div>
+  <div v-else>
+    <vslot></vslot>
+  </div>
+</body>
+<script setup>
+  loading = true; // false 时显示默认插槽内容
+  rows = 3;
+  avatar = false;
+  title = true;
+</script>
+
+</html>

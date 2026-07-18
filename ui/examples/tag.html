@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Tag Component Demo" />
+  <title>{{$t('tag.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('tag.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('tag.variants')}}</span>
+    <div class="v-flex v-gap-sm v-flex-wrap v-mb-md">
+      <div vsrc="/tag.html">Default</div>
+      <div vsrc="/tag.html" color="primary">Primary</div>
+      <div vsrc="/tag.html" color="success">Success</div>
+      <div vsrc="/tag.html" color="warning">Warning</div>
+      <div vsrc="/tag.html" color="danger">Danger</div>
+    </div>
+
+    <span class="demo-label">Filled</span>
+    <div class="v-flex v-gap-sm v-flex-wrap v-mb-md">
+      <div vsrc="/tag.html" variant="filled">Default</div>
+      <div vsrc="/tag.html" variant="filled" color="primary">Primary</div>
+      <div vsrc="/tag.html" variant="filled" color="success">Success</div>
+      <div vsrc="/tag.html" variant="filled" color="warning">Warning</div>
+      <div vsrc="/tag.html" variant="filled" color="danger">Danger</div>
+    </div>
+
+    <span class="demo-label">Outline</span>
+    <div class="v-flex v-gap-sm v-flex-wrap v-mb-md">
+      <div vsrc="/tag.html" variant="outline" color="primary">Primary</div>
+      <div vsrc="/tag.html" variant="outline" color="success">Success</div>
+      <div vsrc="/tag.html" variant="outline" color="#9333ea">#9333ea</div>
+    </div>
+
+    <span class="demo-label">{{$t('tag.sizeRound')}}</span>
+    <div class="v-flex v-gap-sm v-flex-wrap v-items-center v-mb-md">
+      <div vsrc="/tag.html" size="sm" color="primary">Small</div>
+      <div vsrc="/tag.html" size="md" color="primary">Medium</div>
+      <div vsrc="/tag.html" size="lg" color="primary">Large</div>
+      <div vsrc="/tag.html" round color="success">Round</div>
+    </div>
+
+    <span class="demo-label">{{$t('tag.closable')}}</span>
+    <div class="v-flex v-gap-sm v-flex-wrap">
+      <div vsrc="/tag.html" closable color="primary" @close="onClose">{{$t('tag.removable')}}</div>
+      <div vsrc="/tag.html" closable variant="filled" color="danger">{{$t('tag.removable')}}</div>
+    </div>
+  </div>
+</body>
+<script setup>
+  onClose = () => {
+    $message.info($t('tag.closed'));
+  }
+</script>
+
+</html>

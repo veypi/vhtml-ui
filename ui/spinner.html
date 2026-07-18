@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Loading Spinner Component">
+  <title>Spinner</title>
+</head>
+<style>
+  body {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .v-spinner {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--v-spacing-sm);
+    color: var(--v-spinner-color, var(--v-color-primary));
+  }
+
+  .v-spinner-circle {
+    border: 2px solid color-mix(in srgb, currentColor 20%, transparent);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: v-spinner-rotate 0.8s linear infinite;
+  }
+
+  .v-spinner-text {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+  }
+
+  @keyframes v-spinner-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<body>
+  <div class="v-spinner" :style="computeStyle">
+    <div class="v-spinner-circle" :style="circleStyle"></div>
+    <div v-if="text" class="v-spinner-text">{{ text }}</div>
+  </div>
+</body>
+<script setup>
+  size = 'md';  // sm | md | lg | 数字 px
+  color = '';   // 默认 primary，可传任意 CSS 色值
+  text = '';
+
+  resolveSize = () => {
+    if (typeof size === 'number') return size + 'px';
+    switch (size) {
+      case 'sm': return '16px';
+      case 'lg': return '40px';
+      default: return '24px';
+    }
+  }
+
+  computeStyle = () => {
+    return color ? { '--v-spinner-color': color } : {};
+  }
+
+  circleStyle = () => {
+    const s = resolveSize();
+    return { width: s, height: s };
+  }
+</script>
+
+</html>

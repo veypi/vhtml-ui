@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Pagination Component Demo" />
+  <title>{{$t('pagination.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('pagination.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('pagination.basic')}}</span>
+    <div vsrc="/pagination.html" v:value="page1" :total="50"></div>
+    <div class="value-display">{{$t('pagination.current')}}: {{ page1 }}</div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('pagination.manyPages')}}</span>
+    <div vsrc="/pagination.html" v:value="page2" :total="500" showTotal></div>
+    <div class="value-display">{{$t('pagination.current')}}: {{ page2 }}</div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('pagination.withTable')}}</span>
+    <div vsrc="/table.html" :columns="columns" :data="pageData()"></div>
+    <div class="v-mt-md v-flex v-justify-end">
+      <div vsrc="/pagination.html" v:value="page3" :total="allData.length" :pageSize="3"></div>
+    </div>
+  </div>
+</body>
+<script setup>
+  page1 = 1;
+  page2 = 5;
+  page3 = 1;
+
+  columns = [
+    { key: 'name', label: () => $t('table.name') },
+    { key: 'role', label: () => $t('table.role') }
+  ];
+
+  allData = [
+    { name: 'Alice', role: 'Developer' },
+    { name: 'Bob', role: 'Designer' },
+    { name: 'Carol', role: 'Manager' },
+    { name: 'David', role: 'Developer' },
+    { name: 'Eve', role: 'Tester' },
+    { name: 'Frank', role: 'Developer' },
+    { name: 'Grace', role: 'Designer' }
+  ];
+
+  pageData = () => {
+    const start = (page3 - 1) * 3;
+    return allData.slice(start, start + 3);
+  }
+</script>
+
+</html>

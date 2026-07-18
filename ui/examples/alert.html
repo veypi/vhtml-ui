@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Alert Component Demo" />
+  <title>{{$t('alert.title')}}</title>
+</head>
+<style>
+  .alert-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--v-spacing-md);
+  }
+</style>
+
+<body>
+  <div class="section-title">{{$t('alert.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('alert.types')}}</span>
+    <div class="alert-col">
+      <div vsrc="/alert.html" type="info" :title="$t('alert.info')" :description="$t('alert.desc')"></div>
+      <div vsrc="/alert.html" type="success" :title="$t('alert.success')" :description="$t('alert.desc')"></div>
+      <div vsrc="/alert.html" type="warning" :title="$t('alert.warning')" :description="$t('alert.desc')"></div>
+      <div vsrc="/alert.html" type="danger" :title="$t('alert.danger')" :description="$t('alert.desc')"></div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('alert.closableCustom')}}</span>
+    <div class="alert-col">
+      <div vsrc="/alert.html" type="success" :title="$t('alert.success')" closable @close="onClose">
+        {{$t('alert.customDesc')}}
+      </div>
+      <div vsrc="/alert.html" type="info" :description="$t('alert.desc')"></div>
+    </div>
+  </div>
+</body>
+<script setup>
+  onClose = () => {
+    $message.info($t('alert.closed'));
+  }
+</script>
+
+</html>

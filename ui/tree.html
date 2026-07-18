@@ -1,30 +1,75 @@
 <!DOCTYPE html>
 <html>
 <style>
-  /* No visual styles, just structure */
   vslot {
     display: contents;
   }
 
   .v-tree {
     user-select: none;
+  }
+
+  .v-tree-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    border-radius: var(--v-radius-sm);
     cursor: pointer;
+    color: var(--v-text-color);
+    font-size: var(--v-font-size-md);
+  }
+
+  .v-tree-row:hover {
+    background: var(--v-bg-color-secondary);
+  }
+
+  .v-tree-arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--v-text-color-tertiary);
+    transition: transform var(--v-transition-fast);
+  }
+
+  .v-tree-arrow.is-expanded {
+    transform: rotate(90deg);
+  }
+
+  .v-tree-arrow svg {
+    width: 14px;
+    height: 14px;
   }
 </style>
 
 <body class="v-tree">
-  <div v-for="row in items" class="v-tree-node">
+  <div :key="idx" v-for="(row, idx) in items" class="v-tree-node">
     <vslot vbind="row, depth">
-      <div :style="{paddingLeft: (depth * 20) + 'px'}">
-        {{ row.name }}
+      <div class="v-tree-row" :style="{paddingLeft: (depth * 20) + 'px'}" @click="toggle(row)">
+        <span class="v-tree-arrow" :class="{ 'is-expanded': row.expand }">
+          <svg v-if="row.children && row.children.length" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </span>
+        <span>{{ row.name }}</span>
       </div>
     </vslot>
-    <div vsrc='/tree' vslot-inherit v-if='row.items && row.expand' :items="row.items" :depth="depth + 1"></div>
+    <div vsrc='/tree' vslot-inherit v-if='row.children && row.expand' :items="row.children" :depth="depth + 1"></div>
   </div>
 </body>
 <script setup>
   items = []
   depth = 0
+
+  toggle = (row) => {
+    if (row.children && row.children.length) {
+      row.expand = !row.expand
+    }
+  }
 </script>
 
 </html>

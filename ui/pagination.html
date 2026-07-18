@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Pagination Component">
+  <title>Pagination</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .v-pagination {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    user-select: none;
+  }
+
+  .v-page-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--v-radius-md);
+    border: 1px solid var(--v-border-color);
+    background: var(--v-bg-color);
+    color: var(--v-text-color);
+    font-size: var(--v-font-size-sm);
+    cursor: pointer;
+    transition: all var(--v-transition-fast);
+  }
+
+  .v-page-btn:hover:not(.is-disabled):not(.is-active) {
+    border-color: var(--v-color-primary);
+    color: var(--v-color-primary);
+  }
+
+  .v-page-btn.is-active {
+    background: var(--v-color-primary);
+    border-color: var(--v-color-primary);
+    color: var(--v-color-primary-text);
+    font-weight: var(--v-font-weight-medium);
+  }
+
+  .v-page-btn.is-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .v-page-ellipsis {
+    min-width: 32px;
+    text-align: center;
+    color: var(--v-text-color-tertiary);
+  }
+
+  .v-page-total {
+    margin-left: var(--v-spacing-sm);
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+  }
+</style>
+
+<body>
+  <div class="v-pagination">
+    <button class="v-page-btn" :class="{ 'is-disabled': value <= 1 }" @click="go(value - 1)">‹</button>
+
+    <template :key="idx" v-for="(p, idx) in pageList()">
+      <button v-if="p !== '...'" class="v-page-btn" :class="{ 'is-active': p === value }" @click="go(p)">{{ p }}</button>
+      <span v-else class="v-page-ellipsis">…</span>
+    </template>
+
+    <button class="v-page-btn" :class="{ 'is-disabled': value >= pageCount() }" @click="go(value + 1)">›</button>
+
+    <span v-if="showTotal" class="v-page-total">{{ $t('pagination.total', { count: total }) }}</span>
+  </div>
+</body>
+<script setup>
+  value = 1;      // 当前页（v:value）
+  total = 0;      // 总条数
+  pageSize = 10;
+  maxButtons = 7; // 页码按钮最大数量（含首尾与省略号）
+  showTotal = false;
+
+  pageCount = () => Math.max(1, Math.ceil(total / pageSize));
+
+  go = (p) => {
+    const count = pageCount();
+    if (p < 1 || p > count || p === value) return;
+    value = p;
+    $emit('change', p);
+  }
+
+  pageList = () => {
+    const count = pageCount();
+    const cur = value;
+    const max = maxButtons;
+    if (count <= max) {
+      return Array.from({ length: count }, (_, i) => i + 1);
+    }
+    // 始终显示首尾页，当前页前后各 1 页，其余省略
+    const pages = [1];
+    const left = Math.max(2, cur - 1);
+    const right = Math.min(count - 1, cur + 1);
+    if (left > 2) pages.push('...');
+    for (let i = left; i <= right; i++) pages.push(i);
+    if (right < count - 1) pages.push('...');
+    pages.push(count);
+    return pages;
+  }
+</script>
+
+</html>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Popover Component">
+  <title>Popover</title>
+</head>
+<style>
+  body {
+    display: inline-block;
+  }
+
+  .v-popover {
+    position: relative;
+    display: inline-block;
+  }
+
+  .v-popover-panel {
+    position: absolute;
+    z-index: var(--v-z-dropdown);
+    min-width: 180px;
+    background: var(--v-bg-color);
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-md);
+    box-shadow: var(--v-shadow-md);
+    color: var(--v-text-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--v-transition-fast), transform var(--v-transition-fast);
+  }
+
+  .v-popover-panel.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .v-popover-title {
+    padding: var(--v-spacing-sm) var(--v-spacing-md);
+    font-weight: var(--v-font-weight-bold);
+    border-bottom: 1px solid var(--v-border-color);
+  }
+
+  .v-popover-title:empty {
+    display: none;
+  }
+
+  .v-popover-body {
+    padding: var(--v-spacing-md);
+    font-size: var(--v-font-size-sm);
+  }
+
+  /* 箭头 */
+  .v-popover-panel::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--v-bg-color);
+    border: 1px solid var(--v-border-color);
+    transform: rotate(45deg);
+  }
+
+  /* top */
+  .v-popover-panel[data-placement='top'] {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(2px);
+  }
+
+  .v-popover-panel[data-placement='top'].is-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .v-popover-panel[data-placement='top']::after {
+    bottom: -5px;
+    left: calc(50% - 4px);
+    border-top: none;
+    border-left: none;
+  }
+
+  /* bottom */
+  .v-popover-panel[data-placement='bottom'] {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  .v-popover-panel[data-placement='bottom'].is-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .v-popover-panel[data-placement='bottom']::after {
+    top: -5px;
+    left: calc(50% - 4px);
+    border-bottom: none;
+    border-right: none;
+  }
+
+  /* left */
+  .v-popover-panel[data-placement='left'] {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%) translateX(2px);
+  }
+
+  .v-popover-panel[data-placement='left'].is-visible {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .v-popover-panel[data-placement='left']::after {
+    right: -5px;
+    top: calc(50% - 4px);
+    border-bottom: none;
+    border-left: none;
+  }
+
+  /* right */
+  .v-popover-panel[data-placement='right'] {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-2px);
+  }
+
+  .v-popover-panel[data-placement='right'].is-visible {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .v-popover-panel[data-placement='right']::after {
+    left: -5px;
+    top: calc(50% - 4px);
+    border-top: none;
+    border-right: none;
+  }
+
+  vslot {
+    display: contents;
+  }
+</style>
+
+<body>
+  <span class="v-popover" @mouseenter="onEnter" @mouseleave="onLeave" @click="onClick" @outerclick="handleOuter">
+    <vslot></vslot>
+    <div class="v-popover-panel" :class="{ 'is-visible': visible }" :data-placement="placement">
+      <div class="v-popover-title">{{ title }}</div>
+      <div class="v-popover-body">
+        <vslot name="content">{{ content }}</vslot>
+      </div>
+    </div>
+  </span>
+</body>
+<script setup>
+  title = '';
+  content = '';
+  placement = 'top'; // top | bottom | left | right
+  trigger = 'click'; // click | hover
+
+  visible = false;
+
+  onEnter = () => {
+    if (trigger === 'hover') visible = true;
+  }
+
+  onLeave = () => {
+    if (trigger === 'hover') visible = false;
+  }
+
+  onClick = () => {
+    if (trigger === 'click') visible = !visible;
+  }
+
+  handleOuter = () => {
+    if (trigger === 'click') visible = false;
+  }
+</script>
+
+</html>

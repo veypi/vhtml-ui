@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Tooltip Component Demo" />
+  <title>{{$t('tooltip.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('tooltip.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('tooltip.placements')}}</span>
+    <div class="v-flex v-gap-md v-flex-wrap v-mb-md">
+      <div vsrc="/tooltip.html" :content="$t('tooltip.topTip')" placement="top">
+        <div vsrc="/btn.html" variant="outline">Top</div>
+      </div>
+      <div vsrc="/tooltip.html" :content="$t('tooltip.bottomTip')" placement="bottom">
+        <div vsrc="/btn.html" variant="outline">Bottom</div>
+      </div>
+      <div vsrc="/tooltip.html" :content="$t('tooltip.leftTip')" placement="left">
+        <div vsrc="/btn.html" variant="outline">Left</div>
+      </div>
+      <div vsrc="/tooltip.html" :content="$t('tooltip.rightTip')" placement="right">
+        <div vsrc="/btn.html" variant="outline">Right</div>
+      </div>
+    </div>
+
+    <span class="demo-label">{{$t('tooltip.clickTrigger')}}</span>
+    <div class="v-flex v-gap-md">
+      <div vsrc="/tooltip.html" :content="$t('tooltip.clickTip')" trigger="click">
+        <div vsrc="/btn.html">{{$t('tooltip.clickMe')}}</div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

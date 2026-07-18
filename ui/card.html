@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Card Container Component">
+  <title>Card</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .v-card {
+    background: var(--v-bg-color);
+    border-radius: var(--v-radius-lg);
+    border: 1px solid transparent;
+    transition: box-shadow var(--v-transition-base);
+    overflow: hidden;
+  }
+
+  .v-card.is-bordered {
+    border-color: var(--v-border-color);
+  }
+
+  .v-card.is-shadow-always {
+    box-shadow: var(--v-shadow-sm);
+  }
+
+  .v-card.is-shadow-hover:hover {
+    box-shadow: var(--v-shadow-md);
+  }
+
+  .v-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--v-spacing-md) var(--v-spacing-lg);
+    border-bottom: 1px solid var(--v-border-color);
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+  }
+
+  .v-card-header:empty {
+    display: none;
+  }
+
+  .v-card-body {
+    padding: var(--v-spacing-lg);
+    color: var(--v-text-color);
+  }
+
+  .v-card-footer {
+    padding: var(--v-spacing-md) var(--v-spacing-lg);
+    border-top: 1px solid var(--v-border-color);
+    color: var(--v-text-color-secondary);
+  }
+
+  .v-card-footer:empty {
+    display: none;
+  }
+</style>
+
+<body>
+  <div class="v-card" :class="['is-shadow-' + shadow, { 'is-bordered': bordered }]">
+    <vslot name="header" class="v-card-header">
+      <span v-if="title">{{ title }}</span>
+    </vslot>
+    <div class="v-card-body">
+      <vslot></vslot>
+    </div>
+    <vslot name="footer" class="v-card-footer"></vslot>
+  </div>
+</body>
+<script setup>
+  title = '';      // 便捷标题；复杂头部用 header 插槽
+  shadow = 'hover'; // always | hover | never
+  bordered = true;
+</script>
+
+</html>

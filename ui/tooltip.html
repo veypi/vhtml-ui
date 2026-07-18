@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Tooltip Component">
+  <title>Tooltip</title>
+</head>
+<style>
+  body {
+    display: inline-block;
+  }
+
+  .v-tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  .v-tooltip-content {
+    position: absolute;
+    z-index: var(--v-z-dropdown);
+    padding: 6px 10px;
+    font-size: var(--v-font-size-xs);
+    line-height: 1.4;
+    color: #fff;
+    background: var(--v-gray-800);
+    border-radius: var(--v-radius-sm);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--v-transition-fast), transform var(--v-transition-fast);
+  }
+
+  .v-tooltip-content.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* 箭头 */
+  .v-tooltip-content::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+    transform: rotate(45deg);
+  }
+
+  /* top */
+  .v-tooltip-content[data-placement='top'] {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(2px);
+  }
+
+  .v-tooltip-content[data-placement='top'].is-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .v-tooltip-content[data-placement='top']::after {
+    bottom: -4px;
+    left: calc(50% - 4px);
+  }
+
+  /* bottom */
+  .v-tooltip-content[data-placement='bottom'] {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  .v-tooltip-content[data-placement='bottom'].is-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .v-tooltip-content[data-placement='bottom']::after {
+    top: -4px;
+    left: calc(50% - 4px);
+  }
+
+  /* left */
+  .v-tooltip-content[data-placement='left'] {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%) translateX(2px);
+  }
+
+  .v-tooltip-content[data-placement='left'].is-visible {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .v-tooltip-content[data-placement='left']::after {
+    right: -4px;
+    top: calc(50% - 4px);
+  }
+
+  /* right */
+  .v-tooltip-content[data-placement='right'] {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-2px);
+  }
+
+  .v-tooltip-content[data-placement='right'].is-visible {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .v-tooltip-content[data-placement='right']::after {
+    left: -4px;
+    top: calc(50% - 4px);
+  }
+
+  vslot {
+    display: contents;
+  }
+</style>
+
+<body>
+  <span class="v-tooltip" @mouseenter="onEnter" @mouseleave="onLeave" @click="onClick" @outerclick="handleOuter">
+    <vslot></vslot>
+    <span class="v-tooltip-content" :class="{ 'is-visible': visible }" :data-placement="placement">
+      {{ content }}
+    </span>
+  </span>
+</body>
+<script setup>
+  content = '';
+  placement = 'top'; // top | bottom | left | right
+  trigger = 'hover'; // hover | click
+  delay = 100;       // hover 触发延迟 ms
+
+  visible = false;
+  hoverTimer = null;
+
+  onEnter = () => {
+    if (trigger !== 'hover') return;
+    clearTimeout(hoverTimer);
+    hoverTimer = setTimeout(() => { visible = true; }, delay);
+  }
+
+  onLeave = () => {
+    if (trigger !== 'hover') return;
+    clearTimeout(hoverTimer);
+    visible = false;
+  }
+
+  onClick = () => {
+    if (trigger !== 'click') return;
+    visible = !visible;
+  }
+
+  handleOuter = () => {
+    if (trigger === 'click') visible = false;
+  }
+</script>
+<script dispose>
+  clearTimeout(hoverTimer);
+</script>
+
+</html>

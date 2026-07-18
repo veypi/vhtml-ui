@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Alert Banner Component">
+  <title>Alert</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .v-alert {
+    display: flex;
+    gap: var(--v-spacing-sm);
+    padding: var(--v-spacing-sm) var(--v-spacing-md);
+    border-radius: var(--v-radius-md);
+    border: 1px solid color-mix(in srgb, var(--v-alert-color) 25%, transparent);
+    background: color-mix(in srgb, var(--v-alert-color) 8%, transparent);
+    color: var(--v-text-color);
+    align-items: flex-start;
+  }
+
+  .v-alert-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    color: var(--v-alert-color);
+    display: inline-flex;
+  }
+
+  .v-alert-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .v-alert-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .v-alert-title {
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-alert-color);
+    line-height: 1.5;
+  }
+
+  .v-alert-desc {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+
+  .v-alert-desc:empty {
+    display: none;
+  }
+
+  .v-alert-close {
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: var(--v-text-color-tertiary);
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.4;
+    transition: color var(--v-transition-fast);
+  }
+
+  .v-alert-close:hover {
+    color: var(--v-text-color);
+  }
+
+  vslot {
+    display: contents;
+  }
+</style>
+
+<body>
+  <div v-show="visible" class="v-alert" :style="{ '--v-alert-color': typeColor() }">
+    <vslot name="icon" class="v-alert-icon">
+      <span class="v-alert-icon" v-html="typeIcon()"></span>
+    </vslot>
+    <div class="v-alert-content">
+      <div v-if="title" class="v-alert-title">{{ title }}</div>
+      <div class="v-alert-desc">
+        <vslot>{{ description }}</vslot>
+      </div>
+    </div>
+    <button v-if="closable" class="v-alert-close" @click="handleClose">×</button>
+  </div>
+</body>
+<script setup>
+  type = 'info'; // info | success | warning | danger
+  title = '';
+  description = '';
+  closable = false;
+
+  visible = true;
+
+  typeColor = () => {
+    switch (type) {
+      case 'success': return 'var(--v-color-success)';
+      case 'warning': return 'var(--v-color-warning)';
+      case 'danger': return 'var(--v-color-danger)';
+      default: return 'var(--v-color-info)';
+    }
+  }
+
+  typeIcon = () => {
+    switch (type) {
+      case 'success':
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+      case 'warning':
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+      case 'danger':
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+      default:
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+    }
+  }
+
+  handleClose = () => {
+    visible = false;
+    $emit('close');
+  }
+</script>
+
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Breadcrumb Component Demo" />
+  <title>{{$t('breadcrumb.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('breadcrumb.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('breadcrumb.basic')}}</span>
+    <div vsrc="/breadcrumb.html" :items="items"></div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('breadcrumb.customSep')}}</span>
+    <div vsrc="/breadcrumb.html" :items="items" separator=">"></div>
+  </div>
+</body>
+<script setup>
+  items = [
+    { label: () => $t('menu.home'), path: '/' },
+    { label: () => $t('breadcrumb.components'), path: '/c/breadcrumb' },
+    { label: () => $t('menu.breadcrumb') }
+  ];
+</script>
+
+</html>

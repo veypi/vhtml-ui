@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Skeleton Component Demo" />
+  <title>{{$t('skeleton.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('skeleton.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('skeleton.basic')}}</span>
+    <div vsrc="/skeleton.html"></div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('skeleton.withAvatar')}}</span>
+    <div vsrc="/skeleton.html" avatar :rows="2"></div>
+  </div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('skeleton.toggle')}}</span>
+    <div class="v-mb-md">
+      <div vsrc="/btn.html" size="sm" variant="outline" @click="reload">{{$t('skeleton.reload')}}</div>
+    </div>
+    <div vsrc="/skeleton.html" :loading="loading" avatar :rows="2">
+      <div class="v-flex v-gap-md v-items-center">
+        <div vsrc="/avatar.html" name="Alice" size="lg"></div>
+        <div>
+          <div class="v-font-bold">Alice</div>
+          <div class="v-text-secondary v-text-sm">{{$t('skeleton.loadedContent')}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script setup>
+  loading = true;
+
+  reload = () => {
+    loading = true;
+    setTimeout(() => { loading = false; }, 1500);
+  }
+
+  reload();
+</script>
+
+</html>

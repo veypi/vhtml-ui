@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="description" content="Popover Component Demo" />
+  <title>{{$t('popover.title')}}</title>
+</head>
+
+<body>
+  <div class="section-title">{{$t('popover.title')}}</div>
+
+  <div class="demo-section">
+    <span class="demo-label">{{$t('popover.clickBasic')}}</span>
+    <div class="v-flex v-gap-md v-flex-wrap v-mb-md">
+      <div vsrc="/popover.html" :title="$t('popover.popTitle')" :content="$t('popover.popContent')">
+        <div vsrc="/btn.html" variant="outline">Top</div>
+      </div>
+      <div vsrc="/popover.html" placement="bottom" :title="$t('popover.popTitle')" :content="$t('popover.popContent')">
+        <div vsrc="/btn.html" variant="outline">Bottom</div>
+      </div>
+    </div>
+
+    <span class="demo-label">{{$t('popover.hoverCustom')}}</span>
+    <div class="v-flex v-gap-md">
+      <div vsrc="/popover.html" trigger="hover" placement="right" :title="$t('popover.userCard')">
+        <div vsrc="/avatar.html" name="Alice"></div>
+        <div vslot="content">
+          <div class="v-font-bold">Alice</div>
+          <div class="v-text-secondary v-text-sm">alice@example.com</div>
+          <div class="v-mt-sm">
+            <div vsrc="/btn.html" size="xs">{{$t('popover.follow')}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
