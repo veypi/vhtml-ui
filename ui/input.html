@@ -67,22 +67,22 @@
       <!-- Delegated Controls -->
       <div v-else-if='type==="select"' vsrc="/input/select.html" ref="ctrl" v:value="value"
         :placeholder="placeholder" :disabled="disabled" :required="required" :validate="validate" :opts="opts"
-        :name="name" @change="forwardChange"></div>
+        :name="name" @update="forwardChange"></div>
       <div v-else-if='type==="checkbox"' vsrc="/input/checkbox.html" ref="ctrl" v:value="value"
         :placeholder="placeholder" :disabled="disabled" :required="required" :validate="validate" :opts="opts"
-        :name="name" @change="forwardChange"></div>
+        :name="name" @update="forwardChange"></div>
       <div v-else-if='type==="radio"' vsrc="/input/radio.html" ref="ctrl" v:value="value" :disabled="disabled"
-        :required="required" :validate="validate" :opts="opts" :name="name" @change="forwardChange"></div>
+        :required="required" :validate="validate" :opts="opts" :name="name" @update="forwardChange"></div>
       <div v-else-if='type==="switch"' vsrc="/input/switch.html" ref="ctrl" v:value="value"
         :placeholder="placeholder" :disabled="disabled" :required="required" :validate="validate" :opts="opts"
-        :name="name" @change="forwardChange"></div>
+        :name="name" @update="forwardChange"></div>
       <div v-else-if='type==="slider"' vsrc="/input/slider.html" ref="ctrl" v:value="value" :disabled="disabled"
-        :required="required" :validate="validate" :opts="opts" :name="name" @change="forwardChange"></div>
+        :required="required" :validate="validate" :opts="opts" :name="name" @update="forwardChange"></div>
       <div v-else-if='type==="range"' vsrc="/input/range.html" ref="ctrl" v:value="value" :disabled="disabled"
-        :required="required" :validate="validate" :opts="opts" :name="name" @change="forwardChange"></div>
+        :required="required" :validate="validate" :opts="opts" :name="name" @update="forwardChange"></div>
       <div v-else-if='type==="file"' vsrc="/input/upload.html" ref="ctrl" vslot-inherit v:value="value"
         :placeholder="placeholder" :disabled="disabled" :required="required" :validate="validate" :opts="opts"
-        :name="name" :noborder="noborder" @change="forwardChange"></div>
+        :name="name" :noborder="noborder" @update="forwardChange"></div>
 
       <div v-else>
         Not supported input type {{ type }}
@@ -167,7 +167,7 @@
     $emit("v-focus", e);
   }
 
-  forwardChange = (v) => $emit('change', v);
+  forwardChange = (v) => $emit('update', v);
 </script>
 
 </html>

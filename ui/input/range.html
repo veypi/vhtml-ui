@@ -182,7 +182,7 @@
     document.removeEventListener('touchend', handleRangeEnd);
 
     validateField();
-    $emit('change', value);
+    $emit('update', value);
   }
 </script>
 <script dispose>

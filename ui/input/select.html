@@ -54,7 +54,7 @@
   handleChange = (e) => {
     value = e.target.value;
     runCheck(e.target);
-    $emit('change', value);
+    $emit('update', value);
   }
 
   handleBlur = (e) => runCheck(e.target);

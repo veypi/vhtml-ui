@@ -151,7 +151,7 @@
     if (item.disabled) return;
     if (item.value !== value) {
       value = item.value;
-      $emit('change', value);
+      $emit('update', value);
       
       // Update local styles trigger
       // Since 'value' is reactive, the view should update automatically

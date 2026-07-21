@@ -110,13 +110,13 @@
     }
     value = newValue;
     validateField();
-    $emit('change', value);
+    $emit('update', value);
   }
 
   handleSingleChange = (e) => {
     value = e.target.checked;
     validateField();
-    $emit('change', value);
+    $emit('update', value);
   }
 </script>
 <script>

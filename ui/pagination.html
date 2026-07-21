@@ -92,7 +92,7 @@
     const count = pageCount();
     if (p < 1 || p > count || p === value) return;
     value = p;
-    $emit('change', p);
+    $emit('update', p);
   }
 
   pageList = () => {

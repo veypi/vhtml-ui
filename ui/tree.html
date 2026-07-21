@@ -50,7 +50,7 @@
     <vslot vbind="row, depth">
       <div class="v-tree-row" :style="{paddingLeft: (depth * 20) + 'px'}" @click="toggle(row)">
         <span class="v-tree-arrow" :class="{ 'is-expanded': row.expand }">
-          <svg v-if="row.children && row.children.length" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          <svg v-if="row.items && row.items.length" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
@@ -58,7 +58,7 @@
         <span>{{ row.name }}</span>
       </div>
     </vslot>
-    <div vsrc='/tree' vslot-inherit v-if='row.children && row.expand' :items="row.children" :depth="depth + 1"></div>
+    <div vsrc='/tree' vslot-inherit v-if='row.items && row.expand' :items="row.items" :depth="depth + 1"></div>
   </div>
 </body>
 <script setup>
@@ -66,7 +66,7 @@
   depth = 0
 
   toggle = (row) => {
-    if (row.children && row.children.length) {
+    if (row.items && row.items.length) {
       row.expand = !row.expand
     }
   }
