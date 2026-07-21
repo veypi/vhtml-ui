@@ -3,15 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sidebar Component Demo">
-  <title>{{$t('sidebar.title')}}</title>
+  <meta name="description" content="Sidebar Component Documentation" />
+  <title>{{ $t('sidebar.title') }}</title>
 </head>
 <style>
-  body {
-    display: block;
-  }
-
   .layout-container {
     display: flex;
     height: 480px;
@@ -21,12 +16,11 @@
     overflow: hidden;
   }
 
-  .main-content {
+  .demo-content {
     flex: 1;
     padding: var(--v-spacing-lg);
     background-color: var(--v-bg-color-secondary);
     overflow-y: auto;
-    transition: all var(--v-transition-base);
   }
 
   .header-logo {
@@ -34,6 +28,7 @@
     font-size: 1.2rem;
     color: var(--v-color-primary);
     white-space: nowrap;
+    padding: var(--v-spacing-md);
   }
 
   .toggle-btn {
@@ -48,79 +43,120 @@
   }
 </style>
 
-<body layout="default">
-  <div class="layout-container">
+<body>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('sidebar.title') }}</h1>
+    <p class="doc-intro">{{ $t('sidebar.intro') }}</p>
 
-    <!-- Sidebar -->
-    <div vsrc="/sidebar" :items="menuItems" v:collapsed="isCollapsed" v:value="currentPath">
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-      <div vslot="header" class="header-logo">
-        <span v-if="!isCollapsed">{{$t('sidebar.admin')}}</span>
-        <span v-else>V</span>
-      </div>
-
-      <div vslot="footer" class="v-text-center">
-        <div class="toggle-btn" @click="toggleSidebar">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path v-if="!isCollapsed" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            <path v-else d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-          </svg>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-      <div class="v-container">
-        <h1>{{ getPageTitle(currentPath) }}</h1>
-        <p class="v-text-secondary">{{$t('sidebar.currentPath')}}: {{ currentPath }}</p>
-
-        <div class="v-mt-lg v-p-md v-border v-rounded-lg" style="background: var(--v-bg-color);">
-          <p>{{$t('sidebar.contentArea')}} {{$t(isCollapsed ? 'sidebar.collapsed' : 'sidebar.expanded')}}</p>
-          <div class="v-mt-md">
-            <button class="toggle-btn" @click="toggleSidebar">{{$t('sidebar.toggle')}}</button>
+    <doc-demo :title="$t('sidebar.ex.basic.title')" :desc="$t('sidebar.ex.basic.desc')" :code="codeBasic">
+      <div class="layout-container">
+        <div vsrc="/sidebar" :items="menuItems" v:collapsed="isCollapsed" v:value="currentPath">
+          <div vslot="header" class="header-logo">
+            <span v-if="!isCollapsed">{{ $t('sidebar.admin') }}</span>
+            <span v-else>V</span>
+          </div>
+          <div vslot="footer" class="v-text-center v-p-sm">
+            <div class="toggle-btn" @click="toggleSidebar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path v-if="!isCollapsed" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                <path v-else d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              </svg>
+            </div>
           </div>
         </div>
+        <div class="demo-content">
+          <h3 class="v-mt-0">{{ getPageTitle(currentPath) }}</h3>
+          <p class="v-text-secondary">{{ $t('sidebar.currentPath') }}: {{ currentPath }}</p>
+          <p class="v-text-secondary">{{ $t('sidebar.contentArea') }} {{ $t(isCollapsed ? 'sidebar.collapsed' :
+            'sidebar.expanded') }}</p>
+        </div>
       </div>
-    </div>
+    </doc-demo>
 
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
-</body>
+
+  <script setup>
+    isCollapsed = false;
+    currentPath = '/dashboard';
+
+    const iconHome = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
+    const iconUser = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+    const iconSettings = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>';
+
+    menuItems = [
+      { label: () => $t('sidebar.dashboard'), icon: iconHome, path: '/dashboard' },
+      {
+        label: () => $t('sidebar.userMgmt'),
+        icon: iconUser,
+        expanded: true,
+        children: [
+          { label: () => $t('sidebar.userList'), path: '/users/list' },
+          { label: () => $t('sidebar.roles'), path: '/users/roles' }
+        ]
+      },
+      { label: () => $t('sidebar.settings'), icon: iconSettings, path: '/settings' }
+    ];
+
+    toggleSidebar = () => {
+      isCollapsed = !isCollapsed;
+    };
+
+    getPageTitle = (path) => {
+      if (path === '/dashboard') return $t('sidebar.dashboard');
+      if (path.startsWith('/users')) return $t('sidebar.userMgmt');
+      if (path === '/settings') return $t('sidebar.settings');
+      return 'Unknown';
+    };
+
+    codeBasic = `<div vsrc="/sidebar" :items="menuItems" v:collapsed="isCollapsed" v:value="currentPath">
+  <div vslot="header">Admin</div>
+  <div vslot="footer">
+    <button @click="isCollapsed = !isCollapsed">Toggle</button>
+  </div>
+</div>
 
 <script setup>
   isCollapsed = false;
   currentPath = '/dashboard';
 
-  // Helper icons
-  const iconHome = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
-  const iconUser = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
-  const iconSettings = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>';
-
   menuItems = [
-    {label: () => $t('sidebar.dashboard'), icon: iconHome, path: '/dashboard'},
+    { label: 'Dashboard', icon: iconHome, path: '/dashboard' },
     {
-      label: () => $t('sidebar.userMgmt'),
-      icon: iconUser,
-      expanded: true,
+      label: 'Users', icon: iconUser, expanded: true,
       children: [
-        {label: () => $t('sidebar.userList'), path: '/users/list'},
-        {label: () => $t('sidebar.roles'), path: '/users/roles'}
+        { label: 'User List', path: '/users/list' },
+        { label: 'Roles', path: '/users/roles' }
       ]
     },
-    {label: () => $t('sidebar.settings'), icon: iconSettings, path: '/settings'}
+    { label: 'Settings', icon: iconSettings, path: '/settings' }
   ];
+<\/script>`;
 
-  toggleSidebar = () => {
-    isCollapsed = !isCollapsed;
-  };
+    propRows = [
+      { name: 'items', desc: $t('sidebar.api.items'), type: 'array', default: '[]' },
+      { name: 'collapsed', desc: $t('sidebar.api.collapsed'), type: 'boolean', default: 'false' },
+      { name: 'width', desc: $t('sidebar.api.width'), type: 'string', default: "'240px'" },
+      { name: 'collapsedWidth', desc: $t('sidebar.api.collapsedWidth'), type: 'string', default: "'64px'" },
+      { name: 'value', desc: $t('sidebar.api.value'), type: 'string', default: 'null' },
+      { name: 'pathPrefix', desc: $t('sidebar.api.pathPrefix'), type: 'string', default: "''" }
+    ];
 
-  getPageTitle = (path) => {
-    if (path === '/dashboard') return $t('sidebar.dashboard');
-    if (path.startsWith('/users')) return $t('sidebar.userMgmt');
-    if (path === '/settings') return $t('sidebar.settings');
-    return 'Unknown';
-  };
-</script>
+    eventRows = [
+      { name: 'select', desc: $t('sidebar.api.select'), type: '(item: object)', default: '-' }
+    ];
+
+    slotRows = [
+      { name: 'header', desc: $t('sidebar.api.slotHeader'), type: '-', default: '-' },
+      { name: 'footer', desc: $t('sidebar.api.slotFooter'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

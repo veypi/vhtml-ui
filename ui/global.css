@@ -171,6 +171,9 @@ body {
   --v-z-overlay: 900;
   --v-z-modal: 1000;
   --v-z-toast: 2000;
+
+  /* --- Layout (布局) --- */
+  --v-layout-max-width: 1120px;
 }
 
 /* ==========================================================================
@@ -537,39 +540,6 @@ body {
 /* ==========================================================================
    5. Demo Helpers (演示站点共用样式)
    ========================================================================== */
-.section-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  color: var(--v-text-color);
-  border-left: 4px solid var(--v-color-primary);
-  padding-left: 0.5rem;
-}
-
-.demo-label {
-  font-size: 0.875rem;
-  color: var(--v-text-color-secondary);
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.demo-section {
-  margin-bottom: var(--v-spacing-xl);
-  padding: var(--v-spacing-lg);
-  border: 1px solid var(--v-border-color);
-  border-radius: var(--v-radius-lg);
-  background-color: var(--v-bg-color);
-}
-
-.demo-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: var(--v-spacing-md);
-  padding-bottom: var(--v-spacing-sm);
-  border-bottom: 1px solid var(--v-border-color);
-  color: var(--v-text-color);
-}
-
 .value-display {
   font-family: ui-monospace, monospace;
   font-size: var(--v-font-size-xs);
@@ -578,5 +548,35 @@ body {
   padding: var(--v-spacing-sm);
   border-radius: var(--v-radius-sm);
   margin-top: var(--v-spacing-xs);
+}
+
+/* ==========================================================================
+   6. Doc Pages (组件教程页共用样式)
+   ========================================================================== */
+.doc-page {
+  width: 100%;
+  padding-bottom: 48px;
+}
+
+.doc-title {
+  font-size: 1.8rem;
+  font-weight: var(--v-font-weight-bold);
+  color: var(--v-text-color);
+  margin-bottom: var(--v-spacing-sm);
+}
+
+.doc-intro {
+  color: var(--v-text-color-secondary);
+  line-height: 1.8;
+  margin-bottom: var(--v-spacing-xl);
+}
+
+.doc-h2 {
+  font-size: 1.3rem;
+  font-weight: var(--v-font-weight-bold);
+  color: var(--v-text-color);
+  margin: 40px 0 var(--v-spacing-md);
+  padding-top: var(--v-spacing-lg);
+  border-top: 1px solid var(--v-border-color);
 }
 

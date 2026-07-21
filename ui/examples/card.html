@@ -2,8 +2,8 @@
 <html>
 
 <head>
-  <meta name="description" content="Card Component Demo" />
-  <title>{{$t('card.title')}}</title>
+  <meta name="description" content="Card Component Documentation" />
+  <title>{{ $t('card.title') }}</title>
 </head>
 <style>
   .card-grid {
@@ -14,29 +14,91 @@
 </style>
 
 <body>
-  <div class="section-title">{{$t('card.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('card.title') }}</h1>
+    <p class="doc-intro">{{ $t('card.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('card.basic')}}</span>
-    <div class="card-grid">
-      <div vsrc="/card.html" :title="$t('card.simpleTitle')">
-        <p class="v-m-0">{{$t('card.content')}}</p>
-      </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-      <div vsrc="/card.html">
-        <div vslot="header">
-          <span>{{$t('card.customHeader')}}</span>
-          <div vsrc="/btn.html" size="sm" variant="ghost">{{$t('card.more')}}</div>
+    <doc-demo :title="$t('card.ex.basic.title')" :desc="$t('card.ex.basic.desc')" :code="codeBasic">
+      <div class="card-grid">
+        <div vsrc="/card" :title="$t('card.simpleTitle')">
+          <p class="v-m-0">{{ $t('card.content') }}</p>
         </div>
-        <p class="v-m-0">{{$t('card.content')}}</p>
-        <div vslot="footer">{{$t('card.footer')}}</div>
+        <div vsrc="/card" :bordered="false" :title="$t('card.simpleTitle')">
+          <p class="v-m-0">{{ $t('card.content') }}</p>
+        </div>
       </div>
+    </doc-demo>
 
-      <div vsrc="/card.html" shadow="always" :bordered="false" :title="$t('card.shadowAlways')">
-        <p class="v-m-0">{{$t('card.content')}}</p>
+    <doc-demo :title="$t('card.ex.slot.title')" :desc="$t('card.ex.slot.desc')" :code="codeSlot">
+      <div class="card-grid">
+        <div vsrc="/card">
+          <div vslot="header">
+            <span>{{ $t('card.customHeader') }}</span>
+            <div vsrc="/btn" size="sm" variant="ghost">{{ $t('card.more') }}</div>
+          </div>
+          <p class="v-m-0">{{ $t('card.content') }}</p>
+          <div vslot="footer">{{ $t('card.footer') }}</div>
+        </div>
       </div>
-    </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('card.ex.shadow.title')" :desc="$t('card.ex.shadow.desc')" :code="codeShadow">
+      <div class="card-grid">
+        <div vsrc="/card" shadow="always" :title="$t('card.shadowAlways')">
+          <p class="v-m-0">{{ $t('card.content') }}</p>
+        </div>
+        <div vsrc="/card" shadow="hover" title="shadow = hover">
+          <p class="v-m-0">{{ $t('card.content') }}</p>
+        </div>
+        <div vsrc="/card" shadow="never" title="shadow = never">
+          <p class="v-m-0">{{ $t('card.content') }}</p>
+        </div>
+      </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
+
+  <script setup>
+    codeBasic = `<div vsrc="/card" title="Simple Card">
+  <p>Card content.</p>
+</div>
+
+<!-- 无边框 -->
+<div vsrc="/card" :bordered="false" title="Simple Card">
+  <p>Card content.</p>
+</div>`;
+
+    codeSlot = `<div vsrc="/card">
+  <div vslot="header">
+    <span>Custom Header</span>
+    <div vsrc="/btn" size="sm" variant="ghost">More</div>
+  </div>
+  <p>Card content.</p>
+  <div vslot="footer">Footer</div>
+</div>`;
+
+    codeShadow = `<div vsrc="/card" shadow="always" title="Always">...</div>
+<div vsrc="/card" shadow="hover" title="Hover">...</div>
+<div vsrc="/card" shadow="never" title="Never">...</div>`;
+
+    propRows = [
+      {name: 'title', desc: $t('card.api.title'), type: 'string', default: "''"},
+      {name: 'shadow', desc: $t('card.api.shadow'), type: "'always' | 'hover' | 'never'", default: "'hover'"},
+      {name: 'bordered', desc: $t('card.api.bordered'), type: 'boolean', default: 'true'}
+    ];
+
+    slotRows = [
+      {name: 'header', desc: $t('card.api.slotHeader'), type: '-', default: '-'},
+      {name: 'default', desc: $t('card.api.slotDefault'), type: '-', default: '-'},
+      {name: 'footer', desc: $t('card.api.slotFooter'), type: '-', default: '-'}
+    ];
+  </script>
 </body>
 
 </html>

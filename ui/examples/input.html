@@ -2,342 +2,317 @@
 <html>
 
 <head>
-  <meta name="description" content="Input Component Demo" />
-  <title>{{$t('input.title')}}</title>
-  <style>
-    .demo-row {
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .avatar-uploader {
-      margin: auto;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 2px dashed var(--v-border-color-hover);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      cursor: pointer;
-      background-size: cover;
-      background-position: center;
-      color: var(--v-text-color-tertiary);
-      font-size: 24px;
-      transition: border-color 0.2s;
-    }
-
-    .avatar-uploader:hover {
-      border-color: var(--v-color-primary);
-      color: var(--v-color-primary);
-    }
-  </style>
+  <meta name="description" content="Input Component Documentation" />
+  <title>{{ $t('input.title') }}</title>
 </head>
+<style>
+  .input-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--v-spacing-lg);
+    max-width: 420px;
+  }
+
+  .avatar-uploader {
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px dashed var(--v-border-color-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    color: var(--v-text-color-tertiary);
+    font-size: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .avatar-uploader:hover {
+    border-color: var(--v-color-primary);
+    color: var(--v-color-primary);
+  }
+</style>
 
 <body>
-  <div class="section-title">{{$t('input.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('input.title') }}</h1>
+    <p class="doc-intro">{{ $t('input.intro') }}</p>
 
-  <!-- 1. 基础输入类型 -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.basicTypes')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.textNoLabel')}} (v:value={{ textVal }})</span>
-      <div vsrc="/input" v:value="textVal" noborder :placeholder="$t('input.textPlaceholder')"></div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.password')}}</span>
-      <div vsrc="/input" type="password" v:value="passVal" :label="$t('input.password')" :placeholder="$t('input.passwordPlaceholder')"></div>
-    </div>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.number')}} (Min: 0, Max: 100)</span>
-      <div vsrc="/input" type="number" v:value="numVal" :label="$t('input.numberLabel')" :placeholder="$t('input.numberPlaceholder')" :validate="numValidator">
-      </div>
-      <div class="value-display">{{$t('input.currentValue')}}: {{ numVal }}</div>
-    </div>
-  </div>
-
-  <!-- 1.5 Textarea -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.textarea')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.textarea')}} (v:value={{ textareaVal }})</span>
-      <div vsrc="/input" type="textarea" v:value="textareaVal" :label="$t('input.textareaLabel')" :placeholder="$t('input.textareaPlaceholder')" :opts="{rows: 4}">
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. Select 选择器 -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.select')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.selectBasic')}} (v:value)</span>
-      <div vsrc="/input" type="select" v:value="selectVal" :label="$t('input.selectCity')" :placeholder="$t('input.selectPlaceholder')"
-        :opts="{options: cityOptions}">
-      </div>
-    </div>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.selectDisabled')}}</span>
-      <div vsrc="/input" type="select" :disabled="true" :label="$t('input.selectDisabled')" :placeholder="$t('input.selectDisabledPlaceholder')" :opts="{options: cityOptions}">
-      </div>
-    </div>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.selectSimple')}} (v:value)</span>
-      <div vsrc="/input" type="select" v:value="simpleSelectVal" :label="$t('input.selectColor')" :placeholder="$t('input.selectColorPlaceholder')"
-        :opts="{options: colorOptions}">
-      </div>
-      <div class="value-display">Selected Color: {{ simpleSelectVal }}</div>
-    </div>
-  </div>
-
-  <!-- 2.5 Checkbox -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.checkbox')}}</h3>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.checkboxSingle')}} (v:value={{ checkboxVal }})</span>
-      <div vsrc="/input" type="checkbox" v:value="checkboxVal" :placeholder="$t('input.agree')"></div>
-    </div>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.checkboxGroup')}} (v:value={{ checkboxGroupVal }})</span>
-      <div vsrc="/input" type="checkbox" v:value="checkboxGroupVal" :label="$t('input.hobby')" :opts="{options: hobbyOptions}">
-      </div>
-    </div>
-  </div>
-
-  <!-- 2.6 Radio -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.radio')}}</h3>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.radioGroup')}} (v:value={{ radioVal }})</span>
-      <div vsrc="/input" type="radio" v:value="radioVal" :label="$t('input.gender')" :opts="{options: genderOptions}">
-      </div>
-    </div>
-  </div>
-
-  <!-- 2.7 Switch -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.switch')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.switchBasic')}} (v:value={{ switchVal }})</span>
-      <div vsrc="/input" type="switch" v:value="switchVal" :placeholder="$t('input.enableNotification')"></div>
-    </div>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.switchDisabled')}}</span>
-      <div vsrc="/input" type="switch" :value="true" :disabled="true" :placeholder="$t('input.switchDisabledPlaceholder')"></div>
-    </div>
-  </div>
-
-  <!-- 2.8 Date & Time -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.datetime')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.date')}} - v:value={{ dateVal }}</span>
-      <div vsrc="/input" type="date" v:value="dateVal" :label="$t('input.birthdate')"></div>
-    </div>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.datetimeLabel')}} - v:value={{ datetimeVal }}</span>
-      <div vsrc="/input" type="datetime" v:value="datetimeVal" :label="$t('input.meetingTime')"></div>
-    </div>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.time')}} - v:value={{ timeVal }}</span>
-      <div vsrc="/input" type="time" v:value="timeVal" :label="$t('input.reminderTime')"></div>
-    </div>
-  </div>
-
-  <!-- 2.9 Slider -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.slider')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.sliderBasic')}} (v:value={{ sliderVal }})</span>
-      <div vsrc="/input" type="slider" v:value="sliderVal" :opts="{min: 0, max: 100, step: 1, showValue: true}">
-      </div>
-    </div>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.sliderCustom')}} (Min: 10, Max: 50, Step: 5)</span>
-      <div vsrc="/input" type="slider" :value="30" label="slider" :opts="{min: 10, max: 50, step: 5, showValue: true}">
-      </div>
-    </div>
-  </div>
-
-  <!-- 2.10 Range -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.range')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.rangeSelect')}} (v:value={{ rangeVal }})</span>
-      <div vsrc="/input" type="range" v:value="rangeVal" label="range"
-        :opts="{min: 0, max: 100, step: 1, showValue: true}"></div>
-    </div>
-  </div>
-
-  <!-- 2.11 File -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.file')}}</h3>
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.fileAuto')}}</span>
-      <div vsrc="/input" type="file" v:value="fileVal" :placeholder="$t('input.filePlaceholder')"
-        :opts="{uploader: mockUploader, multiple: false}">
-      </div>
-      <div class="value-display" style="white-space: pre-wrap;">{{$t('input.value')}}: {{ fileVal }}</div>
-    </div>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.fileManual')}}</span>
-      <div vsrc="/input" type="file" :placeholder="$t('input.fileManualPlaceholder')" :opts="{uploader: mockUploader, autoUpload: false}">
-      </div>
-    </div>
-
-    <div class="demo-row">
-      <span class="demo-label">{{$t('input.fileAvatar')}}</span>
-      <div vsrc="/input" type="file" v:value="avatarVal" :noborder="true"
-        :opts="{uploader: mockUploader, autoUpload: true, showList: false, accept: 'image/*'}">
-
-        <div vslot="trigger" class="avatar-uploader"
-          :style="{backgroundImage: avatarVal && avatarVal[0] ? 'url(' + avatarVal[0].url + ')' : 'none'}">
-          <span v-if="!avatarVal || !avatarVal[0]">+</span>
+    <doc-demo :title="$t('input.ex.basic.title')" :desc="$t('input.ex.basic.desc')" :code="codeBasic">
+      <div class="input-col">
+        <div vsrc="/input" v:value="textVal" noborder :placeholder="$t('input.textPlaceholder')"></div>
+        <div vsrc="/input" type="password" v:value="passVal" label="Password"
+          :placeholder="$t('input.passwordPlaceholder')"></div>
+        <div>
+          <div vsrc="/input" type="number" v:value="numVal" :label="$t('input.numberLabel')"
+            :placeholder="$t('input.numberPlaceholder')" :validate="numValidator"></div>
+          <div class="value-display">{{ $t('input.currentValue') }}: {{ numVal }}</div>
         </div>
-
+        <div vsrc="/input" type="textarea" v:value="textareaVal" :label="$t('input.textareaLabel')"
+          :placeholder="$t('input.textareaPlaceholder')" :opts="{rows: 4}"></div>
       </div>
-      <div class="value-display" style="white-space: pre-wrap;">{{$t('input.value')}}: {{avatarVal}}</div>
-    </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('input.ex.datetime.title')" :desc="$t('input.ex.datetime.desc')" :code="codeDatetime">
+      <div class="input-col">
+        <div vsrc="/input" type="date" v:value="dateVal" :label="$t('input.birthdate')"></div>
+        <div vsrc="/input" type="datetime" v:value="datetimeVal" :label="$t('input.meetingTime')"></div>
+        <div vsrc="/input" type="time" v:value="timeVal" :label="$t('input.reminderTime')"></div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('input.ex.select.title')" :desc="$t('input.ex.select.desc')" :code="codeSelect">
+      <div class="input-col">
+        <div>
+          <div vsrc="/input" type="select" v:value="selectVal" :label="$t('input.selectCity')"
+            :placeholder="$t('input.selectPlaceholder')" :opts="{options: cityOptions}"></div>
+          <div class="value-display">{{ $t('input.value') }}: {{ selectVal }}</div>
+        </div>
+        <div vsrc="/input" type="select" v:value="simpleSelectVal" :label="$t('input.selectColor')"
+          :placeholder="$t('input.selectColorPlaceholder')" :opts="{options: colorOptions}"></div>
+        <div vsrc="/input" type="select" :disabled="true" :label="$t('input.selectCity')"
+          :placeholder="$t('input.selectDisabledPlaceholder')" :opts="{options: cityOptions}"></div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('input.ex.check.title')" :desc="$t('input.ex.check.desc')" :code="codeCheck">
+      <div class="input-col">
+        <div vsrc="/input" type="checkbox" v:value="checkboxVal" :placeholder="$t('input.agree')"></div>
+        <div vsrc="/input" type="checkbox" v:value="checkboxGroupVal" :label="$t('input.hobby')"
+          :opts="{options: hobbyOptions}"></div>
+        <div vsrc="/input" type="radio" v:value="radioVal" :label="$t('input.gender')"
+          :opts="{options: genderOptions}"></div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('input.ex.switch.title')" :desc="$t('input.ex.switch.desc')" :code="codeSwitch">
+      <div class="input-col">
+        <div vsrc="/input" type="switch" v:value="switchVal" :placeholder="$t('input.enableNotification')"></div>
+        <div vsrc="/input" type="switch" :value="true" :disabled="true"
+          :placeholder="$t('input.switchDisabledPlaceholder')"></div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('input.ex.slider.title')" :desc="$t('input.ex.slider.desc')" :code="codeSlider">
+      <div class="input-col">
+        <div vsrc="/input" type="slider" v:value="sliderVal" :opts="{min: 0, max: 100, step: 1, showValue: true}">
+        </div>
+        <div vsrc="/input" type="range" v:value="rangeVal" :opts="{min: 0, max: 100, step: 1, showValue: true}">
+        </div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('input.ex.file.title')" :desc="$t('input.ex.file.desc')" :code="codeFile">
+      <div class="input-col">
+        <div vsrc="/input" type="file" v:value="fileVal" :placeholder="$t('input.filePlaceholder')"
+          :opts="{uploader: mockUploader, multiple: false}"></div>
+        <div vsrc="/input" type="file" :placeholder="$t('input.fileManualPlaceholder')"
+          :opts="{uploader: mockUploader, autoUpload: false}"></div>
+        <div vsrc="/input" type="file" v:value="avatarVal" :noborder="true"
+          :opts="{uploader: mockUploader, autoUpload: true, showList: false, accept: 'image/*'}">
+          <div vslot="trigger" class="avatar-uploader"
+            :style="{backgroundImage: avatarVal && avatarVal[0] ? 'url(' + avatarVal[0].url + ')' : 'none'}">
+            <span v-if="!avatarVal || !avatarVal[0]">+</span>
+          </div>
+        </div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('input.ex.validate.title')" :desc="$t('input.ex.validate.desc')" :code="codeValidate">
+      <div class="input-col">
+        <div vsrc="/input" :label="$t('input.requiredText')" required :placeholder="$t('input.requiredPlaceholder')">
+        </div>
+        <div vsrc="/input" type="email" :label="$t('input.emailRegex')" :required="true"
+          validate="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" :placeholder="$t('input.emailPlaceholder')"></div>
+      </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api title="opts" :rows="optsRows"></doc-api>
+    <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
 
-  <!-- 3. 表单校验与提交 -->
-  <div class="demo-section">
-    <h3 class="v-mb-md">{{$t('input.formValidation')}}</h3>
-    <form id="demo-form" action="javascript:void(0);">
-
-      <div vsrc="/input" :label="$t('input.requiredText')" required noborder :placeholder="$t('input.requiredPlaceholder')">
-      </div>
-
-      <div vsrc="/input" type="email" :label="$t('input.emailRegex')" :required="true" validate="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-        :placeholder="$t('input.emailPlaceholder')">
-      </div>
-      <div vsrc="/input" type="email" :label="$t('input.email')" :required="true" :placeholder="$t('input.emailPlaceholder')">
-      </div>
-
-      <div vsrc="/input" type="select" :label="$t('input.requiredSelect')" :required="true" :placeholder="$t('input.selectOne')" :opts="{options: cityOptions}">
-      </div>
-
-      <div vsrc="/input" type="checkbox" :required="true" :placeholder="$t('input.requiredCheckbox')">
-      </div>
-
-      <div vsrc="/input" type="checkbox" :label="$t('input.requiredHobby')" :required="true" :opts="{options: hobbyOptions}">
-      </div>
-
-      <div vsrc="/input" type="radio" :label="$t('input.requiredGender')" :required="true" :opts="{options: genderOptions}">
-      </div>
-
-      <div class="v-flex v-gap-sm v-mt-md">
-        <div vsrc='/btn' type="submit" variant="default" @click="submitForm">{{$t('input.submit')}}</div>
-        <div vsrc='/btn' type="button" variant="outline" @click="resetForm">{{$t('input.reset')}}</div>
-      </div>
-    </form>
-  </div>
-</body>
-<script setup>
-  // Data
-  textVal = "Hello";
-  textareaVal = "This is a textarea.";
-  passVal = "";
-  numVal = 25;
-  selectVal = "shanghai";
-  simpleSelectVal = "red";
-  checkboxVal = false;
-  checkboxGroupVal = ["reading"];
-  radioVal = "male";
-  switchVal = false;
-  dateVal = "2023-10-01";
-  datetimeVal = "";
-  timeVal = "09:00";
-  sliderVal = 50;
-  rangeVal = [20, 80];
-  fileVal = [{name: 'InitialFile.pdf', url: 'https://example.com/InitialFile.pdf'}];
-  avatarVal = [];
-
-  // Options
-  genderOptions = [
-    {label: () => $t('form.male'), value: 'male'},
-    {label: () => $t('form.female'), value: 'female'},
-    {label: () => $t('form.other'), value: 'other'}
-  ];
-
-  hobbyOptions = [
-    {label: () => $t('form.reading'), value: 'reading'},
-    {label: () => $t('form.gaming'), value: 'gaming'},
-    {label: () => $t('form.coding'), value: 'coding'}
-  ];
-
-  cityOptions = [
-    {label: () => $t('form.beijing'), value: 'beijing'},
-    {label: () => $t('form.shanghai'), value: 'shanghai'},
-    {label: () => $t('form.guangzhou'), value: 'guangzhou'},
-    {label: () => $t('form.shenzhen'), value: 'shenzhen'}
-  ];
-  colorOptions = ["red", "green", "blue"];
-
-  // Validators
-  numValidator = (val) => {
-    const n = Number(val);
-    if (n < 0 || n > 100) return "Must be between 0 and 100";
-    return true;
-  };
-
-  mockUploader = (file, onProgress) => {
-    return new Promise((resolve, reject) => {
-      let p = 0;
-      const interval = setInterval(() => {
-        p += 10;
-        onProgress(p);
-        if (p >= 100) {
-          clearInterval(interval);
-          resolve(`https://public.veypi.com/img/avatar/01${(Math.random() * 90 + 10).toFixed(0)}.jpg`);
-        }
-      }, 100);
-    });
-  };
-
-  // Methods
-  resetForm = () => {
-    document.getElementById('demo-form').reset();
-    textVal = "";
-    passVal = "";
-    numVal = "";
-    textareaVal = "";
-    selectVal = "";
+  <script setup>
+    textVal = 'Hello';
+    textareaVal = '';
+    passVal = '';
+    numVal = 25;
+    dateVal = '2023-10-01';
+    datetimeVal = '';
+    timeVal = '09:00';
+    selectVal = 'shanghai';
+    simpleSelectVal = 'red';
     checkboxVal = false;
-    checkboxGroupVal = [];
-    radioVal = "";
+    checkboxGroupVal = ['reading'];
+    radioVal = 'male';
     switchVal = false;
-    dateVal = "";
-    datetimeVal = "";
-    timeVal = "";
     sliderVal = 50;
     rangeVal = [20, 80];
-  };
+    fileVal = [{ name: 'InitialFile.pdf', url: 'https://example.com/InitialFile.pdf' }];
+    avatarVal = [];
 
-  submitForm = () => {
-    const form = document.getElementById('demo-form');
-    if (form.reportValidity()) {
-      $message.success($t('input.submitSuccess'));
-    } else {
-      $message.error($t('input.submitFailed'));
-    }
+    genderOptions = [
+      { label: () => $t('form.male'), value: 'male' },
+      { label: () => $t('form.female'), value: 'female' },
+      { label: () => $t('form.other'), value: 'other' }
+    ];
+
+    hobbyOptions = [
+      { label: () => $t('form.reading'), value: 'reading' },
+      { label: () => $t('form.gaming'), value: 'gaming' },
+      { label: () => $t('form.coding'), value: 'coding' }
+    ];
+
+    cityOptions = [
+      { label: () => $t('form.beijing'), value: 'beijing' },
+      { label: () => $t('form.shanghai'), value: 'shanghai' },
+      { label: () => $t('form.guangzhou'), value: 'guangzhou' },
+      { label: () => $t('form.shenzhen'), value: 'shenzhen' }
+    ];
+    colorOptions = ['red', 'green', 'blue'];
+
+    numValidator = (val) => {
+      const n = Number(val);
+      if (n < 0 || n > 100) return 'Must be between 0 and 100';
+      return true;
+    };
+
+    mockUploader = (file, onProgress) => {
+      return new Promise((resolve, reject) => {
+        let p = 0;
+        const interval = setInterval(() => {
+          p += 10;
+          onProgress(p);
+          if (p >= 100) {
+            clearInterval(interval);
+            resolve(`https://public.veypi.com/img/avatar/01${(Math.random() * 90 + 10).toFixed(0)}.jpg`);
+          }
+        }, 100);
+      });
+    };
+
+    codeBasic = `<div vsrc="/input" v:value="textVal" noborder placeholder="..."></div>
+<div vsrc="/input" type="password" v:value="passVal" label="Password"></div>
+
+<!-- validate 函数：返回 true 通过，返回字符串作为错误信息 -->
+<div vsrc="/input" type="number" v:value="numVal" label="Age" :validate="numValidator"></div>
+
+<div vsrc="/input" type="textarea" v:value="bio" :opts="{rows: 4}"></div>
+
+<script setup>
+  numValidator = (val) => {
+    const n = Number(val);
+    if (n < 0 || n > 100) return 'Must be between 0 and 100';
+    return true;
   };
-</script>
+<\/script>`;
+
+    codeDatetime = `<div vsrc="/input" type="date" v:value="dateVal" label="Birthdate"></div>
+<div vsrc="/input" type="datetime" v:value="datetimeVal" label="Meeting"></div>
+<div vsrc="/input" type="time" v:value="timeVal" label="Reminder"></div>`;
+
+    codeSelect = `<!-- 对象数组选项 -->
+<div vsrc="/input" type="select" v:value="city" :opts="{options: cityOptions}"></div>
+
+<!-- 简单字符串数组 -->
+<div vsrc="/input" type="select" v:value="color" :opts="{options: ['red', 'green', 'blue']}"></div>
+
+<script setup>
+  cityOptions = [
+    { label: 'Beijing', value: 'beijing' },
+    { label: 'Shanghai', value: 'shanghai' }
+  ];
+<\/script>`;
+
+    codeCheck = `<!-- 单个 checkbox：布尔值 -->
+<div vsrc="/input" type="checkbox" v:value="agree" placeholder="Agree to terms"></div>
+
+<!-- 多选组：数组值 -->
+<div vsrc="/input" type="checkbox" v:value="hobbies" :opts="{options: hobbyOptions}"></div>
+
+<!-- 单选组 -->
+<div vsrc="/input" type="radio" v:value="gender" :opts="{options: genderOptions}"></div>`;
+
+    codeSwitch = `<div vsrc="/input" type="switch" v:value="enabled" placeholder="Enable notifications"></div>
+<div vsrc="/input" type="switch" :value="true" :disabled="true"></div>`;
+
+    codeSlider = `<div vsrc="/input" type="slider" v:value="percent" :opts="{min: 0, max: 100, step: 1, showValue: true}"></div>
+<div vsrc="/input" type="range" v:value="rangeVal" :opts="{min: 0, max: 100, step: 1, showValue: true}"></div>
+
+<script setup>
+  percent = 50;
+  rangeVal = [20, 80];
+<\/script>`;
+
+    codeFile = `<!-- 自动上传 -->
+<div vsrc="/input" type="file" v:value="files" :opts="{uploader: mockUploader}"></div>
+
+<!-- 手动上传 -->
+<div vsrc="/input" type="file" :opts="{uploader: mockUploader, autoUpload: false}"></div>
+
+<!-- trigger 插槽自定义触发区域（头像上传） -->
+<div vsrc="/input" type="file" v:value="avatar" :noborder="true"
+  :opts="{uploader: mockUploader, showList: false, accept: 'image/*'}">
+  <div vslot="trigger" class="avatar-uploader">+</div>
+</div>
+
+<script setup>
+  mockUploader = (file, onProgress) => {
+    return new Promise((resolve) => {
+      // 上传逻辑，onProgress(percent) 回报进度
+      resolve('https://example.com/uploaded.jpg');
+    });
+  };
+<\/script>`;
+
+    codeValidate = `<div vsrc="/input" label="Required" required placeholder="..."></div>
+
+<!-- 正则字符串校验 -->
+<div vsrc="/input" type="email" label="Email" :required="true"
+  validate="^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$">
+</div>`;
+
+    propRows = [
+      { name: 'type', desc: $t('input.api.type'), type: "'text' | 'password' | 'number' | 'email' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'switch' | 'slider' | 'range' | 'file' | 'date' | 'datetime' | 'time' | ...", default: "'text'" },
+      { name: 'value', desc: $t('input.api.value'), type: 'any', default: "''" },
+      { name: 'label', desc: $t('input.api.label'), type: 'string', default: "''" },
+      { name: 'name', desc: $t('input.api.name'), type: 'string', default: "''" },
+      { name: 'placeholder', desc: $t('input.api.placeholder'), type: 'string', default: "''" },
+      { name: 'disabled', desc: $t('input.api.disabled'), type: 'boolean', default: 'false' },
+      { name: 'readonly', desc: $t('input.api.readonly'), type: 'boolean', default: 'false' },
+      { name: 'required', desc: $t('input.api.required'), type: 'boolean', default: 'false' },
+      { name: 'noborder', desc: $t('input.api.noborder'), type: 'boolean', default: 'false' },
+      { name: 'validate', desc: $t('input.api.validate'), type: 'string | function', default: 'null' },
+      { name: 'opts', desc: $t('input.api.opts'), type: 'object', default: '{}' }
+    ];
+
+    optsRows = [
+      { name: 'rows', desc: $t('input.api.opts.textareaRows'), type: 'number', default: '3' },
+      { name: 'options', desc: $t('input.api.opts.selectOptions'), type: 'array', default: '[]' },
+      { name: 'min / max / step / showValue', desc: $t('input.api.opts.slider'), type: 'number | boolean', default: '-' },
+      { name: 'uploader', desc: $t('input.api.opts.uploader'), type: 'function', default: '-' },
+      { name: 'multiple / autoUpload / showList / accept', desc: $t('input.api.opts.uploadOthers'), type: '-', default: '-' }
+    ];
+
+    slotRows = [
+      { name: 'trigger', desc: $t('input.api.slotTrigger'), type: '-', default: '-' }
+    ];
+
+    eventRows = [
+      { name: 'update', desc: $t('input.api.update'), type: '(value: any)', default: '-' },
+      { name: 'v-blur', desc: $t('input.api.vBlur'), type: '(e: Event)', default: '-' },
+      { name: 'v-focus', desc: $t('input.api.vFocus'), type: '(e: Event)', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

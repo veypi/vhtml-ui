@@ -2,35 +2,66 @@
 <html>
 
 <head>
-  <meta name="description" content="Avatar Component Demo" />
-  <title>{{$t('avatar.title')}}</title>
+  <meta name="description" content="Avatar Component Documentation" />
+  <title>{{ $t('avatar.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('avatar.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('avatar.title') }}</h1>
+    <p class="doc-intro">{{ $t('avatar.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('avatar.sizes')}}</span>
-    <div class="v-flex v-gap-md v-items-end v-mb-md">
-      <div vsrc="/avatar.html" name="Alice" size="sm"></div>
-      <div vsrc="/avatar.html" name="Bob" size="md"></div>
-      <div vsrc="/avatar.html" name="Carol" size="lg"></div>
-      <div vsrc="/avatar.html" name="David" :size="64"></div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <span class="demo-label">{{$t('avatar.shapes')}}</span>
-    <div class="v-flex v-gap-md v-items-center v-mb-md">
-      <div vsrc="/avatar.html" name="Circle" shape="circle"></div>
-      <div vsrc="/avatar.html" name="Square" shape="square"></div>
-    </div>
+    <doc-demo :title="$t('avatar.ex.size.title')" :desc="$t('avatar.ex.size.desc')" :code="codeSize">
+      <div class="v-flex v-gap-md v-items-end">
+        <div vsrc="/avatar" name="Alice" size="sm"></div>
+        <div vsrc="/avatar" name="Bob" size="md"></div>
+        <div vsrc="/avatar" name="Carol" size="lg"></div>
+        <div vsrc="/avatar" name="David" :size="64"></div>
+      </div>
+    </doc-demo>
 
-    <span class="demo-label">{{$t('avatar.imageFallback')}}</span>
-    <div class="v-flex v-gap-md v-items-center">
-      <div vsrc="/avatar.html" src="https://public.veypi.com/img/avatar/0145.jpg" name="User"></div>
-      <div vsrc="/avatar.html" src="https://invalid.example.com/x.jpg" name="Fallback"></div>
-      <div vsrc="/avatar.html"></div>
-    </div>
+    <doc-demo :title="$t('avatar.ex.shape.title')" :desc="$t('avatar.ex.shape.desc')" :code="codeShape">
+      <div class="v-flex v-gap-md v-items-center">
+        <div vsrc="/avatar" src="https://public.veypi.com/img/avatar/0145.jpg" name="User"></div>
+        <div vsrc="/avatar" name="Circle" shape="circle"></div>
+        <div vsrc="/avatar" name="Square" shape="square"></div>
+        <div vsrc="/avatar" src="https://invalid.example.com/x.jpg" name="Fallback"></div>
+        <div vsrc="/avatar"></div>
+      </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
   </div>
+
+  <script setup>
+    codeSize = `<div vsrc="/avatar" name="Alice" size="sm"></div>
+<div vsrc="/avatar" name="Bob" size="md"></div>
+<div vsrc="/avatar" name="Carol" size="lg"></div>
+
+<!-- 数字按 px 处理 -->
+<div vsrc="/avatar" name="David" :size="64"></div>`;
+
+    codeShape = `<!-- 图片头像 -->
+<div vsrc="/avatar" src="/img/user.jpg" name="User"></div>
+
+<!-- 形状：circle / square -->
+<div vsrc="/avatar" name="Circle" shape="circle"></div>
+<div vsrc="/avatar" name="Square" shape="square"></div>
+
+<!-- 加载失败自动回退首字符 -->
+<div vsrc="/avatar" src="https://invalid.example.com/x.jpg" name="Fallback"></div>`;
+
+    propRows = [
+      { name: 'src', desc: $t('avatar.api.src'), type: 'string', default: "''" },
+      { name: 'name', desc: $t('avatar.api.name'), type: 'string', default: "''" },
+      { name: 'size', desc: $t('avatar.api.size'), type: "'sm' | 'md' | 'lg' | number", default: "'md'" },
+      { name: 'shape', desc: $t('avatar.api.shape'), type: "'circle' | 'square'", default: "'circle'" }
+    ];
+  </script>
 </body>
 
 </html>

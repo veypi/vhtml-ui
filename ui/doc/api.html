@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="description" content="API Table: props / events / slots documentation" />
+  <title>ApiTable</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .api-table {
+    margin-bottom: var(--v-spacing-xl);
+  }
+
+  .api-table__title {
+    font-size: var(--v-font-size-lg);
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+    margin-bottom: var(--v-spacing-md);
+  }
+
+  .api-table__scroll {
+    overflow-x: auto;
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-lg);
+    background: var(--v-bg-color);
+  }
+
+  .api-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--v-font-size-sm);
+  }
+
+  .api-table th {
+    text-align: left;
+    padding: 10px var(--v-spacing-md);
+    background: var(--v-bg-color-secondary);
+    color: var(--v-text-color-secondary);
+    font-weight: var(--v-font-weight-medium);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--v-border-color);
+  }
+
+  .api-table td {
+    padding: 10px var(--v-spacing-md);
+    border-bottom: 1px solid var(--v-border-color);
+    color: var(--v-text-color);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .api-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .api-table tbody tr {
+    transition: background var(--v-transition-fast);
+  }
+
+  .api-table tbody tr:hover {
+    background: var(--v-bg-color-secondary);
+  }
+
+  .api-table code {
+    font-family: "Menlo", "Monaco", "Consolas", monospace;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: var(--v-radius-sm);
+    white-space: nowrap;
+  }
+
+  .api-table .api-name {
+    color: var(--v-color-primary);
+    background: color-mix(in srgb, var(--v-color-primary) 10%, transparent);
+    font-weight: var(--v-font-weight-bold);
+  }
+
+  .api-table .api-type {
+    color: var(--v-color-warning);
+    background: color-mix(in srgb, var(--v-color-warning) 10%, transparent);
+  }
+
+  .api-table .api-default {
+    color: var(--v-text-color-secondary);
+    background: var(--v-bg-color-tertiary);
+  }
+
+  .api-table .api-desc {
+    color: var(--v-text-color-secondary);
+    min-width: 200px;
+  }
+</style>
+
+<body>
+  <div class="api-table">
+    <div class="api-table__title">{{ title }}</div>
+    <div class="api-table__scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ $t('doc.col.name') }}</th>
+            <th>{{ $t('doc.col.desc') }}</th>
+            <th>{{ $t('doc.col.type') }}</th>
+            <th>{{ $t('doc.col.default') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr :key="row.name" v-for="row in rows">
+            <td><code class="api-name">{{ row.name }}</code></td>
+            <td class="api-desc">{{ row.desc }}</td>
+            <td><code class="api-type">{{ row.type }}</code></td>
+            <td><code class="api-default">{{ row.default === '' || row.default === undefined ? '-' : row.default }}</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script setup>
+    title = ''
+    rows = []
+  </script>
+</body>
+
+</html>

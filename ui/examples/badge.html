@@ -2,37 +2,78 @@
 <html>
 
 <head>
-  <meta name="description" content="Badge Component Demo" />
-  <title>{{$t('badge.title')}}</title>
+  <meta name="description" content="Badge Component Documentation" />
+  <title>{{ $t('badge.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('badge.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('badge.title') }}</h1>
+    <p class="doc-intro">{{ $t('badge.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('badge.basic')}}</span>
-    <div class="v-flex v-gap-lg v-items-center v-mb-md">
-      <div vsrc="/badge.html" :count="5">
-        <div vsrc="/btn.html" variant="outline">{{$t('badge.messages')}}</div>
-      </div>
-      <div vsrc="/badge.html" :count="100">
-        <div vsrc="/btn.html" variant="outline">{{$t('badge.messages')}}</div>
-      </div>
-      <div vsrc="/badge.html" dot>
-        <div vsrc="/btn.html" variant="outline">{{$t('badge.messages')}}</div>
-      </div>
-      <div vsrc="/badge.html" :count="3">
-        <div vsrc="/avatar.html" name="Alice"></div>
-      </div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <span class="demo-label">{{$t('badge.standalone')}}</span>
-    <div class="v-flex v-gap-md v-items-center">
-      <div vsrc="/badge.html" :count="12"></div>
-      <div vsrc="/badge.html" :count="120" :max="99"></div>
-      <div vsrc="/badge.html" dot></div>
-    </div>
+    <doc-demo :title="$t('badge.ex.basic.title')" :desc="$t('badge.ex.basic.desc')" :code="codeBasic">
+      <div class="v-flex v-gap-lg v-items-center v-flex-wrap">
+        <div vsrc="/badge" :count="5">
+          <div vsrc="/btn" variant="outline">{{ $t('badge.messages') }}</div>
+        </div>
+        <div vsrc="/badge" :count="100">
+          <div vsrc="/btn" variant="outline">{{ $t('badge.messages') }}</div>
+        </div>
+        <div vsrc="/badge" dot>
+          <div vsrc="/btn" variant="outline">{{ $t('badge.messages') }}</div>
+        </div>
+        <div vsrc="/badge" :count="3">
+          <div vsrc="/avatar" name="Alice"></div>
+        </div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('badge.ex.standalone.title')" :desc="$t('badge.ex.standalone.desc')" :code="codeStandalone">
+      <div class="v-flex v-gap-md v-items-center">
+        <div vsrc="/badge" :count="12"></div>
+        <div vsrc="/badge" :count="120" :max="99"></div>
+        <div vsrc="/badge" dot></div>
+      </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
+
+  <script setup>
+    codeBasic = `<div vsrc="/badge" :count="5">
+  <div vsrc="/btn" variant="outline">Messages</div>
+</div>
+
+<!-- 超出 max 显示 99+ -->
+<div vsrc="/badge" :count="100">
+  <div vsrc="/btn" variant="outline">Messages</div>
+</div>
+
+<!-- 小红点模式 -->
+<div vsrc="/badge" dot>
+  <div vsrc="/avatar" name="Alice"></div>
+</div>`;
+
+    codeStandalone = `<div vsrc="/badge" :count="12"></div>
+<div vsrc="/badge" :count="120" :max="99"></div>
+<div vsrc="/badge" dot></div>`;
+
+    propRows = [
+      { name: 'count', desc: $t('badge.api.count'), type: 'number', default: '0' },
+      { name: 'dot', desc: $t('badge.api.dot'), type: 'boolean', default: 'false' },
+      { name: 'max', desc: $t('badge.api.max'), type: 'number', default: '99' },
+      { name: 'hidden', desc: $t('badge.api.hidden'), type: 'boolean', default: 'false' }
+    ];
+
+    slotRows = [
+      { name: 'default', desc: $t('badge.api.slotDefault'), type: '-', default: '-' }
+    ];
+  </script>
 </body>
 
 </html>

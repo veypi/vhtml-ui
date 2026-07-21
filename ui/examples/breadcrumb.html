@@ -2,29 +2,55 @@
 <html>
 
 <head>
-  <meta name="description" content="Breadcrumb Component Demo" />
-  <title>{{$t('breadcrumb.title')}}</title>
+  <meta name="description" content="Breadcrumb Component Documentation" />
+  <title>{{ $t('breadcrumb.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('breadcrumb.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('breadcrumb.title') }}</h1>
+    <p class="doc-intro">{{ $t('breadcrumb.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('breadcrumb.basic')}}</span>
-    <div vsrc="/breadcrumb.html" :items="items"></div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+
+    <doc-demo :title="$t('breadcrumb.ex.basic.title')" :desc="$t('breadcrumb.ex.basic.desc')" :code="codeBasic">
+      <div vsrc="/breadcrumb" :items="items"></div>
+    </doc-demo>
+
+    <doc-demo :title="$t('breadcrumb.ex.sep.title')" :desc="$t('breadcrumb.ex.sep.desc')" :code="codeSep">
+      <div vsrc="/breadcrumb" :items="items" separator=">"></div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
   </div>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('breadcrumb.customSep')}}</span>
-    <div vsrc="/breadcrumb.html" :items="items" separator=">"></div>
-  </div>
-</body>
+  <script setup>
+    items = [
+      { label: () => $t('menu.home'), path: '/' },
+      { label: () => $t('breadcrumb.components'), path: '/c/breadcrumb' },
+      { label: () => $t('menu.breadcrumb') }
+    ];
+
+    codeBasic = `<div vsrc="/breadcrumb" :items="items"></div>
+
 <script setup>
+  // 最后一项为当前页，不渲染链接
   items = [
-    { label: () => $t('menu.home'), path: '/' },
-    { label: () => $t('breadcrumb.components'), path: '/c/breadcrumb' },
-    { label: () => $t('menu.breadcrumb') }
+    { label: 'Home', path: '/' },
+    { label: 'Components', path: '/c/breadcrumb' },
+    { label: 'Breadcrumb' }
   ];
-</script>
+<\/script>`;
+
+    codeSep = `<div vsrc="/breadcrumb" :items="items" separator=">"></div>`;
+
+    propRows = [
+      { name: 'items', desc: $t('breadcrumb.api.items'), type: 'array', default: '[]' },
+      { name: 'separator', desc: $t('breadcrumb.api.separator'), type: 'string', default: "'/'" }
+    ];
+  </script>
+</body>
 
 </html>

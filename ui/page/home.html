@@ -3,35 +3,293 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Components Overview">
-  <title>{{$t('menu.home')}}</title>
+  <meta name="description" content="vhtml-ui - A component library built on vhtml" />
+  <title>{{ $t('app.logo') }}</title>
 </head>
 <style>
   body {
-    max-width: 1200px;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--v-bg-color);
+  }
+
+  .container {
+    max-width: var(--v-layout-max-width);
     margin: 0 auto;
+    padding: 0 var(--v-spacing-lg);
   }
 
-  .home-hero {
-    text-align: center;
-    padding: var(--v-spacing-xl) 0;
+  /* ================= Hero ================= */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 88px 0 72px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+  }
+
+  .hero-glow.g1 {
+    width: 480px;
+    height: 480px;
+    top: -160px;
+    right: -80px;
+    background: color-mix(in srgb, var(--v-color-primary) 22%, transparent);
+  }
+
+  .hero-glow.g2 {
+    width: 380px;
+    height: 380px;
+    bottom: -140px;
+    left: -100px;
+    background: color-mix(in srgb, var(--v-color-success) 12%, transparent);
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--v-border-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--v-border-color) 1px, transparent 1px);
+    background-size: 44px 44px;
+    opacity: 0.35;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--v-spacing-xl);
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--v-spacing-sm);
+    padding: 6px 14px;
+    border-radius: var(--v-radius-full);
+    border: 1px solid var(--v-border-color);
+    background: color-mix(in srgb, var(--v-bg-color) 70%, transparent);
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
     margin-bottom: var(--v-spacing-lg);
-    border-bottom: 1px solid var(--v-border-color);
   }
 
-  .home-hero h1 {
-    font-size: 2.5rem;
-    color: var(--v-color-primary);
-    margin-bottom: var(--v-spacing-sm);
+  .hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--v-color-success);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--v-color-success) 25%, transparent);
   }
 
-  .home-hero p {
+  .hero-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    line-height: 1.2;
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--v-spacing-lg);
+  }
+
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(120deg, var(--v-color-primary), var(--v-color-info) 60%, var(--v-color-success));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: var(--v-font-size-lg);
+    color: var(--v-text-color-secondary);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: var(--v-spacing-xl);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--v-spacing-md);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--v-spacing-xl);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: var(--v-spacing-xl);
+  }
+
+  .hero-stat b {
+    display: block;
+    font-size: var(--v-font-size-2xl);
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+  }
+
+  .hero-stat span {
+    font-size: var(--v-font-size-sm);
     color: var(--v-text-color-secondary);
   }
 
+  /* Hero 右侧组件拼贴 */
+  .collage {
+    position: relative;
+    height: 380px;
+  }
+
+  .tile {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: var(--v-spacing-sm);
+    padding: var(--v-spacing-md) var(--v-spacing-lg);
+    border-radius: var(--v-radius-lg);
+    border: 1px solid var(--v-border-color);
+    background: color-mix(in srgb, var(--v-bg-color) 72%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--v-shadow-lg);
+    animation: tile-float 7s ease-in-out infinite;
+  }
+
+  .tile.t1 {
+    top: 24px;
+    left: 8px;
+  }
+
+  .tile.t2 {
+    top: 120px;
+    right: 0;
+    animation-delay: -2.2s;
+    animation-duration: 8s;
+  }
+
+  .tile.t3 {
+    bottom: 96px;
+    left: 44px;
+    animation-delay: -4s;
+    animation-duration: 6.5s;
+  }
+
+  .tile.t4 {
+    bottom: 12px;
+    right: 40px;
+    animation-delay: -1.2s;
+    animation-duration: 7.5s;
+  }
+
+  @keyframes tile-float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .tile-label {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+  }
+
+  /* ================= 区块通用 ================= */
+  .home-section {
+    padding: 72px 0;
+  }
+
+  .home-section-head {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto var(--v-spacing-xl);
+  }
+
+  .home-section-title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+    margin-bottom: var(--v-spacing-sm);
+  }
+
+  .home-section-sub {
+    color: var(--v-text-color-secondary);
+    font-size: var(--v-font-size-lg);
+  }
+
+  /* ================= 特性 ================= */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--v-spacing-lg);
+  }
+
+  .feature-card {
+    padding: var(--v-spacing-lg);
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-lg);
+    background: var(--v-bg-color);
+    transition: all var(--v-transition-base);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--v-color-primary);
+    box-shadow: var(--v-shadow-lg);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--v-radius-md);
+    color: var(--v-color-primary);
+    background: color-mix(in srgb, var(--v-color-primary) 10%, transparent);
+    margin-bottom: var(--v-spacing-md);
+    transition: all var(--v-transition-base);
+  }
+
+  .feature-card:hover .feature-icon {
+    background: var(--v-color-primary);
+    color: var(--v-color-primary-text);
+  }
+
+  .feature-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .feature-name {
+    font-size: var(--v-font-size-lg);
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+    margin-bottom: var(--v-spacing-sm);
+  }
+
+  .feature-desc {
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+    line-height: 1.7;
+  }
+
+  /* ================= 组件总览 ================= */
   .home-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: var(--v-spacing-md);
   }
 
@@ -87,24 +345,167 @@
     color: var(--v-text-color-secondary);
     line-height: 1.5;
   }
+
+  /* ================= Footer ================= */
+  .footer {
+    border-top: 1px solid var(--v-border-color);
+    padding: var(--v-spacing-xl) 0;
+    text-align: center;
+    color: var(--v-text-color-tertiary);
+    font-size: var(--v-font-size-sm);
+  }
+
+  /* ================= 响应式 ================= */
+  @media (max-width: 900px) {
+    .hero {
+      padding: 56px 0;
+    }
+
+    .hero-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .collage {
+      height: 320px;
+    }
+
+    .hero-stats {
+      gap: var(--v-spacing-lg);
+    }
+  }
 </style>
 
 <body>
-  <div class="home-hero">
-    <h1>{{ $t('app.logo') }}</h1>
-    <p>{{ $t('app.subtitle') }}</p>
-  </div>
+  <layout-header></layout-header>
 
-  <div class="home-grid">
-    <a :key="item.name" v-for="item in items" class="home-card" :href="'/c/' + item.name">
-      <span class="home-card-icon" v-html="item.icon"></span>
-      <span class="home-card-name">{{ $t(item.labelKey) }}</span>
-      <span class="home-card-desc">{{ $t(item.descKey) }}</span>
-    </a>
-  </div>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow g1"></div>
+    <div class="hero-glow g2"></div>
+    <div class="container hero-inner">
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          {{ $t('home.badge') }}
+        </div>
+        <h1 class="hero-title">
+          {{ $t('home.hero.title1') }}<br />
+          <em>{{ $t('home.hero.title2') }}</em>
+        </h1>
+        <p class="hero-subtitle">{{ $t('home.hero.subtitle') }}</p>
+        <div class="hero-actions">
+          <div vsrc="/btn" size="lg" @click="$router.push('/c/btn')">
+            {{ $t('home.hero.start') }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+          <div vsrc="/btn" size="lg" variant="outline" @click="scrollToComponents()">{{ $t('home.hero.browse') }}</div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <b>{{ items.length }}+</b>
+            <span>{{ $t('home.stats.components') }}</span>
+          </div>
+          <div class="hero-stat">
+            <b>0</b>
+            <span>{{ $t('home.stats.zero') }}</span>
+          </div>
+          <div class="hero-stat">
+            <b>2</b>
+            <span>{{ $t('home.stats.themes') }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 组件拼贴：全部使用库自身组件渲染 -->
+      <div class="collage">
+        <div class="tile t1">
+          <div vsrc="/btn">{{ $t('btn.default') }}</div>
+          <div vsrc="/btn" variant="outline">{{ $t('btn.outline') }}</div>
+          <div vsrc="/btn" color="danger">{{ $t('btn.destructive') }}</div>
+        </div>
+        <div class="tile t2">
+          <div vsrc="/tag" color="primary">Tag</div>
+          <div vsrc="/tag" color="success" variant="outline">Success</div>
+          <div vsrc="/badge" :count="3">
+            <div vsrc="/avatar" name="V"></div>
+          </div>
+        </div>
+        <div class="tile t3">
+          <div vsrc="/input/switch.html" :value="true"></div>
+          <span class="tile-label">Switch</span>
+        </div>
+        <div class="tile t4">
+          <div vsrc="/spinner" size="sm"></div>
+          <span class="tile-label">{{ $t('spinner.loading') }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特性 -->
+  <section class="home-section">
+    <div class="container">
+      <div class="home-section-head">
+        <h2 class="home-section-title">{{ $t('home.features.title') }}</h2>
+        <p class="home-section-sub">{{ $t('home.features.subtitle') }}</p>
+      </div>
+      <div class="feature-grid">
+        <div :key="f.titleKey" v-for="f in features" class="feature-card">
+          <div class="feature-icon" v-html="f.icon"></div>
+          <div class="feature-name">{{ $t(f.titleKey) }}</div>
+          <div class="feature-desc">{{ $t(f.descKey) }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 组件总览 -->
+  <section class="home-section" id="home-components">
+    <div class="container">
+      <div class="home-section-head">
+        <h2 class="home-section-title">{{ $t('home.components.title') }}</h2>
+        <p class="home-section-sub">{{ $t('home.components.subtitle') }}</p>
+      </div>
+      <div class="home-grid">
+        <a :key="item.name" v-for="item in items" class="home-card" :href="'/c/' + item.name">
+          <div class="home-card-icon" v-html="item.icon"></div>
+          <span class="home-card-name">{{ $t(item.labelKey) }}</span>
+          <span class="home-card-desc">{{ $t(item.descKey) }}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">vhtml-ui — Built with vhtml. Real DOM, no build step.</div>
+  </footer>
+
+  <script setup>
+    items = $mod.navItems.map(i => ({ name: i.name, labelKey: i.labelKey, descKey: i.descKey, icon: i.icon }));
+
+    scrollToComponents = () => {
+      const el = document.getElementById('home-components');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const icon = (body) =>
+      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+
+    features = [
+      { titleKey: 'home.feature.dom.title', descKey: 'home.feature.dom.desc', icon: icon('<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline>') },
+      { titleKey: 'home.feature.zero.title', descKey: 'home.feature.zero.desc', icon: icon('<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>') },
+      { titleKey: 'home.feature.file.title', descKey: 'home.feature.file.desc', icon: icon('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>') },
+      { titleKey: 'home.feature.theme.title', descKey: 'home.feature.theme.desc', icon: icon('<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>') },
+      { titleKey: 'home.feature.i18n.title', descKey: 'home.feature.i18n.desc', icon: icon('<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>') },
+      { titleKey: 'home.feature.comp.title', descKey: 'home.feature.comp.desc', icon: icon('<rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>') }
+    ];
+  </script>
 </body>
-<script setup>
-  items = $mod.navItems;
-</script>
 
 </html>

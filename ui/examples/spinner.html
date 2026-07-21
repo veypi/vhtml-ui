@@ -2,35 +2,58 @@
 <html>
 
 <head>
-  <meta name="description" content="Spinner Component Demo" />
-  <title>{{$t('spinner.title')}}</title>
+  <meta name="description" content="Spinner Component Documentation" />
+  <title>{{ $t('spinner.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('spinner.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('spinner.title') }}</h1>
+    <p class="doc-intro">{{ $t('spinner.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('spinner.sizes')}}</span>
-    <div class="v-flex v-gap-md v-items-center v-mb-md">
-      <div vsrc="/spinner.html" size="sm"></div>
-      <div vsrc="/spinner.html" size="md"></div>
-      <div vsrc="/spinner.html" size="lg"></div>
-      <div vsrc="/spinner.html" :size="56"></div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <span class="demo-label">{{$t('spinner.colors')}}</span>
-    <div class="v-flex v-gap-md v-items-center v-mb-md">
-      <div vsrc="/spinner.html"></div>
-      <div vsrc="/spinner.html" color="var(--v-color-success)"></div>
-      <div vsrc="/spinner.html" color="var(--v-color-danger)"></div>
-      <div vsrc="/spinner.html" color="#9333ea"></div>
-    </div>
+    <doc-demo :title="$t('spinner.ex.basic.title')" :desc="$t('spinner.ex.basic.desc')" :code="codeBasic">
+      <div class="v-flex v-gap-md v-items-center v-flex-wrap">
+        <div vsrc="/spinner" size="sm"></div>
+        <div vsrc="/spinner" size="md"></div>
+        <div vsrc="/spinner" size="lg"></div>
+        <div vsrc="/spinner" :size="56"></div>
+        <div vsrc="/spinner" color="var(--v-color-success)"></div>
+        <div vsrc="/spinner" color="var(--v-color-danger)"></div>
+        <div vsrc="/spinner" color="#9333ea"></div>
+      </div>
+    </doc-demo>
 
-    <span class="demo-label">{{$t('spinner.withText')}}</span>
-    <div class="v-flex v-gap-md v-items-center">
-      <div vsrc="/spinner.html" :text="$t('spinner.loading')"></div>
-    </div>
+    <doc-demo :title="$t('spinner.ex.text.title')" :desc="$t('spinner.ex.text.desc')" :code="codeText">
+      <div vsrc="/spinner" :text="$t('spinner.loading')"></div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
   </div>
+
+  <script setup>
+    codeBasic = `<div vsrc="/spinner" size="sm"></div>
+<div vsrc="/spinner" size="md"></div>
+<div vsrc="/spinner" size="lg"></div>
+
+<!-- 数字按 px 处理 -->
+<div vsrc="/spinner" :size="56"></div>
+
+<!-- 任意 CSS 色值 -->
+<div vsrc="/spinner" color="var(--v-color-success)"></div>
+<div vsrc="/spinner" color="#9333ea"></div>`;
+
+    codeText = `<div vsrc="/spinner" text="Loading..."></div>`;
+
+    propRows = [
+      { name: 'size', desc: $t('spinner.api.size'), type: "'sm' | 'md' | 'lg' | number", default: "'md'" },
+      { name: 'color', desc: $t('spinner.api.color'), type: 'string', default: "''" },
+      { name: 'text', desc: $t('spinner.api.text'), type: 'string', default: "''" }
+    ];
+  </script>
 </body>
 
 </html>

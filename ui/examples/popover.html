@@ -2,38 +2,77 @@
 <html>
 
 <head>
-  <meta name="description" content="Popover Component Demo" />
-  <title>{{$t('popover.title')}}</title>
+  <meta name="description" content="Popover Component Documentation" />
+  <title>{{ $t('popover.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('popover.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('popover.title') }}</h1>
+    <p class="doc-intro">{{ $t('popover.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('popover.clickBasic')}}</span>
-    <div class="v-flex v-gap-md v-flex-wrap v-mb-md">
-      <div vsrc="/popover.html" :title="$t('popover.popTitle')" :content="$t('popover.popContent')">
-        <div vsrc="/btn.html" variant="outline">Top</div>
-      </div>
-      <div vsrc="/popover.html" placement="bottom" :title="$t('popover.popTitle')" :content="$t('popover.popContent')">
-        <div vsrc="/btn.html" variant="outline">Bottom</div>
-      </div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <span class="demo-label">{{$t('popover.hoverCustom')}}</span>
-    <div class="v-flex v-gap-md">
-      <div vsrc="/popover.html" trigger="hover" placement="right" :title="$t('popover.userCard')">
-        <div vsrc="/avatar.html" name="Alice"></div>
+    <doc-demo :title="$t('popover.ex.click.title')" :desc="$t('popover.ex.click.desc')" :code="codeClick">
+      <div class="v-flex v-gap-md v-flex-wrap">
+        <div vsrc="/popover" :title="$t('popover.popTitle')" :content="$t('popover.popContent')">
+          <div vsrc="/btn" variant="outline">Top</div>
+        </div>
+        <div vsrc="/popover" placement="bottom" :title="$t('popover.popTitle')" :content="$t('popover.popContent')">
+          <div vsrc="/btn" variant="outline">Bottom</div>
+        </div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('popover.ex.hover.title')" :desc="$t('popover.ex.hover.desc')" :code="codeHover">
+      <div vsrc="/popover" trigger="hover" placement="right" :title="$t('popover.userCard')">
+        <div vsrc="/avatar" name="Alice"></div>
         <div vslot="content">
           <div class="v-font-bold">Alice</div>
           <div class="v-text-secondary v-text-sm">alice@example.com</div>
           <div class="v-mt-sm">
-            <div vsrc="/btn.html" size="xs">{{$t('popover.follow')}}</div>
+            <div vsrc="/btn" size="xs">{{ $t('popover.follow') }}</div>
           </div>
         </div>
       </div>
-    </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
+
+  <script setup>
+    codeClick = `<div vsrc="/popover" title="Title" content="Content">
+  <div vsrc="/btn" variant="outline">Top</div>
+</div>
+
+<div vsrc="/popover" placement="bottom" title="Title" content="Content">
+  <div vsrc="/btn" variant="outline">Bottom</div>
+</div>`;
+
+    codeHover = `<div vsrc="/popover" trigger="hover" placement="right" title="User Card">
+  <div vsrc="/avatar" name="Alice"></div>
+  <div vslot="content">
+    <div>Alice</div>
+    <div>alice@example.com</div>
+    <div vsrc="/btn" size="xs">Follow</div>
+  </div>
+</div>`;
+
+    propRows = [
+      {name: 'title', desc: $t('popover.api.title'), type: 'string', default: "''"},
+      {name: 'content', desc: $t('popover.api.content'), type: 'string', default: "''"},
+      {name: 'placement', desc: $t('popover.api.placement'), type: "'top' | 'bottom' | 'left' | 'right'", default: "'top'"},
+      {name: 'trigger', desc: $t('popover.api.trigger'), type: "'click' | 'hover'", default: "'click'"}
+    ];
+
+    slotRows = [
+      {name: 'default', desc: $t('popover.api.slotDefault'), type: '-', default: '-'},
+      {name: 'content', desc: $t('popover.api.slotContent'), type: '-', default: '-'}
+    ];
+  </script>
 </body>
 
 </html>

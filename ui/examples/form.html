@@ -3,19 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Form Component Demo">
-  <title>{{$t('form.title')}}</title>
+  <meta name="description" content="Form Component Documentation" />
+  <title>{{ $t('form.title') }}</title>
 </head>
 <style>
-  .demo-narrow {
-    max-width: 640px;
-    margin: 0 auto;
-  }
-
   .demo-result {
-    margin-top: 30px;
-    padding: 16px;
+    margin-top: var(--v-spacing-lg);
+    padding: var(--v-spacing-md);
     background: var(--v-bg-color-secondary);
     border-radius: var(--v-radius-md);
   }
@@ -28,90 +22,153 @@
 </style>
 
 <body>
-  <div class="section-title">{{$t('form.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('form.title') }}</h1>
+    <p class="doc-intro">{{ $t('form.intro') }}</p>
 
-  <div class="demo-narrow">
-    <div vsrc="/form.html" :items="formItems" v:data="formData" :cols="2" @submit="onSubmit" @reset="onReset"></div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <div class="demo-result">
-      <h4 style="margin-top: 0;">{{$t('form.liveData')}}:</h4>
-      <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
-    </div>
+    <doc-demo :title="$t('form.ex.basic.title')" :desc="$t('form.ex.basic.desc')" :code="codeBasic">
+      <div vsrc="/form" :items="formItems" v:data="formData" :cols="2" @submit="onSubmit" @reset="onReset"></div>
+      <div class="demo-result">
+        <h4 style="margin-top: 0;">{{ $t('form.liveData') }}:</h4>
+        <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
+      </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api title="items" :rows="itemRows"></doc-api>
+    <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
-</body>
+
+  <script setup>
+    formData = {
+      name: 'John Doe',
+      age: 25,
+      city: 'bj',
+      roles: ['dev'],
+      agree: true,
+      bio: ''
+    };
+
+    formItems = [
+      {
+        name: 'name',
+        label: () => $t('form.name'),
+        placeholder: () => $t('form.namePlaceholder'),
+        required: true
+      },
+      {
+        name: 'age',
+        type: 'number',
+        label: () => $t('form.age'),
+        placeholder: () => $t('form.agePlaceholder'),
+        validate: /^\d+$/
+      },
+      {
+        name: 'city',
+        type: 'select',
+        label: () => $t('form.city'),
+        opts: {
+          options: [
+            { label: () => $t('form.beijing'), value: 'bj' },
+            { label: () => $t('form.shanghai'), value: 'sh' },
+            { label: () => $t('form.guangzhou'), value: 'gz' }
+          ]
+        }
+      },
+      {
+        name: 'roles',
+        type: 'checkbox',
+        label: () => $t('form.roles'),
+        opts: {
+          options: [
+            { label: () => $t('form.dev'), value: 'dev' },
+            { label: () => $t('form.des'), value: 'des' },
+            { label: () => $t('form.pm'), value: 'pm' }
+          ]
+        }
+      },
+      {
+        name: 'bio',
+        type: 'textarea',
+        label: () => $t('form.bio'),
+        placeholder: () => $t('form.bioPlaceholder'),
+        opts: { rows: 4 },
+        full: true
+      },
+      {
+        name: 'agree',
+        type: 'checkbox',
+        placeholder: () => $t('form.agreeProtocol'),
+        required: true,
+        full: true
+      }
+    ];
+
+    onSubmit = (data) => {
+      $message.success($t('form.submitSuccess'));
+    };
+
+    onReset = () => {
+      $message.info($t('form.resetMsg'));
+    };
+
+    codeBasic = `<div vsrc="/form" :items="formItems" v:data="formData" :cols="2"
+  @submit="onSubmit" @reset="onReset">
+</div>
 
 <script setup>
-  formData = {
-    name: 'John Doe',
-    age: 25,
-    city: 'bj',
-    roles: ['dev'],
-    agree: true,
-    bio: ''
-  };
+  formData = { name: '', age: null, city: '', agree: false };
 
   formItems = [
+    { name: 'name', label: 'Name', required: true },
+    { name: 'age', type: 'number', label: 'Age', validate: /^\\d+$/ },
     {
-      name: 'name',
-      label: () => $t('form.name'),
-      placeholder: () => $t('form.namePlaceholder'),
-      required: true
+      name: 'city', type: 'select', label: 'City',
+      opts: { options: [{ label: 'Beijing', value: 'bj' }] }
     },
     {
-      name: 'age',
-      type: 'number',
-      label: () => $t('form.age'),
-      placeholder: () => $t('form.agePlaceholder'),
-      validate: /^\d+$/
-    },
-    {
-      name: 'city',
-      type: 'select',
-      label: () => $t('form.city'),
-      opts: {
-        options: [
-          {label: () => $t('form.beijing'), value: 'bj'},
-          {label: () => $t('form.shanghai'), value: 'sh'},
-          {label: () => $t('form.guangzhou'), value: 'gz'}
-        ]
-      }
-    },
-    {
-      name: 'roles',
-      type: 'checkbox',
-      label: () => $t('form.roles'),
-      opts: {
-        options: [
-          {label: () => $t('form.dev'), value: 'dev'},
-          {label: () => $t('form.des'), value: 'des'},
-          {label: () => $t('form.pm'), value: 'pm'}
-        ]
-      }
-    },
-    {
-      name: 'bio',
-      type: 'textarea',
-      label: () => $t('form.bio'),
-      placeholder: () => $t('form.bioPlaceholder'),
-      opts: {rows: 4},
-      full: true
-    },
-    {
-      name: 'agree',
-      type: 'checkbox',
-      placeholder: () => $t('form.agreeProtocol'),
-      required: true,
-      full: true
+      name: 'agree', type: 'checkbox', required: true, full: true,
+      placeholder: 'I agree to the terms'
     }
   ];
 
   onSubmit = (data) => {
-    $message.success($t('form.submitSuccess'));
+    $message.success('Submitted!');
   };
+<\/script>`;
 
-  onReset = () => {
-    $message.info($t('form.resetMsg'));
-  };
-</script>
+    propRows = [
+      { name: 'items', desc: $t('form.api.items'), type: 'array', default: '[]' },
+      { name: 'data', desc: $t('form.api.data'), type: 'object', default: '{}' },
+      { name: 'cols', desc: $t('form.api.cols'), type: 'number', default: '1' },
+      { name: 'disabled', desc: $t('form.api.disabled'), type: 'boolean', default: 'false' }
+    ];
+
+    itemRows = [
+      { name: 'name', desc: $t('form.api.item.name'), type: 'string', default: '-' },
+      { name: 'type', desc: $t('form.api.item.type'), type: 'string', default: "'text'" },
+      { name: 'label', desc: $t('form.api.item.label'), type: 'string', default: "''" },
+      { name: 'required', desc: $t('form.api.item.required'), type: 'boolean', default: 'false' },
+      { name: 'validate', desc: $t('form.api.item.validate'), type: 'RegExp | function', default: 'null' },
+      { name: 'opts', desc: $t('form.api.item.opts'), type: 'object', default: '{}' },
+      { name: 'span', desc: $t('form.api.item.span'), type: 'number', default: '-' },
+      { name: 'full', desc: $t('form.api.item.full'), type: 'boolean', default: 'false' }
+    ];
+
+    eventRows = [
+      { name: 'submit', desc: $t('form.api.submit'), type: '(data: object)', default: '-' },
+      { name: 'reset', desc: $t('form.api.reset'), type: '-', default: '-' }
+    ];
+
+    slotRows = [
+      { name: 'actions', desc: $t('form.api.slotActions'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

@@ -2,80 +2,145 @@
 <html>
 
 <head>
-  <meta name="description" content="Table Component Demo" />
-  <title>{{$t('table.title')}}</title>
+  <meta name="description" content="Table Component Documentation" />
+  <title>{{ $t('table.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('table.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('table.title') }}</h1>
+    <p class="doc-intro">{{ $t('table.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('table.basic')}}</span>
-    <div vsrc="/table.html" :columns="columns" :data="tableData" striped></div>
-  </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('table.customCell')}}</span>
-    <div vsrc="/table.html" :columns="columnsWithActions" :data="tableData" bordered>
-      <template vslot="cell">
-        <div v-if="col.key === 'status'">
-          <div vsrc="/tag.html" :color="row.status === 'active' ? 'success' : 'danger'" size="sm">
-            {{ row.status === 'active' ? $t('table.active') : $t('table.inactive') }}
+    <doc-demo :title="$t('table.ex.basic.title')" :desc="$t('table.ex.basic.desc')" :code="codeBasic">
+      <div vsrc="/table" :columns="columns" :data="tableData" striped></div>
+    </doc-demo>
+
+    <doc-demo :title="$t('table.ex.cell.title')" :desc="$t('table.ex.cell.desc')" :code="codeCell">
+      <div vsrc="/table" :columns="columnsWithActions" :data="tableData" bordered>
+        <template vslot="cell">
+          <div v-if="col.key === 'status'">
+            <div vsrc="/tag" :color="row.status === 'active' ? 'success' : 'danger'" size="sm">
+              {{ row.status === 'active' ? $t('table.active') : $t('table.inactive') }}
+            </div>
           </div>
-        </div>
-        <div v-else-if="col.key === 'actions'">
-          <div vsrc="/btn.html" size="xs" variant="ghost" @click="onEdit(row)">{{$t('table.edit')}}</div>
-        </div>
-        <template v-else>{{ row[col.key] }}</template>
-      </template>
-    </div>
+          <div v-else-if="col.key === 'actions'">
+            <div vsrc="/btn" size="xs" variant="ghost" @click="onEdit(row)">{{ $t('table.edit') }}</div>
+          </div>
+          <template v-else>{{ row[col.key] }}</template>
+        </template>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('table.ex.state.title')" :desc="$t('table.ex.state.desc')" :code="codeState">
+      <div class="v-flex v-gap-sm v-mb-md">
+        <div vsrc="/btn" size="sm" variant="outline" @click="toggleLoading">{{ $t('table.toggleLoading') }}</div>
+        <div vsrc="/btn" size="sm" variant="outline" @click="toggleEmpty">{{ $t('table.toggleEmpty') }}</div>
+      </div>
+      <div vsrc="/table" :columns="columns" :data="demo2Data" :loading="loading"></div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('table.states')}}</span>
-    <div class="v-flex v-gap-sm v-mb-md">
-      <div vsrc="/btn.html" size="sm" variant="outline" @click="toggleLoading">{{$t('table.toggleLoading')}}</div>
-      <div vsrc="/btn.html" size="sm" variant="outline" @click="toggleEmpty">{{$t('table.toggleEmpty')}}</div>
-    </div>
-    <div vsrc="/table.html" :columns="columns" :data="demo2Data" :loading="loading"></div>
-  </div>
-</body>
+  <script setup>
+    loading = false;
+
+    columns = [
+      { key: 'name', label: () => $t('table.name') },
+      { key: 'role', label: () => $t('table.role') },
+      { key: 'city', label: () => $t('table.city') }
+    ];
+
+    columnsWithActions = [
+      { key: 'name', label: () => $t('table.name') },
+      { key: 'role', label: () => $t('table.role') },
+      { key: 'status', label: () => $t('table.status'), width: '100px' },
+      { key: 'actions', label: () => $t('table.actions'), width: '80px' }
+    ];
+
+    tableData = [
+      { name: 'Alice', role: 'Developer', city: 'Beijing', status: 'active' },
+      { name: 'Bob', role: 'Designer', city: 'Shanghai', status: 'inactive' },
+      { name: 'Carol', role: 'Manager', city: 'Guangzhou', status: 'active' }
+    ];
+
+    demo2Data = tableData;
+
+    onEdit = (row) => {
+      $message.info($t('table.edit') + ': ' + row.name);
+    };
+
+    toggleLoading = () => {
+      loading = true;
+      setTimeout(() => { loading = false; }, 1500);
+    };
+
+    toggleEmpty = () => {
+      demo2Data = demo2Data.length ? [] : tableData;
+    };
+
+    codeBasic = `<div vsrc="/table" :columns="columns" :data="tableData" striped></div>
+
 <script setup>
-  loading = false;
-
   columns = [
-    { key: 'name', label: () => $t('table.name') },
-    { key: 'role', label: () => $t('table.role') },
-    { key: 'city', label: () => $t('table.city') }
-  ];
-
-  columnsWithActions = [
-    { key: 'name', label: () => $t('table.name') },
-    { key: 'role', label: () => $t('table.role') },
-    { key: 'status', label: () => $t('table.status'), width: '100px' },
-    { key: 'actions', label: () => $t('table.actions'), width: '80px' }
+    { key: 'name', label: 'Name' },
+    { key: 'role', label: 'Role' },
+    { key: 'city', label: 'City' }
   ];
 
   tableData = [
-    { name: 'Alice', role: 'Developer', city: 'Beijing', status: 'active' },
-    { name: 'Bob', role: 'Designer', city: 'Shanghai', status: 'inactive' },
-    { name: 'Carol', role: 'Manager', city: 'Guangzhou', status: 'active' }
+    { name: 'Alice', role: 'Developer', city: 'Beijing' },
+    { name: 'Bob', role: 'Designer', city: 'Shanghai' }
   ];
+<\/script>`;
 
-  demo2Data = tableData;
+    codeCell = `<div vsrc="/table" :columns="columns" :data="tableData" bordered>
+  <template vslot="cell">
+    <div v-if="col.key === 'status'">
+      <div vsrc="/tag" :color="row.status === 'active' ? 'success' : 'danger'" size="sm">
+        {{ row.status }}
+      </div>
+    </div>
+    <div v-else-if="col.key === 'actions'">
+      <div vsrc="/btn" size="xs" variant="ghost" @click="onEdit(row)">Edit</div>
+    </div>
+    <template v-else>{{ row[col.key] }}</template>
+  </template>
+</div>`;
 
-  onEdit = (row) => {
-    $message.info($t('table.edit') + ': ' + row.name);
-  }
+    codeState = `<div vsrc="/table" :columns="columns" :data="demo2Data" :loading="loading"></div>
+
+<script setup>
+  loading = false;
 
   toggleLoading = () => {
     loading = true;
     setTimeout(() => { loading = false; }, 1500);
-  }
+  };
 
   toggleEmpty = () => {
     demo2Data = demo2Data.length ? [] : tableData;
-  }
-</script>
+  };
+<\/script>`;
+
+    propRows = [
+      { name: 'columns', desc: $t('table.api.columns'), type: 'array', default: '[]' },
+      { name: 'data', desc: $t('table.api.data'), type: 'array', default: '[]' },
+      { name: 'striped', desc: $t('table.api.striped'), type: 'boolean', default: 'false' },
+      { name: 'bordered', desc: $t('table.api.bordered'), type: 'boolean', default: 'false' },
+      { name: 'loading', desc: $t('table.api.loading'), type: 'boolean', default: 'false' },
+      { name: 'emptyText', desc: $t('table.api.emptyText'), type: 'string', default: "''" }
+    ];
+
+    slotRows = [
+      { name: 'cell', desc: $t('table.api.slotCell'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

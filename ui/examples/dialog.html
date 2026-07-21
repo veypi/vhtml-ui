@@ -2,51 +2,95 @@
 <html>
 
 <head>
-  <meta name="description" content="Dialog Component Demo" />
-  <title>{{$t('dialog.title')}}</title>
+  <meta name="description" content="Dialog Component Documentation" />
+  <title>{{ $t('dialog.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('dialog.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('dialog.title') }}</h1>
+    <p class="doc-intro">{{ $t('dialog.intro') }}</p>
 
-  <div class="v-mb-md">
-    <span class="demo-label">{{$t('dialog.basic')}}</span>
-    <div class="v-flex v-gap-sm">
-      <div vsrc='/btn' @click="visible = true">{{$t('dialog.clickToOpen')}}</div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+
+    <doc-demo :title="$t('dialog.ex.basic.title')" :desc="$t('dialog.ex.basic.desc')" :code="codeBasic">
+      <div vsrc="/btn" @click="visible = true">{{ $t('dialog.clickToOpen') }}</div>
+    </doc-demo>
+
+    <doc-demo :title="$t('dialog.ex.custom.title')" :desc="$t('dialog.ex.custom.desc')" :code="codeCustom">
+      <div vsrc="/btn" variant="outline" @click="visible2 = true">{{ $t('dialog.customContent') }}</div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
 
-  <div vsrc='/dialog.html' v:visible="visible" :title="$t('dialog.hint')" width="30%">
-    <span>{{$t('dialog.message')}}</span>
+  <!-- 对话框实例：overlay 会 teleport 到 body -->
+  <div vsrc="/dialog" v:visible="visible" :title="$t('dialog.hint')" width="30%">
+    <span>{{ $t('dialog.message') }}</span>
     <div vslot="footer">
-      <div vsrc='/btn' @click="visible = false">{{$t('dialog.cancel')}}</div>
-      <div vsrc='/btn' variant="default" @click="visible = false">{{$t('dialog.confirm')}}</div>
+      <div vsrc="/btn" variant="outline" @click="visible = false">{{ $t('dialog.cancel') }}</div>
+      <div vsrc="/btn" @click="visible = false">{{ $t('dialog.confirm') }}</div>
     </div>
   </div>
 
-  <div class="v-mb-md">
-    <span class="demo-label">{{$t('dialog.customContent')}}</span>
-    <div class="v-flex v-gap-sm">
-      <div vsrc='/btn' @click="visible2 = true">{{$t('dialog.customContent')}}</div>
-    </div>
-  </div>
-
-  <div vsrc='/dialog.html' v:visible="visible2" :title="$t('dialog.customContent')" width="50%">
+  <div vsrc="/dialog" v:visible="visible2" :title="$t('dialog.customContent')" width="50%">
     <div class="v-flex v-flex-col v-gap-md">
-      <p>{{$t('dialog.customDesc')}}</p>
-      <div class="v-p-md v-bg-secondary v-rounded-md">
-        {{$t('dialog.mockForm')}}
-      </div>
+      <p class="v-m-0">{{ $t('dialog.customDesc') }}</p>
+      <div class="v-p-md v-bg-secondary v-rounded-md">{{ $t('dialog.mockForm') }}</div>
     </div>
     <div vslot="footer">
-      <div vsrc='/btn' @click="visible2 = false">{{$t('dialog.close')}}</div>
+      <div vsrc="/btn" @click="visible2 = false">{{ $t('dialog.close') }}</div>
     </div>
   </div>
 
-</body>
+  <script setup>
+    visible = false;
+    visible2 = false;
+
+    codeBasic = `<div vsrc="/btn" @click="visible = true">Open</div>
+
+<div vsrc="/dialog" v:visible="visible" title="Hint" width="30%">
+  <span>Message content.</span>
+  <div vslot="footer">
+    <div vsrc="/btn" variant="outline" @click="visible = false">Cancel</div>
+    <div vsrc="/btn" @click="visible = false">Confirm</div>
+  </div>
+</div>
+
 <script setup>
   visible = false;
-  visible2 = false;
-</script>
+<\/script>`;
+
+    codeCustom = `<div vsrc="/dialog" v:visible="visible" title="Custom" width="50%">
+  <div>Forms, tables or any complex content.</div>
+  <div vslot="footer">
+    <div vsrc="/btn" @click="visible = false">Close</div>
+  </div>
+</div>`;
+
+    propRows = [
+      { name: 'visible', desc: $t('dialog.api.visible'), type: 'boolean', default: 'false' },
+      { name: 'title', desc: $t('dialog.api.title'), type: 'string', default: "'Dialog'" },
+      { name: 'width', desc: $t('dialog.api.width'), type: 'string', default: "'50%'" },
+      { name: 'closeOnClickModal', desc: $t('dialog.api.closeOnClickModal'), type: 'boolean', default: 'true' },
+      { name: 'compact', desc: $t('dialog.api.compact'), type: 'boolean', default: 'false' },
+      { name: 'background', desc: $t('dialog.api.background'), type: 'string', default: '-' }
+    ];
+
+    eventRows = [
+      { name: 'close', desc: $t('dialog.api.close'), type: '-', default: '-' }
+    ];
+
+    slotRows = [
+      { name: 'title', desc: $t('dialog.api.slotTitle'), type: '-', default: '-' },
+      { name: 'default', desc: $t('dialog.api.slotDefault'), type: '-', default: '-' },
+      { name: 'footer', desc: $t('dialog.api.slotFooter'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

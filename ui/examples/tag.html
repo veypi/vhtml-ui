@@ -2,58 +2,96 @@
 <html>
 
 <head>
-  <meta name="description" content="Tag Component Demo" />
-  <title>{{$t('tag.title')}}</title>
+  <meta name="description" content="Tag Component Documentation" />
+  <title>{{ $t('tag.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('tag.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('tag.title') }}</h1>
+    <p class="doc-intro">{{ $t('tag.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('tag.variants')}}</span>
-    <div class="v-flex v-gap-sm v-flex-wrap v-mb-md">
-      <div vsrc="/tag.html">Default</div>
-      <div vsrc="/tag.html" color="primary">Primary</div>
-      <div vsrc="/tag.html" color="success">Success</div>
-      <div vsrc="/tag.html" color="warning">Warning</div>
-      <div vsrc="/tag.html" color="danger">Danger</div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <span class="demo-label">Filled</span>
-    <div class="v-flex v-gap-sm v-flex-wrap v-mb-md">
-      <div vsrc="/tag.html" variant="filled">Default</div>
-      <div vsrc="/tag.html" variant="filled" color="primary">Primary</div>
-      <div vsrc="/tag.html" variant="filled" color="success">Success</div>
-      <div vsrc="/tag.html" variant="filled" color="warning">Warning</div>
-      <div vsrc="/tag.html" variant="filled" color="danger">Danger</div>
-    </div>
+    <doc-demo :title="$t('tag.ex.basic.title')" :desc="$t('tag.ex.basic.desc')" :code="codeBasic">
+      <div class="v-flex v-gap-sm v-flex-wrap v-items-center">
+        <div vsrc="/tag">Default</div>
+        <div vsrc="/tag" color="primary">Primary</div>
+        <div vsrc="/tag" color="success">Success</div>
+        <div vsrc="/tag" color="warning">Warning</div>
+        <div vsrc="/tag" color="danger">Danger</div>
+        <div vsrc="/tag" variant="filled" color="primary">Filled</div>
+        <div vsrc="/tag" variant="outline" color="primary">Outline</div>
+        <div vsrc="/tag" variant="outline" color="#9333ea">#9333ea</div>
+      </div>
+    </doc-demo>
 
-    <span class="demo-label">Outline</span>
-    <div class="v-flex v-gap-sm v-flex-wrap v-mb-md">
-      <div vsrc="/tag.html" variant="outline" color="primary">Primary</div>
-      <div vsrc="/tag.html" variant="outline" color="success">Success</div>
-      <div vsrc="/tag.html" variant="outline" color="#9333ea">#9333ea</div>
-    </div>
+    <doc-demo :title="$t('tag.ex.size.title')" :desc="$t('tag.ex.size.desc')" :code="codeSize">
+      <div class="v-flex v-gap-sm v-flex-wrap v-items-center">
+        <div vsrc="/tag" size="sm" color="primary">Small</div>
+        <div vsrc="/tag" size="md" color="primary">Medium</div>
+        <div vsrc="/tag" size="lg" color="primary">Large</div>
+        <div vsrc="/tag" round color="success">Round</div>
+      </div>
+    </doc-demo>
 
-    <span class="demo-label">{{$t('tag.sizeRound')}}</span>
-    <div class="v-flex v-gap-sm v-flex-wrap v-items-center v-mb-md">
-      <div vsrc="/tag.html" size="sm" color="primary">Small</div>
-      <div vsrc="/tag.html" size="md" color="primary">Medium</div>
-      <div vsrc="/tag.html" size="lg" color="primary">Large</div>
-      <div vsrc="/tag.html" round color="success">Round</div>
-    </div>
+    <doc-demo :title="$t('tag.ex.closable.title')" :desc="$t('tag.ex.closable.desc')" :code="codeClosable">
+      <div class="v-flex v-gap-sm v-flex-wrap v-items-center">
+        <div vsrc="/tag" closable color="primary" @close="onClose">{{ $t('tag.removable') }}</div>
+        <div vsrc="/tag" closable variant="filled" color="danger" @close="onClose">{{ $t('tag.removable') }}</div>
+      </div>
+    </doc-demo>
 
-    <span class="demo-label">{{$t('tag.closable')}}</span>
-    <div class="v-flex v-gap-sm v-flex-wrap">
-      <div vsrc="/tag.html" closable color="primary" @close="onClose">{{$t('tag.removable')}}</div>
-      <div vsrc="/tag.html" closable variant="filled" color="danger">{{$t('tag.removable')}}</div>
-    </div>
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
-</body>
+
+  <script setup>
+    onClose = () => {
+      $message.info($t('tag.closed'));
+    };
+
+    codeBasic = `<div vsrc="/tag">Default</div>
+<div vsrc="/tag" color="primary">Primary</div>
+<div vsrc="/tag" color="success">Success</div>
+<div vsrc="/tag" color="warning">Warning</div>
+<div vsrc="/tag" color="danger">Danger</div>
+<div vsrc="/tag" variant="filled" color="primary">Filled</div>
+<div vsrc="/tag" variant="outline" color="primary">Outline</div>
+<div vsrc="/tag" variant="outline" color="#9333ea">#9333ea</div>`;
+
+    codeSize = `<div vsrc="/tag" size="sm" color="primary">Small</div>
+<div vsrc="/tag" size="md" color="primary">Medium</div>
+<div vsrc="/tag" size="lg" color="primary">Large</div>
+<div vsrc="/tag" round color="success">Round</div>`;
+
+    codeClosable = `<div vsrc="/tag" closable color="primary" @close="onClose">Tag</div>
+
 <script setup>
   onClose = () => {
-    $message.info($t('tag.closed'));
-  }
-</script>
+    $message.info('Tag closed');
+  };
+<\/script>`;
+
+    propRows = [
+      { name: 'color', desc: $t('tag.api.color'), type: "'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' | CSS 色值", default: "'default'" },
+      { name: 'variant', desc: $t('tag.api.variant'), type: "'light' | 'filled' | 'outline'", default: "'light'" },
+      { name: 'size', desc: $t('tag.api.size'), type: "'sm' | 'md' | 'lg'", default: "'md'" },
+      { name: 'closable', desc: $t('tag.api.closable'), type: 'boolean', default: 'false' },
+      { name: 'round', desc: $t('tag.api.round'), type: 'boolean', default: 'false' }
+    ];
+
+    eventRows = [
+      { name: 'close', desc: $t('tag.api.close'), type: '-', default: '-' }
+    ];
+
+    slotRows = [
+      { name: 'default', desc: $t('tag.api.slotDefault'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

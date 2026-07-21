@@ -2,48 +2,78 @@
 <html>
 
 <head>
-  <meta name="description" content="Skeleton Component Demo" />
-  <title>{{$t('skeleton.title')}}</title>
+  <meta name="description" content="Skeleton Component Documentation" />
+  <title>{{ $t('skeleton.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('skeleton.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('skeleton.title') }}</h1>
+    <p class="doc-intro">{{ $t('skeleton.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('skeleton.basic')}}</span>
-    <div vsrc="/skeleton.html"></div>
-  </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('skeleton.withAvatar')}}</span>
-    <div vsrc="/skeleton.html" avatar :rows="2"></div>
-  </div>
+    <doc-demo :title="$t('skeleton.ex.basic.title')" :desc="$t('skeleton.ex.basic.desc')" :code="codeBasic">
+      <div vsrc="/skeleton"></div>
+    </doc-demo>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('skeleton.toggle')}}</span>
-    <div class="v-mb-md">
-      <div vsrc="/btn.html" size="sm" variant="outline" @click="reload">{{$t('skeleton.reload')}}</div>
-    </div>
-    <div vsrc="/skeleton.html" :loading="loading" avatar :rows="2">
-      <div class="v-flex v-gap-md v-items-center">
-        <div vsrc="/avatar.html" name="Alice" size="lg"></div>
-        <div>
-          <div class="v-font-bold">Alice</div>
-          <div class="v-text-secondary v-text-sm">{{$t('skeleton.loadedContent')}}</div>
+    <doc-demo :title="$t('skeleton.ex.avatar.title')" :desc="$t('skeleton.ex.avatar.desc')" :code="codeAvatar">
+      <div class="v-mb-md">
+        <div vsrc="/btn" size="sm" variant="outline" @click="reload">{{ $t('skeleton.reload') }}</div>
+      </div>
+      <div vsrc="/skeleton" :loading="loading" avatar :rows="2">
+        <div class="v-flex v-gap-md v-items-center">
+          <div vsrc="/avatar" name="Alice" size="lg"></div>
+          <div>
+            <div class="v-font-bold">Alice</div>
+            <div class="v-text-secondary v-text-sm">{{ $t('skeleton.loadedContent') }}</div>
+          </div>
         </div>
       </div>
-    </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
-</body>
+
+  <script setup>
+    loading = true;
+
+    reload = () => {
+      loading = true;
+      setTimeout(() => { loading = false; }, 1500);
+    };
+
+    reload();
+
+    codeBasic = `<div vsrc="/skeleton"></div>`;
+
+    codeAvatar = `<div vsrc="/skeleton" :loading="loading" avatar :rows="2">
+  <div>真实内容</div>
+</div>
+
 <script setup>
   loading = true;
 
   reload = () => {
     loading = true;
     setTimeout(() => { loading = false; }, 1500);
-  }
+  };
+<\/script>`;
 
-  reload();
-</script>
+    propRows = [
+      { name: 'loading', desc: $t('skeleton.api.loading'), type: 'boolean', default: 'true' },
+      { name: 'rows', desc: $t('skeleton.api.rows'), type: 'number', default: '3' },
+      { name: 'avatar', desc: $t('skeleton.api.avatar'), type: 'boolean', default: 'false' },
+      { name: 'title', desc: $t('skeleton.api.title'), type: 'boolean', default: 'true' }
+    ];
+
+    slotRows = [
+      { name: 'default', desc: $t('skeleton.api.slotDefault'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

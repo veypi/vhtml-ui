@@ -1,6 +1,6 @@
 export default ({ $mod }) => ({
   routes: [
-    { path: '/', component: '/page/home.html', name: 'home', layout: 'default' },
+    { path: '/', component: '/page/home.html', name: 'home' },
     {
       path: '/c/:name',
       component: (path, params) => `/examples/${params.name}.html`,

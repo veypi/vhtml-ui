@@ -2,29 +2,63 @@
 <html>
 
 <head>
-  <meta name="description" content="Empty Component Demo" />
-  <title>{{$t('empty.title')}}</title>
+  <meta name="description" content="Empty Component Documentation" />
+  <title>{{ $t('empty.title') }}</title>
 </head>
 
 <body>
-  <div class="section-title">{{$t('empty.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('empty.title') }}</h1>
+    <p class="doc-intro">{{ $t('empty.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('empty.basic')}}</span>
-    <div vsrc="/empty.html"></div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+
+    <doc-demo :title="$t('empty.ex.basic.title')" :desc="$t('empty.ex.basic.desc')" :code="codeBasic">
+      <div vsrc="/empty"></div>
+    </doc-demo>
+
+    <doc-demo :title="$t('empty.ex.action.title')" :desc="$t('empty.ex.action.desc')" :code="codeAction">
+      <div vsrc="/empty" :description="$t('empty.noResult')">
+        <div vsrc="/btn" size="sm" variant="outline" @click="onReset">{{ $t('empty.resetFilter') }}</div>
+      </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('empty.withAction')}}</span>
-    <div vsrc="/empty.html" :description="$t('empty.noResult')">
-      <div vsrc="/btn.html" size="sm" variant="outline" @click="onReset">{{$t('empty.resetFilter')}}</div>
-    </div>
-  </div>
-</body>
+  <script setup>
+    onReset = () => {
+      $message.success($t('empty.resetDone'));
+    };
+
+    codeBasic = `<div vsrc="/empty"></div>
+
+<!-- 自定义描述与插画 -->
+<div vsrc="/empty" description="No results" image="/assets/empty.png"></div>`;
+
+    codeAction = `<div vsrc="/empty" description="No results found">
+  <div vsrc="/btn" size="sm" variant="outline" @click="onReset">Reset</div>
+</div>
+
 <script setup>
   onReset = () => {
-    $message.success($t('empty.resetDone'));
-  }
-</script>
+    $message.success('Reset done');
+  };
+<\/script>`;
+
+    propRows = [
+      { name: 'description', desc: $t('empty.api.description'), type: 'string', default: "''" },
+      { name: 'image', desc: $t('empty.api.image'), type: 'string', default: "''" }
+    ];
+
+    slotRows = [
+      { name: 'default', desc: $t('empty.api.slotDefault'), type: '-', default: '-' },
+      { name: 'image', desc: $t('empty.api.slotImage'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

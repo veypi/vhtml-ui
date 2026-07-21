@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="description" content="Demo Block: live preview + collapsible highlighted code" />
+  <title>DemoBlock</title>
+</head>
+<style>
+  body {
+    display: block;
+    margin-bottom: var(--v-spacing-lg);
+  }
+
+  .demo-block {
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-lg);
+    background: var(--v-bg-color);
+    overflow: hidden;
+  }
+
+  .demo-block__header {
+    padding: var(--v-spacing-md) var(--v-spacing-lg) 0;
+  }
+
+  .demo-block__title {
+    font-size: var(--v-font-size-lg);
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+  }
+
+  .demo-block__desc {
+    margin-top: var(--v-spacing-xs);
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+    line-height: 1.6;
+  }
+
+  .demo-block__preview {
+    padding: var(--v-spacing-lg);
+  }
+
+  .demo-block__preview>vslot {
+    display: contents;
+  }
+
+  .demo-block__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--v-border-color);
+    padding: 0 var(--v-spacing-sm);
+    height: 40px;
+  }
+
+  .demo-block__toggle,
+  .demo-block__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--v-spacing-xs);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: var(--v-font-size-sm);
+    color: var(--v-text-color-secondary);
+    padding: var(--v-spacing-xs) var(--v-spacing-sm);
+    border-radius: var(--v-radius-md);
+    transition: all var(--v-transition-fast);
+  }
+
+  .demo-block__toggle:hover,
+  .demo-block__copy:hover {
+    color: var(--v-color-primary);
+    background: color-mix(in srgb, var(--v-color-primary) 8%, transparent);
+  }
+
+  .demo-block__toggle svg {
+    width: 14px;
+    height: 14px;
+    transition: transform var(--v-transition-base);
+  }
+
+  .demo-block__toggle.expanded svg {
+    transform: rotate(180deg);
+  }
+
+  .demo-block__code {
+    border-top: 1px solid var(--v-border-color);
+    background: #0f172a;
+  }
+
+  .demo-block__code pre {
+    margin: 0;
+    padding: var(--v-spacing-md) var(--v-spacing-lg);
+    color: #e2e8f0;
+    font-family: "Menlo", "Monaco", "Consolas", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    tab-size: 2;
+  }
+
+  /* 高亮 token（暗色代码块专用配色，不随主题切换） */
+  .demo-block__code .tk-t {
+    color: #7dd3fc;
+  }
+
+  .demo-block__code .tk-a {
+    color: #c4b5fd;
+  }
+
+  .demo-block__code .tk-v {
+    color: #86efac;
+  }
+
+  .demo-block__code .tk-e {
+    color: #fbbf24;
+  }
+
+  .demo-block__code .tk-c {
+    color: #64748b;
+    font-style: italic;
+  }
+</style>
+
+<body>
+  <div class="demo-block">
+    <div class="demo-block__header" v-if="title">
+      <div class="demo-block__title">{{ title }}</div>
+      <div class="demo-block__desc" v-if="desc">{{ desc }}</div>
+    </div>
+    <div class="demo-block__preview">
+      <vslot></vslot>
+    </div>
+    <div class="demo-block__bar">
+      <button class="demo-block__toggle" :class="{ expanded: expanded }" @click="expanded = !expanded">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        <span>{{ expanded ? $t('doc.hideCode') : $t('doc.showCode') }}</span>
+      </button>
+      <button class="demo-block__copy" v-show="expanded" @click="copyCode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span>{{ $t('doc.copy') }}</span>
+      </button>
+    </div>
+    <div class="demo-block__code" v-show="expanded">
+      <pre><div class="demo-block__codeinner"></div></pre>
+    </div>
+  </div>
+
+  <script setup>
+    title = ''
+    desc = ''
+    code = ''
+    expanded = false
+
+    const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+    // 零依赖简易 HTML 高亮：注释 → 标签/属性 → {{ }} 插值
+    highlight = (src) => {
+      if (!src) return ''
+      let s = escapeHtml(src)
+      const comments = []
+      s = s.replace(/&lt;!--[\s\S]*?--&gt;/g, (m) => '\x00' + (comments.push(m) - 1) + '\x00')
+      s = s.replace(/(&lt;\/?)([\w-]+)((?:"[^"]*"|'[^']*'|(?!&gt;|\x00)[\s\S])*?)(\/?&gt;)/g,
+        (m, open, tag, attrs, close) => {
+          const inner = attrs.replace(/([^\s=\/]+)(=("[^"]*"|'[^']*'))?/g, (am, name, eq) => {
+            if (!eq) return `<span class="tk-a">${name}</span>`
+            return `<span class="tk-a">${name}</span>=<span class="tk-v">${eq.slice(1)}</span>`
+          })
+          return `${open}<span class="tk-t">${tag}</span>${inner}${close}`
+        })
+      s = s.replace(/\{\{[\s\S]*?\}\}/g, (m) => `<span class="tk-e">${m}</span>`)
+      s = s.replace(/\x00(\d+)\x00/g, (m, i) => `<span class="tk-c">${comments[i]}</span>`)
+      return s
+    }
+
+    copyCode = async () => {
+      try {
+        await navigator.clipboard.writeText(code)
+        $message.success($t('doc.copied'))
+      } catch (e) {
+        $message.error(String(e))
+      }
+    }
+  </script>
+  <script>
+    // 手动注入高亮 HTML，而非 v-html 指令：
+    // v-html 注入的内容会被当作活模板二次编译，示例代码中的 {{ }} 插值会被误执行
+    renderCode = () => {
+      const el = $node.querySelector('.demo-block__codeinner')
+      if (el) el.innerHTML = $data.highlight($data.code)
+    }
+    renderCode()
+    $watch(() => $data.code, renderCode)
+  </script>
+</body>
+
+</html>

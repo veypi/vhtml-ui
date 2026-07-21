@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="description" content="Site Header: logo + theme toggle + lang" />
+  <title>Header</title>
+</head>
+<style>
+  body {
+    display: block;
+  }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: var(--v-z-sticky);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--v-bg-color) 75%, transparent);
+    border-bottom: 1px solid var(--v-border-color);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    max-width: var(--v-layout-max-width);
+    margin: 0 auto;
+    padding: 0 var(--v-spacing-lg);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--v-spacing-sm);
+    text-decoration: none;
+    font-size: var(--v-font-size-xl);
+    font-weight: var(--v-font-weight-bold);
+    color: var(--v-text-color);
+  }
+
+  .nav-logo-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--v-radius-md);
+    background: linear-gradient(135deg, var(--v-color-primary), var(--v-color-primary-active));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--v-color-primary-text);
+    font-size: 15px;
+    font-weight: var(--v-font-weight-bold);
+    box-shadow: var(--v-shadow-md);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--v-spacing-sm);
+  }
+
+  .theme-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--v-radius-full);
+    border: 1px solid var(--v-border-color);
+    background: var(--v-bg-color);
+    color: var(--v-text-color-secondary);
+    cursor: pointer;
+    transition: all var(--v-transition-base);
+  }
+
+  .theme-btn:hover {
+    border-color: var(--v-color-primary);
+    color: var(--v-color-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--v-shadow-sm);
+  }
+
+  .theme-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+</style>
+
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="/">
+        <span class="nav-logo-mark">V</span>
+        <span>{{ $t('app.logo') }}</span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-btn" @click="toggleTheme()">
+          <svg v-if="theme === 't1'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+        <div vsrc="/lang.html"></div>
+      </div>
+    </div>
+  </header>
+
+  <script setup>
+    theme = $mod.theme.get();
+
+    toggleTheme = () => {
+      $mod.theme.toggle();
+      theme = $mod.theme.get();
+    };
+  </script>
+</body>
+
+</html>

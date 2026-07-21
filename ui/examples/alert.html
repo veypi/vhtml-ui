@@ -2,8 +2,8 @@
 <html>
 
 <head>
-  <meta name="description" content="Alert Component Demo" />
-  <title>{{$t('alert.title')}}</title>
+  <meta name="description" content="Alert Component Documentation" />
+  <title>{{ $t('alert.title') }}</title>
 </head>
 <style>
   .alert-col {
@@ -14,32 +14,77 @@
 </style>
 
 <body>
-  <div class="section-title">{{$t('alert.title')}}</div>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('alert.title') }}</h1>
+    <p class="doc-intro">{{ $t('alert.intro') }}</p>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('alert.types')}}</span>
-    <div class="alert-col">
-      <div vsrc="/alert.html" type="info" :title="$t('alert.info')" :description="$t('alert.desc')"></div>
-      <div vsrc="/alert.html" type="success" :title="$t('alert.success')" :description="$t('alert.desc')"></div>
-      <div vsrc="/alert.html" type="warning" :title="$t('alert.warning')" :description="$t('alert.desc')"></div>
-      <div vsrc="/alert.html" type="danger" :title="$t('alert.danger')" :description="$t('alert.desc')"></div>
-    </div>
-  </div>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-  <div class="demo-section">
-    <span class="demo-label">{{$t('alert.closableCustom')}}</span>
-    <div class="alert-col">
-      <div vsrc="/alert.html" type="success" :title="$t('alert.success')" closable @close="onClose">
-        {{$t('alert.customDesc')}}
+    <doc-demo :title="$t('alert.ex.types.title')" :desc="$t('alert.ex.types.desc')" :code="codeTypes">
+      <div class="alert-col">
+        <div vsrc="/alert" type="info" :title="$t('alert.info')" :description="$t('alert.desc')"></div>
+        <div vsrc="/alert" type="success" :title="$t('alert.success')" :description="$t('alert.desc')"></div>
+        <div vsrc="/alert" type="warning" :title="$t('alert.warning')" :description="$t('alert.desc')"></div>
+        <div vsrc="/alert" type="danger" :title="$t('alert.danger')" :description="$t('alert.desc')"></div>
       </div>
-      <div vsrc="/alert.html" type="info" :description="$t('alert.desc')"></div>
-    </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('alert.ex.closable.title')" :desc="$t('alert.ex.closable.desc')" :code="codeClosable">
+      <div class="alert-col">
+        <div vsrc="/alert" type="success" :title="$t('alert.success')" closable @close="onClose">
+          {{ $t('alert.desc') }}
+        </div>
+        <div vsrc="/alert" type="info" :description="$t('alert.desc')"></div>
+      </div>
+    </doc-demo>
+
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
-</body>
+
+  <script setup>
+    onClose = () => {
+      $message.info($t('alert.closed'));
+    };
+
+    codeTypes = `<div vsrc="/alert" type="info" title="Info" description="..."></div>
+<div vsrc="/alert" type="success" title="Success" description="..."></div>
+<div vsrc="/alert" type="warning" title="Warning" description="..."></div>
+<div vsrc="/alert" type="danger" title="Error" description="..."></div>`;
+
+    codeClosable = `<!-- 可关闭，close 事件在点击关闭按钮时触发 -->
+<div vsrc="/alert" type="success" title="Success" closable @close="onClose">
+  Custom description via the default slot.
+</div>
+
+<!-- 无标题，仅描述 -->
+<div vsrc="/alert" type="info" description="..."></div>
+
 <script setup>
   onClose = () => {
-    $message.info($t('alert.closed'));
-  }
-</script>
+    $message.info('Alert closed');
+  };
+<\/script>`;
+
+    propRows = [
+      { name: 'type', desc: $t('alert.api.type'), type: "'info' | 'success' | 'warning' | 'danger'", default: "'info'" },
+      { name: 'title', desc: $t('alert.api.title'), type: 'string', default: "''" },
+      { name: 'description', desc: $t('alert.api.description'), type: 'string', default: "''" },
+      { name: 'closable', desc: $t('alert.api.closable'), type: 'boolean', default: 'false' }
+    ];
+
+    eventRows = [
+      { name: 'close', desc: $t('alert.api.close'), type: '-', default: '-' }
+    ];
+
+    slotRows = [
+      { name: 'default', desc: $t('alert.api.slotDefault'), type: '-', default: '-' },
+      { name: 'icon', desc: $t('alert.api.slotIcon'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
 
 </html>

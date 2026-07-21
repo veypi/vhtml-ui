@@ -1,45 +1,39 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tabs Component Demo">
-  <title>{{$t('tabs.title')}}</title>
+  <meta name="description" content="Tabs Component Documentation" />
+  <title>{{ $t('tabs.title') }}</title>
 </head>
 <style>
-  body {
-    padding: 20px;
-  }
   .tab-content {
-    padding: 20px;
+    padding: var(--v-spacing-lg);
     background: var(--v-bg-color-secondary);
     border-radius: var(--v-radius-md);
-    min-height: 100px;
+    min-height: 80px;
   }
 </style>
 
-<body layout="default">
+<body>
+  <div class="doc-page">
+    <h1 class="doc-title">{{ $t('tabs.title') }}</h1>
+    <p class="doc-intro">{{ $t('tabs.intro') }}</p>
 
-  <div class="v-container">
-    <h1>{{$t('tabs.title')}}</h1>
-    <p class="v-text-secondary v-mb-lg">{{$t('tabs.subtitle')}}</p>
+    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
-    <!-- Basic Line Usage -->
-    <div class="demo-section">
-      <div class="demo-title">{{$t('tabs.basic')}}</div>
+    <doc-demo :title="$t('tabs.ex.line.title')" :desc="$t('tabs.ex.line.desc')" :code="codeLine">
       <div vsrc="/tabs" v:value="activeTab1" :items="items1">
         <div class="tab-content">
-          <div v-if="activeTab1 === '1'">{{$t('tabs.userMgmt')}}{{$t('tabs.content')}}...</div>
-          <div v-if="activeTab1 === '2'">{{$t('tabs.configMgmt')}}{{$t('tabs.content')}}...</div>
-          <div v-if="activeTab1 === '3'">{{$t('tabs.roleMgmt')}}{{$t('tabs.content')}}...</div>
+          <div v-if="activeTab1 === '1'">{{ $t('tabs.userMgmt') }}{{ $t('tabs.content') }}...</div>
+          <div v-if="activeTab1 === '2'">{{ $t('tabs.configMgmt') }}{{ $t('tabs.content') }}...</div>
+          <div v-if="activeTab1 === '3'">{{ $t('tabs.roleMgmt') }}{{ $t('tabs.content') }}...</div>
         </div>
       </div>
-      <div class="v-mt-md v-text-secondary">{{$t('tabs.currentSelected')}}: {{ activeTab1 }}</div>
-    </div>
+      <div class="value-display">{{ $t('tabs.currentSelected') }}: {{ activeTab1 }}</div>
+    </doc-demo>
 
-    <!-- Card Style -->
-    <div class="demo-section">
-      <div class="demo-title">{{$t('tabs.card')}}</div>
+    <doc-demo :title="$t('tabs.ex.card.title')" :desc="$t('tabs.ex.card.desc')" :code="codeCard">
       <div vsrc="/tabs" variant="card" v:value="activeTab2" :items="items2">
         <div class="tab-content" style="border-top-left-radius: 0;">
           <div v-if="activeTab2 === 'profile'">Profile Info</div>
@@ -47,46 +41,81 @@
           <div v-if="activeTab2 === 'messages'">Messages List</div>
         </div>
       </div>
-    </div>
+    </doc-demo>
 
-    <!-- Pills Style -->
-    <div class="demo-section">
-      <div class="demo-title">{{$t('tabs.pills')}}</div>
+    <doc-demo :title="$t('tabs.ex.pills.title')" :desc="$t('tabs.ex.pills.desc')" :code="codePills">
       <div vsrc="/tabs" variant="pills" v:value="activeTab3" :items="items3">
-        <div class="tab-content v-mt-md">
-           {{$t('tabs.currentView')}}: {{ activeTab3 }}
-        </div>
+        <div class="tab-content v-mt-md">{{ $t('tabs.currentView') }}: {{ activeTab3 }}</div>
       </div>
-    </div>
+    </doc-demo>
 
+    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+
+    <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
+    <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>
+    <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>
   </div>
 
-</body>
+  <script setup>
+    activeTab1 = '1';
+    items1 = [
+      { label: () => $t('tabs.userMgmt'), value: '1' },
+      { label: () => $t('tabs.configMgmt'), value: '2' },
+      { label: () => $t('tabs.roleMgmt'), value: '3' },
+      { label: () => $t('tabs.scheduledTask'), value: '4', disabled: true }
+    ];
+
+    activeTab2 = 'profile';
+    items2 = [
+      { label: () => $t('tabs.profile'), value: 'profile' },
+      { label: () => $t('tabs.sysSettings'), value: 'settings' },
+      { label: () => $t('tabs.notifications'), value: 'messages' }
+    ];
+
+    activeTab3 = 'all';
+    items3 = [
+      { label: () => $t('tabs.all'), value: 'all' },
+      { label: () => $t('tabs.pending'), value: 'pending' },
+      { label: () => $t('tabs.processing'), value: 'processing' },
+      { label: () => $t('tabs.completed'), value: 'completed' }
+    ];
+
+    codeLine = `<div vsrc="/tabs" v:value="activeTab" :items="items">
+  <div v-if="activeTab === '1'">...</div>
+  <div v-if="activeTab === '2'">...</div>
+</div>
+
 <script setup>
-  // Demo 1 Data
-  activeTab1 = '1';
-  items1 = [
-    { label: () => $t('tabs.userMgmt'), value: '1' },
-    { label: () => $t('tabs.configMgmt'), value: '2' },
-    { label: () => $t('tabs.roleMgmt'), value: '3' },
-    { label: () => $t('tabs.scheduledTask'), value: '4', disabled: true }
+  activeTab = '1';
+  items = [
+    { label: 'Users', value: '1' },
+    { label: 'Config', value: '2' },
+    { label: 'Disabled', value: '3', disabled: true }
   ];
+<\/script>`;
 
-  // Demo 2 Data
-  activeTab2 = 'profile';
-  items2 = [
-    { label: () => $t('tabs.profile'), value: 'profile' },
-    { label: () => $t('tabs.sysSettings'), value: 'settings' },
-    { label: () => $t('tabs.notifications'), value: 'messages' }
-  ];
+    codeCard = `<div vsrc="/tabs" variant="card" v:value="activeTab" :items="items">
+  <div>Tab content</div>
+</div>`;
 
-  // Demo 3 Data
-  activeTab3 = 'all';
-  items3 = [
-    { label: () => $t('tabs.all'), value: 'all' },
-    { label: () => $t('tabs.pending'), value: 'pending' },
-    { label: () => $t('tabs.processing'), value: 'processing' },
-    { label: () => $t('tabs.completed'), value: 'completed' }
-  ];
-</script>
+    codePills = `<div vsrc="/tabs" variant="pills" v:value="activeTab" :items="items">
+  <div>Tab content</div>
+</div>`;
+
+    propRows = [
+      { name: 'items', desc: $t('tabs.api.items'), type: 'array', default: '[]' },
+      { name: 'value', desc: $t('tabs.api.value'), type: 'string', default: "''" },
+      { name: 'variant', desc: $t('tabs.api.variant'), type: "'line' | 'card' | 'pills'", default: "'line'" }
+    ];
+
+    eventRows = [
+      { name: 'update', desc: $t('tabs.api.update'), type: '(value: string)', default: '-' }
+    ];
+
+    slotRows = [
+      { name: 'default', desc: $t('tabs.api.slotDefault'), type: '-', default: '-' }
+    ];
+  </script>
+</body>
+
 </html>
