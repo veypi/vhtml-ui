@@ -42,7 +42,7 @@
 
 <body>
   <span class="v-avatar" :class="'is-' + shape" :style="computeStyle">
-    <img v-if="src && !loadError" :src="src" :alt="name" @error="loadError = true" />
+    <img v-if="src && !loadError" :src="icon_url()" :alt="name" @error="loadError = true" />
     <span v-else>{{ initial() }}</span>
   </span>
 </body>
@@ -71,12 +71,20 @@
       'font-size': Math.round(s * 0.42) + 'px'
     };
   }
+  icon_url = () => {
+    if (src.startsWith('http')) {
+      return src
+    }
+    return '@' + prefix + src
+  }
+  prefix = ''
 
   initial = () => (name || '?').trim().charAt(0).toUpperCase();
 </script>
 <script>
+  prefix = $node.parentNode.closest('[vref]').$mod.scoped
   // src 变化时重置错误态
-  $watch(() => $data.src, () => { loadError = false })
+  $watch(() => $data.src, () => {loadError = false})
 </script>
 
 </html>

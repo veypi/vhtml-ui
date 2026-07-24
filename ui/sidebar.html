@@ -288,6 +288,7 @@
   };
 </script>
 <script>
+  pathPrefix = '@' + $node.parentNode.closest('[vref]').$mod.scoped
   mq = window.matchMedia('(max-width: 767px)');
   mqHandler = (e) => {
     overlay = e.matches;
