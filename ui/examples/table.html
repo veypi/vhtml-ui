@@ -19,7 +19,7 @@
 
     <doc-demo :title="$t('table.ex.cell.title')" :desc="$t('table.ex.cell.desc')" :code="codeCell">
       <div vsrc="/table" :columns="columnsWithActions" :data="tableData" bordered>
-        <template vslot="cell">
+        <div vslot="cell">
           <div v-if="col.key === 'status'">
             <div vsrc="/tag" :color="row.status === 'active' ? 'success' : 'danger'" size="sm">
               {{ row.status === 'active' ? $t('table.active') : $t('table.inactive') }}
@@ -28,8 +28,8 @@
           <div v-else-if="col.key === 'actions'">
             <div vsrc="/btn" size="xs" variant="ghost" @click="onEdit(row)">{{ $t('table.edit') }}</div>
           </div>
-          <template v-else>{{ row[col.key] }}</template>
-        </template>
+          <span v-else>{{ row[col.key] }}</span>
+        </div>
       </div>
     </doc-demo>
 
@@ -100,7 +100,7 @@
 <\/script>`;
 
     codeCell = `<div vsrc="/table" :columns="columns" :data="tableData" bordered>
-  <template vslot="cell">
+  <div vslot="cell">
     <div v-if="col.key === 'status'">
       <div vsrc="/tag" :color="row.status === 'active' ? 'success' : 'danger'" size="sm">
         {{ row.status }}
@@ -109,8 +109,8 @@
     <div v-else-if="col.key === 'actions'">
       <div vsrc="/btn" size="xs" variant="ghost" @click="onEdit(row)">Edit</div>
     </div>
-    <template v-else>{{ row[col.key] }}</template>
-  </template>
+    <span v-else>{{ row[col.key] }}</span>
+  </div>
 </div>`;
 
     codeState = `<div vsrc="/table" :columns="columns" :data="demo2Data" :loading="loading"></div>

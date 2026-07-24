@@ -37,8 +37,8 @@
 
     <doc-demo :title="$t('tag.ex.closable.title')" :desc="$t('tag.ex.closable.desc')" :code="codeClosable">
       <div class="v-flex v-gap-sm v-flex-wrap v-items-center">
-        <div vsrc="/tag" closable color="primary" @close="onClose">{{ $t('tag.removable') }}</div>
-        <div vsrc="/tag" closable variant="filled" color="danger" @close="onClose">{{ $t('tag.removable') }}</div>
+        <div vsrc="/tag" closable color="primary" @v-close="onClose">{{ $t('tag.removable') }}</div>
+        <div vsrc="/tag" closable variant="filled" color="danger" @v-close="onClose">{{ $t('tag.removable') }}</div>
       </div>
     </doc-demo>
 
@@ -68,7 +68,7 @@
 <div vsrc="/tag" size="lg" color="primary">Large</div>
 <div vsrc="/tag" round color="success">Round</div>`;
 
-    codeClosable = `<div vsrc="/tag" closable color="primary" @close="onClose">Tag</div>
+    codeClosable = `<div vsrc="/tag" closable color="primary" @v-close="onClose">Tag</div>
 
 <script setup>
   onClose = () => {
@@ -85,7 +85,7 @@
     ];
 
     eventRows = [
-      { name: 'close', desc: $t('tag.api.close'), type: '-', default: '-' }
+      { name: 'v-close', desc: $t('tag.api.close'), type: '-', default: '-' }
     ];
 
     slotRows = [

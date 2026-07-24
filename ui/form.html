@@ -73,7 +73,7 @@
 
   handleSubmit = () => {
     if (validateAll()) {
-      $emit('submit', data);
+      $emit('v-submit', data);
     }
   }
 
@@ -85,7 +85,7 @@
     $node.querySelectorAll('.v-form-field').forEach(el => {
       if (el.$data) el.$data.errorMsg = '';
     });
-    $emit('reset');
+    $emit('v-reset');
   }
 </script>
 <script>

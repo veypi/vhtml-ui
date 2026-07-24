@@ -31,7 +31,7 @@
 
     <doc-demo :title="$t('alert.ex.closable.title')" :desc="$t('alert.ex.closable.desc')" :code="codeClosable">
       <div class="alert-col">
-        <div vsrc="/alert" type="success" :title="$t('alert.success')" closable @close="onClose">
+        <div vsrc="/alert" type="success" :title="$t('alert.success')" closable @v-close="onClose">
           {{ $t('alert.desc') }}
         </div>
         <div vsrc="/alert" type="info" :description="$t('alert.desc')"></div>
@@ -55,8 +55,8 @@
 <div vsrc="/alert" type="warning" title="Warning" description="..."></div>
 <div vsrc="/alert" type="danger" title="Error" description="..."></div>`;
 
-    codeClosable = `<!-- 可关闭，close 事件在点击关闭按钮时触发 -->
-<div vsrc="/alert" type="success" title="Success" closable @close="onClose">
+    codeClosable = `<!-- 可关闭，v-close 事件在点击关闭按钮时触发 -->
+<div vsrc="/alert" type="success" title="Success" closable @v-close="onClose">
   Custom description via the default slot.
 </div>
 
@@ -77,7 +77,7 @@
     ];
 
     eventRows = [
-      { name: 'close', desc: $t('alert.api.close'), type: '-', default: '-' }
+      { name: 'v-close', desc: $t('alert.api.close'), type: '-', default: '-' }
     ];
 
     slotRows = [

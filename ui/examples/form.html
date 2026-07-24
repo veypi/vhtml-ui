@@ -29,7 +29,7 @@
     <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('form.ex.basic.title')" :desc="$t('form.ex.basic.desc')" :code="codeBasic">
-      <div vsrc="/form" :items="formItems" v:data="formData" :cols="2" @submit="onSubmit" @reset="onReset"></div>
+      <div vsrc="/form" :items="formItems" v:data="formData" :cols="2" @v-submit="onSubmit" @v-reset="onReset"></div>
       <div class="demo-result">
         <h4 style="margin-top: 0;">{{ $t('form.liveData') }}:</h4>
         <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
@@ -118,7 +118,7 @@
     };
 
     codeBasic = `<div vsrc="/form" :items="formItems" v:data="formData" :cols="2"
-  @submit="onSubmit" @reset="onReset">
+  @v-submit="onSubmit" @v-reset="onReset">
 </div>
 
 <script setup>
@@ -161,8 +161,8 @@
     ];
 
     eventRows = [
-      { name: 'submit', desc: $t('form.api.submit'), type: '(data: object)', default: '-' },
-      { name: 'reset', desc: $t('form.api.reset'), type: '-', default: '-' }
+      { name: 'v-submit', desc: $t('form.api.submit'), type: '(data: object)', default: '-' },
+      { name: 'v-reset', desc: $t('form.api.reset'), type: '-', default: '-' }
     ];
 
     slotRows = [

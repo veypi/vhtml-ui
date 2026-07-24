@@ -295,7 +295,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 ### 基础用法
 
 ```html
-<v-form :items="formItems" v:data="formData" :cols="2" @submit="onSubmit" @reset="onReset"></v-form>
+<v-form :items="formItems" v:data="formData" :cols="2" @v-submit="onSubmit" @v-reset="onReset"></v-form>
 
 <script setup>
   formData = { username: "", role: "user" }
@@ -328,8 +328,8 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 | 事件名 | 说明                             | 回调参数 |
 | ------ | -------------------------------- | -------- |
-| submit | 聚合校验全部通过后触发           | data     |
-| reset  | 重置（恢复初始快照并清空错误态） | -        |
+| v-submit | 聚合校验全部通过后触发           | data     |
+| v-reset  | 重置（恢复初始快照并清空错误态） | -        |
 
 ### Slots
 
@@ -379,7 +379,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 <v-tag color="primary">Primary</v-tag>
 <v-tag variant="filled" color="success">Success</v-tag>
 <v-tag variant="outline" color="danger">Danger</v-tag>
-<v-tag closable @close="onClose">可关闭</v-tag>
+<v-tag closable @v-close="onClose">可关闭</v-tag>
 ```
 
 ### Props
@@ -396,7 +396,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 | 事件名 | 说明         |
 | ------ | ------------ |
-| close  | 点击关闭按钮 |
+| v-close | 点击关闭按钮 |
 
 ### Slots
 
@@ -415,7 +415,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 <v-alert type="success" title="成功" description="操作已完成"></v-alert>
 <v-alert type="warning" title="警告" description="请注意检查"></v-alert>
 <v-alert type="danger" title="错误" description="操作失败"></v-alert>
-<v-alert type="danger" title="错误" closable @close="onClose">自定义描述内容</v-alert>
+<v-alert type="danger" title="错误" closable @v-close="onClose">自定义描述内容</v-alert>
 ```
 
 ### Props
@@ -431,7 +431,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 | 事件名 | 说明           |
 | ------ | -------------- |
-| close  | 点击关闭按钮时 |
+| v-close | 点击关闭按钮时 |
 
 ### Slots
 
@@ -543,12 +543,12 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 ```html
 <v-table :columns="columns" :data="tableData">
-  <template vslot="cell">
+  <div vslot="cell">
     <div v-if="col.key === 'status'">
       <v-tag color="success">在职</v-tag>
     </div>
-    <template v-else>{{ row[col.key] }}</template>
-  </template>
+    <span v-else>{{ row[col.key] }}</span>
+  </div>
 </v-table>
 ```
 
@@ -772,7 +772,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 | 事件名 | 说明              |
 | ------ | ----------------- |
-| close  | Dialog 关闭时触发 |
+| v-close | Dialog 关闭时触发 |
 
 ### Slots
 
@@ -832,7 +832,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 ### 基础用法
 
 ```html
-<v-sidebar :items="menuItems" v:collapsed="isCollapsed" @select="handleSelect">
+<v-sidebar :items="menuItems" v:collapsed="isCollapsed" @v-select="handleSelect">
   <div vslot="header">LOGO</div>
   <div vslot="footer">Footer</div>
 </v-sidebar>
@@ -874,7 +874,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 | 事件名 | 说明             | 回调参数 |
 | ------ | ---------------- | -------- |
-| select | 选中菜单项时触发 | item     |
+| v-select | 选中菜单项时触发 | item     |
 
 ### Slots
 
