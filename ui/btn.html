@@ -33,7 +33,9 @@
   }
 
   .v-btn:focus-visible {
-    box-shadow: 0 0 0 2px var(--v-bg-color), 0 0 0 4px var(--v-color-primary);
+    box-shadow:
+      0 0 0 2px var(--v-bg-color),
+      0 0 0 4px color-mix(in oklab, var(--v-color-primary) 45%, transparent);
   }
 
   .v-btn:disabled,
@@ -55,20 +57,16 @@
     background-color: var(--v-btn-bg, var(--v-color-primary));
     color: var(--v-btn-text, var(--v-color-primary-text));
     border-color: transparent;
-    box-shadow: var(--v-shadow-sm);
   }
 
   .v-btn--default:hover:not(:disabled) {
     /* Use color-mix for hover state if --v-btn-bg-hover is not explicitly set */
-    background-color: var(--v-btn-bg-hover, color-mix(in srgb, var(--v-btn-bg, var(--v-color-primary)), black 10%));
-    box-shadow: var(--v-shadow-md);
-    transform: translateY(-1px);
+    background-color: var(--v-btn-bg-hover, color-mix(in srgb, var(--v-btn-bg, var(--v-color-primary)), black 8%));
   }
 
   .v-btn--default:active:not(:disabled) {
     /* Use color-mix for active state */
-    background-color: var(--v-btn-bg-active, color-mix(in srgb, var(--v-btn-bg, var(--v-color-primary)), black 20%));
-    transform: translateY(0);
+    background-color: var(--v-btn-bg-active, color-mix(in srgb, var(--v-btn-bg, var(--v-color-primary)), black 16%));
   }
 
   /* Outline */

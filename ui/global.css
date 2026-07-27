@@ -10,8 +10,19 @@
 }
 
 body {
-  font-family: var(--v-font-family, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  font-family: var(
+    --v-font-family,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif
+  );
   line-height: 1.5;
+  letter-spacing: -0.011em;
   color: var(--v-text-color);
   background-color: var(--v-bg-color);
   -webkit-font-smoothing: antialiased;
@@ -48,8 +59,9 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid color-mix(in oklab, var(--v-color-primary) 60%, transparent);
-  outline-offset: 1px;
+  outline: 2px solid
+    color-mix(in oklab, var(--v-color-primary) 45%, transparent);
+  outline-offset: 2px;
 }
 
 /* 自定义焦点样式的组件关闭默认 outline，避免双重焦点环 */
@@ -65,39 +77,43 @@ body {
    ========================================================================== */
 :root {
   /* --- Primitives: Colors (原始色板) --- */
-  --v-blue-50: #eff6ff;
-  --v-blue-100: #dbeafe;
-  --v-blue-500: #3b82f6;
-  --v-blue-600: #2563eb;
-  --v-blue-700: #1d4ed8;
+  /* 主色：indigo 系（Linear 风） */
+  --v-indigo-50: #eef2ff;
+  --v-indigo-100: #e0e7ff;
+  --v-indigo-500: #6366f1;
+  --v-indigo-600: #4f46e5;
+  --v-indigo-700: #4338ca;
 
-  --v-green-500: #22c55e;
-  --v-green-600: #16a34a;
+  /* emerald：比 green 更柔和现代 */
+  --v-green-500: #10b981;
+  --v-green-600: #059669;
 
   --v-red-500: #ef4444;
   --v-red-600: #dc2626;
 
-  --v-yellow-500: #eab308;
+  /* amber：比 yellow 更克制 */
+  --v-yellow-500: #f59e0b;
 
-  --v-gray-50: #f9fafb;
-  --v-gray-100: #f3f4f6;
-  --v-gray-200: #e5e7eb;
-  --v-gray-300: #d1d5db;
-  --v-gray-400: #9ca3af;
-  --v-gray-500: #6b7280;
-  --v-gray-600: #4b5563;
-  --v-gray-700: #374151;
-  --v-gray-800: #1f2937;
-  --v-gray-900: #111827;
+  /* 纯中性灰阶（zinc 系，去蓝色调） */
+  --v-gray-50: #fafafa;
+  --v-gray-100: #f4f4f5;
+  --v-gray-200: #e4e4e7;
+  --v-gray-300: #d4d4d8;
+  --v-gray-400: #a1a1aa;
+  --v-gray-500: #71717a;
+  --v-gray-600: #52525b;
+  --v-gray-700: #3f3f46;
+  --v-gray-800: #27272a;
+  --v-gray-900: #18181b;
 
   --v-white: #ffffff;
   --v-black: #000000;
 
   /* --- Semantics: Theme (语义主题) --- */
   /* Primary Action */
-  --v-color-primary: var(--v-blue-500);
-  --v-color-primary-hover: var(--v-blue-600);
-  --v-color-primary-active: var(--v-blue-700);
+  --v-color-primary: var(--v-indigo-500);
+  --v-color-primary-hover: var(--v-indigo-600);
+  --v-color-primary-active: var(--v-indigo-700);
   --v-color-primary-text: var(--v-white);
 
   /* Secondary Action */
@@ -107,7 +123,7 @@ body {
   --v-color-secondary-text: var(--v-white);
 
   /* Feedback */
-  --v-color-info: var(--v-blue-500);
+  --v-color-info: var(--v-indigo-500);
   --v-color-success: var(--v-green-500);
   --v-color-warning: var(--v-yellow-500);
   --v-color-danger: var(--v-red-500);
@@ -130,10 +146,10 @@ body {
   --v-border-color-hover: var(--v-gray-300);
 
   /* --- Dimensions: Spacing & Radius (尺寸) --- */
-  --v-radius-sm: 2px;
-  --v-radius-md: 4px;
-  --v-radius-lg: 8px;
-  --v-radius-xl: 12px;
+  --v-radius-sm: 4px;
+  --v-radius-md: 6px;
+  --v-radius-lg: 10px;
+  --v-radius-xl: 14px;
   --v-radius-full: 9999px;
 
   --v-spacing-xs: 4px;
@@ -155,10 +171,16 @@ body {
   --v-font-weight-medium: 500;
   --v-font-weight-bold: 600;
 
-  /* --- Effects (特效) --- */
-  --v-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --v-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --v-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  /* --- Effects (特效) ---
+     现代简约阴影：hairline 描边 + 柔和扩散，避免厚重感 */
+  --v-shadow-sm:
+    0 0 0 1px rgb(0 0 0 / 0.02), 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --v-shadow-md:
+    0 0 0 1px rgb(0 0 0 / 0.03), 0 2px 4px -1px rgb(0 0 0 / 0.05),
+    0 6px 12px -4px rgb(0 0 0 / 0.06);
+  --v-shadow-lg:
+    0 0 0 1px rgb(0 0 0 / 0.03), 0 4px 8px -2px rgb(0 0 0 / 0.05),
+    0 16px 32px -8px rgb(0 0 0 / 0.1);
 
   /* --- Transitions (动画) --- */
   --v-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -184,7 +206,7 @@ body {
    ========================================================================== */
 
 /* 主题 T2: 暗黑/霓虹风格 */
-:root[theme='t2'] {
+:root[theme="t2"] {
   color-scheme: dark;
 
   /* Backgrounds */
@@ -231,8 +253,10 @@ body {
 
   /* Shadows: 暗色下加深 */
   --v-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --v-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-  --v-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  --v-shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --v-shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
 }
 
 /* ==========================================================================
@@ -476,7 +500,8 @@ body {
 .v-input-wrapper:has(:focus-visible):not(.is-disabled) {
   border-color: var(--v-color-primary);
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--v-color-primary) 50%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in oklab, var(--v-color-primary) 18%, transparent);
 }
 
 .v-input-wrapper.is-disabled {
@@ -491,7 +516,8 @@ body {
 
 .v-input-wrapper.is-error:has(:focus-visible) {
   border-color: var(--v-color-danger);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--v-color-danger) 50%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in oklab, var(--v-color-danger) 18%, transparent);
 }
 
 .v-input-wrapper.is-no-border {
@@ -579,4 +605,3 @@ body {
   padding-top: var(--v-spacing-lg);
   border-top: 1px solid var(--v-border-color);
 }
-
