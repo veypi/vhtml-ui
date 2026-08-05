@@ -46,7 +46,7 @@
 </style>
 
 <body class="v-tree">
-  <div :key="idx" v-for="(row, idx) in items" class="v-tree-node">
+  <div v-for="(row, idx) in items" class="v-tree-node">
     <vslot vbind="row, depth">
       <div class="v-tree-row" :style="{paddingLeft: (depth * 20) + 'px'}" @click="toggle(row)">
         <span class="v-tree-arrow" :class="{ 'is-expanded': row.expand }">
