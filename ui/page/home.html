@@ -455,7 +455,7 @@
         <p class="home-section-sub">{{ $t('home.features.subtitle') }}</p>
       </div>
       <div class="feature-grid">
-        <div :key="f.titleKey" v-for="f in features" class="feature-card">
+        <div v-for="f in features" class="feature-card">
           <div class="feature-icon" v-html="f.icon"></div>
           <div class="feature-name">{{ $t(f.titleKey) }}</div>
           <div class="feature-desc">{{ $t(f.descKey) }}</div>
@@ -472,7 +472,7 @@
         <p class="home-section-sub">{{ $t('home.components.subtitle') }}</p>
       </div>
       <div class="home-grid">
-        <a :key="item.name" v-for="item in items" class="home-card" :href="'/c/' + item.name">
+        <a v-for="item in items" class="home-card" :href="'/c/' + item.name">
           <div class="home-card-icon" v-html="item.icon"></div>
           <span class="home-card-name">{{ $t(item.labelKey) }}</span>
           <span class="home-card-desc">{{ $t(item.descKey) }}</span>

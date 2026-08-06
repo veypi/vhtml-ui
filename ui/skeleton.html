@@ -76,7 +76,7 @@
     <div v-if="avatar" class="v-skeleton-avatar"></div>
     <div class="v-skeleton-content">
       <div v-if="title" class="v-skeleton-title"></div>
-      <div :key="i" v-for="i in rows" class="v-skeleton-row"></div>
+      <div v-for="i in rows" class="v-skeleton-row"></div>
     </div>
   </div>
   <div v-else>

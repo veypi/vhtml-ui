@@ -83,12 +83,12 @@
     <table class="v-table" :class="{ 'is-striped': striped, 'is-bordered': bordered }">
       <thead>
         <tr>
-          <th :key="col.key" v-for="col in columns" :style="cellStyle(col)">{{ col.label }}</th>
+          <th v-for="col in columns" :style="cellStyle(col)">{{ col.label }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr :key="ri" v-for="(row, ri) in data">
-          <td :key="col.key" v-for="col in columns" :style="cellStyle(col)">
+        <tr v-for="(row, ri) in data">
+          <td v-for="col in columns" :style="cellStyle(col)">
             <vslot name="cell" vbind="row, col">{{ row[col.key] }}</vslot>
           </td>
         </tr>

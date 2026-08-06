@@ -34,7 +34,7 @@
 <body>
   <form class="v-form" :style="{ '--v-form-cols': cols }" @submit.prevent="handleSubmit">
     <div class="v-form-grid">
-      <div :key="item.name || index" v-for="(item, index) in items" class="v-form-item"
+      <div v-for="(item, index) in items" class="v-form-item"
         :style="item.full ? 'grid-column: 1 / -1;' : (item.span ? 'grid-column: span ' + item.span + ';' : '')">
         <!-- Dynamic Input Component -->
         <div vsrc="/input.html" class="v-form-field" :type="item.type || 'text'" :label="item.label"

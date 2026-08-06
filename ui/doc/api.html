@@ -108,7 +108,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr :key="row.name" v-for="row in rows">
+          <tr v-for="row in rows">
             <td><code class="api-name">{{ row.name }}</code></td>
             <td class="api-desc">{{ row.desc }}</td>
             <td><code class="api-type">{{ row.type }}</code></td>

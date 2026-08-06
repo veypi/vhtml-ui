@@ -18,7 +18,7 @@
     <select class="v-input__inner" :value="value" :disabled="disabled" :required="required" :name="name"
       @change="handleChange" @blur="handleBlur" style="cursor: pointer;">
       <option v-if="placeholder" value="" disabled selected hidden>{{ placeholder }}</option>
-      <option :key="idx" v-for="(opt, idx) in opts?.options" :value="opt.value !== undefined ? opt.value : opt"
+      <option v-for="(opt, idx) in opts?.options" :value="opt.value !== undefined ? opt.value : opt"
         :selected="(opt.value !== undefined ? opt.value : opt) == value">
         {{ opt.label !== undefined ? opt.label : opt }}
       </option>

@@ -47,7 +47,7 @@
 
 <body>
   <nav class="v-breadcrumb">
-    <template :key="idx" v-for="(item, idx) in items">
+    <template v-for="(item, idx) in items">
       <span class="v-breadcrumb-item">
         <a v-if="item.path && idx < items.length - 1" class="v-breadcrumb-link" :href="item.path">{{ item.label }}</a>
         <span v-else class="v-breadcrumb-current">{{ item.label }}</span>

@@ -51,7 +51,7 @@
 <body>
   <!-- Group Mode -->
   <div v-if="opts?.options" class="v-checkbox-group">
-    <label :key="idx" v-for="(opt, idx) in opts?.options" class="v-checkbox-label"
+    <label v-for="(opt, idx) in opts?.options" class="v-checkbox-label"
       :class="{ 'is-disabled': disabled || opt.disabled }">
       <input type="checkbox" :value="opt.value !== undefined ? opt.value : opt"
         :checked="Array.isArray(value) && value.includes(opt.value !== undefined ? opt.value : opt)"

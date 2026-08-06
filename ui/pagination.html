@@ -69,7 +69,7 @@
   <div class="v-pagination">
     <button class="v-page-btn" :class="{ 'is-disabled': value <= 1 }" @click="go(value - 1)">‹</button>
 
-    <template :key="idx" v-for="(p, idx) in pageList()">
+    <template v-for="(p, idx) in pageList()">
       <button v-if="p !== '...'" class="v-page-btn" :class="{ 'is-active': p === value }" @click="go(p)">{{ p }}</button>
       <span v-else class="v-page-ellipsis">…</span>
     </template>

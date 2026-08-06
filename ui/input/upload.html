@@ -151,7 +151,7 @@
 
     <!-- File List -->
     <div v-if="internalFiles.length > 0 && opts?.showList !== false" class="v-file-list">
-      <div v-for="file in internalFiles" :key="file.id" class="v-file-item">
+      <div v-for="file in internalFiles" class="v-file-item">
         <!-- Status Icon -->
         <div class="v-file-status-icon">
           <svg v-if="file.status === 'success'" class="v-text-success" xmlns="http://www.w3.org/2000/svg" width="14"
