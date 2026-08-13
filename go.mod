@@ -3,8 +3,8 @@ module github.com/veypi/vhtml-ui
 go 1.25.4
 
 require (
-	github.com/veypi/vhtml v0.9.0
-	github.com/veypi/vigo v0.7.2
+	github.com/veypi/vhtml v0.9.1
+	github.com/veypi/vigo v0.7.3
 )
 
 require (
@@ -24,7 +24,6 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/redis/go-redis/v9 v9.18.0 // indirect
