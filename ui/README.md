@@ -1015,3 +1015,23 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
   </div>
 </header>
 ```
+
+## $message 全局消息
+
+全局 toast / dialog API（v0.10.3 起自 vhtml 内核迁入本库）。本库 env.js 经 `all.define('$message', vmessage)` 注册到 manager.globals，应用挂载本库模块后，模板与脚本中直接调用 `$message.xxx`（经 $mod root 链回落解析）。
+
+```js
+$message.info('Notice')
+$message.success('Done')
+$message.warning('Careful')
+$message.error('Failed')
+$message.confirm('Delete?').then(() => { ... }).catch(() => { /* cancelled */ })
+$message.prompt('Name', 'default').then(value => { ... }).catch(() => {})
+$message.copy('text')   // 复制到剪贴板 + 成功提示
+```
+
+### 选项
+
+- Toast options: `{ duration = 3000, showClose, onClose }`（`duration: 0` = 不自动关闭）
+- Dialog options: `{ title, confirmText, cancelText, onConfirm, onCancel }`
+- `confirm` / `prompt` 取消或关闭时 Promise **rejects** `Error("cancelled")` —— 务必挂 `.catch`

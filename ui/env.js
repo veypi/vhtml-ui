@@ -1,8 +1,16 @@
 import { checkValue } from './validate.js'
+import vmessage from './vmessage.js'
 
 const THEME_KEY = 'vhtml-ui-theme'
 
-export default async ($mod) => {
+export default async ($mod, all) => {
+  // $message（v0.10.3 自 vhtml 内核迁入本库）：定义到 manager.globals，
+  // 模板 `$message.xxx` 经 $mod root 链回落解析。守卫读 all.globals——
+  // 多挂载点/嵌套装载时 env.js 可能执行多次，重复 define 会撞已装描述符；
+  // manager.clear() 后 globals 重建，守卫自然放行重定义。
+  if (!all.globals.$message) {
+    all.define('$message', vmessage)
+  }
   // 共享表单校验
   $mod.checkValue = checkValue
 

@@ -131,7 +131,13 @@
   </style>
 
   <body>
+    <!--
+      懒创建：v-if="opened" 保证未打开过的对话框零 DOM 驻留（只有注释标记）；
+      首次 visible=true 时才编译 overlay 并 teleport 到 body，之后用 v-show 切换。
+      列表场景（如每条消息一个灯箱）下，未打开的对话框不再常驻 document.body。
+    -->
     <div
+      v-if="opened"
       v-show="visible"
       class="v-dialog-overlay"
       :class="{ 'v-dialog-overlay--compact': compact }"
@@ -182,39 +188,65 @@
     stopProp = (e) => {
       e.stopPropagation();
     };
+    // opened 驱动 v-if 懒创建；overlayEl/teleported 记录 teleport 状态
+    opened = false;
     overlayEl = null;
+    teleported = false;
     prevOverflow = "";
     onKeydown = null;
   </script>
 
   <script>
-    overlayEl = $node.querySelector(".v-dialog-overlay");
-    if (overlayEl) {
-      document.body.appendChild(overlayEl);
-    }
-
     // Esc 关闭与 body 滚动锁：仅 visible 期间生效
     onKeydown = (e) => {
       if (e.key === "Escape" && visible) handleClose();
     };
-    $watch(
-      () => $data.visible,
-      (v) => {
-        if (v) {
+
+    ensureOverlayAttached = () => {
+      if (teleported) return true;
+      overlayEl = $node.querySelector(".v-dialog-overlay");
+      if (overlayEl) {
+        document.body.appendChild(overlayEl);
+        teleported = true;
+        return true;
+      }
+      return false;
+    };
+
+    openDialog = () => {
+      if (!opened) opened = true;
+      // v-if 分支在响应式冲刷期插入并编译，短轮询等待其出现后再 teleport
+      let tries = 0;
+      const tryAttach = () => {
+        if (ensureOverlayAttached()) {
           prevOverflow = document.body.style.overflow;
           document.body.style.overflow = "hidden";
           document.addEventListener("keydown", onKeydown);
-        } else {
-          document.body.style.overflow = prevOverflow;
-          document.removeEventListener("keydown", onKeydown);
+        } else if (++tries < 10) {
+          setTimeout(tryAttach, 16);
         }
+      };
+      setTimeout(tryAttach, 0);
+    };
+
+    closeDialog = () => {
+      document.body.style.overflow = prevOverflow || "";
+      document.removeEventListener("keydown", onKeydown);
+    };
+
+    $watch(
+      () => $data.visible,
+      (v) => {
+        if (v) openDialog();
+        else closeDialog();
       }
     );
+    // 挂载即可见的边界场景
+    if (visible) openDialog();
   </script>
 
   <script dispose>
-    document.body.style.overflow = prevOverflow || "";
-    document.removeEventListener("keydown", onKeydown);
+    closeDialog();
     if (overlayEl && overlayEl.parentNode === document.body) {
       document.body.removeChild(overlayEl);
     }
