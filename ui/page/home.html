@@ -457,8 +457,8 @@
       <div class="feature-grid">
         <div v-for="f in features" class="feature-card">
           <div class="feature-icon" v-html="f.icon"></div>
-          <div class="feature-name">{{ $t(f.titleKey) }}</div>
-          <div class="feature-desc">{{ $t(f.descKey) }}</div>
+          <div class="feature-name">{{ f.title() }}</div>
+          <div class="feature-desc">{{ f.desc() }}</div>
         </div>
       </div>
     </div>
@@ -474,8 +474,8 @@
       <div class="home-grid">
         <a v-for="item in items" class="home-card" :href="'/c/' + item.name">
           <div class="home-card-icon" v-html="item.icon"></div>
-          <span class="home-card-name">{{ $t(item.labelKey) }}</span>
-          <span class="home-card-desc">{{ $t(item.descKey) }}</span>
+          <span class="home-card-name">{{ item.label() }}</span>
+          <span class="home-card-desc">{{ item.desc() }}</span>
         </a>
       </div>
     </div>
@@ -487,7 +487,7 @@
   </footer>
 
   <script setup>
-    items = $mod.navItems.map(i => ({ name: i.name, labelKey: i.labelKey, descKey: i.descKey, icon: i.icon }));
+    items = $mod.navItems.map(i => ({ name: i.name, label: i.label, desc: i.desc, icon: i.icon }));
 
     scrollToComponents = () => {
       const el = document.getElementById('home-components');
@@ -498,12 +498,12 @@
       `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
 
     features = [
-      { titleKey: 'home.feature.dom.title', descKey: 'home.feature.dom.desc', icon: icon('<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline>') },
-      { titleKey: 'home.feature.zero.title', descKey: 'home.feature.zero.desc', icon: icon('<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>') },
-      { titleKey: 'home.feature.file.title', descKey: 'home.feature.file.desc', icon: icon('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>') },
-      { titleKey: 'home.feature.theme.title', descKey: 'home.feature.theme.desc', icon: icon('<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>') },
-      { titleKey: 'home.feature.i18n.title', descKey: 'home.feature.i18n.desc', icon: icon('<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>') },
-      { titleKey: 'home.feature.comp.title', descKey: 'home.feature.comp.desc', icon: icon('<rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>') }
+      { title: () => $t('home.feature.dom.title'), desc: () => $t('home.feature.dom.desc'), icon: icon('<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline>') },
+      { title: () => $t('home.feature.zero.title'), desc: () => $t('home.feature.zero.desc'), icon: icon('<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>') },
+      { title: () => $t('home.feature.file.title'), desc: () => $t('home.feature.file.desc'), icon: icon('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>') },
+      { title: () => $t('home.feature.theme.title'), desc: () => $t('home.feature.theme.desc'), icon: icon('<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>') },
+      { title: () => $t('home.feature.i18n.title'), desc: () => $t('home.feature.i18n.desc'), icon: icon('<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>') },
+      { title: () => $t('home.feature.comp.title'), desc: () => $t('home.feature.comp.desc'), icon: icon('<rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>') }
     ];
   </script>
 </body>
