@@ -385,7 +385,7 @@ class Message {
   }
 
   _prompt(content, options = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.runtime.queue(() => {
         const {
           title = "提示",
@@ -470,12 +470,14 @@ class Message {
           }, 300);
         };
 
+        // 空值语义：取消是正常用户行为，不走 error 通道——
+        // confirm 取消 → false；prompt 取消 → null（空字符串输入是合法值，用 null 区分）
         const cancel = () => {
           finalize(() => {
             if (typeof onCancel === "function") {
               onCancel();
             }
-            reject(new Error("cancelled"));
+            resolve(inputEl ? null : false);
           });
         };
 

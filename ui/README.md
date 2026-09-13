@@ -1025,8 +1025,11 @@ $message.info('Notice')
 $message.success('Done')
 $message.warning('Careful')
 $message.error('Failed')
-$message.confirm('Delete?').then(() => { ... }).catch(() => { /* cancelled */ })
-$message.prompt('Name', 'default').then(value => { ... }).catch(() => {})
+// confirm / prompt 为空值语义：取消不是错误，永不 reject
+const ok = await $message.confirm('Delete?')   // 确认 → true；取消/Esc/关闭/点遮罩 → false
+if (!ok) return
+const name = await $message.prompt('Name', 'default')  // 确认 → 输入值；取消 → null
+if (name == null) return
 $message.copy('text')   // 复制到剪贴板 + 成功提示
 ```
 
@@ -1034,4 +1037,4 @@ $message.copy('text')   // 复制到剪贴板 + 成功提示
 
 - Toast options: `{ duration = 3000, showClose, onClose }`（`duration: 0` = 不自动关闭）
 - Dialog options: `{ title, confirmText, cancelText, onConfirm, onCancel }`
-- `confirm` / `prompt` 取消或关闭时 Promise **rejects** `Error("cancelled")` —— 务必挂 `.catch`
+- `confirm` / `prompt` 取消或关闭时 **resolve 空值**：confirm → `false`、prompt → `null`（空字符串输入是合法值，用 `null` 区分取消）；永不 reject，无需挂 `.catch`；`onCancel` 回调照常触发
