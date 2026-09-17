@@ -1037,4 +1037,6 @@ $message.copy('text')   // 复制到剪贴板 + 成功提示
 
 - Toast options: `{ duration = 3000, showClose, onClose }`（`duration: 0` = 不自动关闭）
 - Dialog options: `{ title, confirmText, cancelText, onConfirm, onCancel }`
+- 弹窗显示后 Enter 确认、Esc 取消；打开弹窗的按键、长按连发和输入法选词不会触发确认。
+- 键盘回归测试：[test/vmessage.html](../test/vmessage.html)，从仓库根目录启动静态 HTTP 服务后在浏览器打开；仅使用页面内计数，不调用业务 API。
 - `confirm` / `prompt` 取消或关闭时 **resolve 空值**：confirm → `false`、prompt → `null`（空字符串输入是合法值，用 `null` 区分取消）；永不 reject，无需挂 `.catch`；`onCancel` 回调照常触发

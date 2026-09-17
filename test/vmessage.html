@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>确认弹窗键盘回归测试</title>
+<style>body {font:16px system-ui;padding:24px} pre {white-space:pre-wrap} textarea {display:block;margin:16px 0}</style></head>
+<body><h1>确认弹窗键盘回归测试</h1><p>只递增页面内计数，不连接业务 API，不清空真实数据。</p><pre id="result">测试运行中…</pre>
+<script type="module">
+import message from '../ui/vmessage.js';
+const assert = {
+  equal(actual, expected, why='unexpected value') { if (actual !== expected) throw new Error(`${why}: ${actual} !== ${expected}`); },
+  ok(value, why) { if (!value) throw new Error(why); },
+};
+try {
+const wait = ms => new Promise(resolve => setTimeout(resolve,ms));
+const textarea = document.createElement('textarea');
+document.body.append(textarea);
+let cleared = 0, resolved;
+textarea.addEventListener('keydown', event => {
+  if(event.key !== 'Enter') return;
+  event.preventDefault();
+  resolved = undefined;
+  message.confirm('Clear session?').then(ok => { resolved = ok; if(ok) cleared++; });
+});
+const key = (name, options={}) => textarea.dispatchEvent(new KeyboardEvent('keydown',{key:name,bubbles:true,cancelable:true,...options}));
+key('Enter');
+await wait(350);
+assert.equal(cleared,0,'opening Enter must not clear');
+assert.equal(resolved,undefined,'opening Enter must leave approval pending');
+assert.ok(document.querySelector('.vmsg-overlay.show'),'confirmation stays visible');
+key('Enter',{repeat:true});
+await wait(30);
+assert.equal(document.querySelectorAll('.vmsg-overlay').length,1,'holding Enter must not open duplicate dialogs');
+assert.equal(resolved,undefined,'held Enter must not confirm');
+key('Escape');
+await wait(350);
+assert.equal(resolved,false);
+assert.equal(cleared,0,'Escape must not clear');
+key('Enter');
+await wait(30);
+key('Enter');
+await wait(350);
+assert.equal(cleared,1,'a separate confirmation Enter clears exactly once');
+assert.equal(document.querySelectorAll('.vmsg-overlay').length,0);
+key('Enter');
+await wait(30);
+document.querySelector('.vmsg-btn-cancel').click();
+await wait(350);
+assert.equal(resolved,false); assert.equal(cleared,1,'cancel leaves data intact');
+let promptValue;
+message.prompt('Name','value').then(value=>promptValue=value);
+await wait(350);
+const input = document.querySelector('.vmsg-input');
+input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true,isComposing:true}));
+await wait(30);
+assert.equal(promptValue,undefined,'IME confirmation must not submit prompt');
+input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+await wait(350);
+assert.equal(promptValue,'value');
+
+document.getElementById('result').textContent = 'PASS：打开时的 Enter 不确认；长按不重复触发；Esc/取消不清空；第二次 Enter 只确认一次；输入法回车不提交。';
+} catch (error) {
+document.getElementById('result').textContent = 'FAIL: ' + error.message;
+console.error(error);
+}
+</script></body></html>

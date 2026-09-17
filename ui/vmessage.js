@@ -492,17 +492,21 @@ class Message {
         };
 
         const escHandler = (event) => {
+          if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return;
+          if (event.key !== "Escape" && event.key !== "Enter") return;
+          // 弹窗接管按键，避免底层输入框再次发送或执行斜杠指令。
+          event.preventDefault();
+          event.stopPropagation();
+          if (event.repeat) return;
           if (event.key === "Escape") {
             cancel();
           } else if (event.key === "Enter") {
             // 回车确认（prompt 输入框内回车同样确认）；settled 守卫防与按钮 click 双触发
-            event.preventDefault();
             confirm();
           }
         };
 
-        document.addEventListener("keydown", escHandler);
-        cleanup.push(() => document.removeEventListener("keydown", escHandler));
+        cleanup.push(() => document.removeEventListener("keydown", escHandler, true));
 
         closeBtn.addEventListener("click", cancel);
         cancelBtn.addEventListener("click", cancel);
@@ -515,6 +519,8 @@ class Message {
 
         const showTimer = this.runtime.schedule(() => {
           overlay.classList.add("show");
+          // 打开弹窗的 Enter 仍在传播；显示后才监听，不能用同一次按键确认。
+          document.addEventListener("keydown", escHandler, true);
         }, 10);
         cleanup.push(() => window.clearTimeout(showTimer));
 
