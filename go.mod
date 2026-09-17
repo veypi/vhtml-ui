@@ -1,10 +1,10 @@
 module github.com/veypi/vhtml-ui
 
-go 1.25.4
+go 1.27.0
 
 require (
-	github.com/veypi/vhtml v0.9.1
-	github.com/veypi/vigo v0.7.3
+	github.com/veypi/vhtml v0.11.1
+	github.com/veypi/vigo v0.7.5
 )
 
 require (
