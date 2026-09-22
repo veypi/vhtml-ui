@@ -3,7 +3,7 @@ module github.com/veypi/vhtml-ui
 go 1.27.0
 
 require (
-	github.com/veypi/vhtml v0.11.1
+	github.com/veypi/vhtml v0.11.2
 	github.com/veypi/vigo v0.7.5
 )
 
