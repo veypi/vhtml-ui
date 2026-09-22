@@ -5,6 +5,9 @@
     display: inline-block;
     /* 尺寸跟宿主高度走：外部直接给 v-lang 设 height 即可，宽度随纵横比 */
     height: 100%;
+    /* 宿主没给高度时的兜底：height:100% 会塌成 0（.lang-toggle 是 container-type:size，
+       图标跟着 100cqmin 一起消失），保证始终有可点击的 24px 见方目标 */
+    min-height: 24px;
     aspect-ratio: 1 / 1;
   }
 

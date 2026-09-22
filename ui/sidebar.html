@@ -262,7 +262,7 @@
   width = '240px';
   collapsedWidth = '64px';
   value = null; // 受控当前路径（v:value），非 null 时点击不跳转、仅更新 value
-  pathPrefix = ''; // 链接前缀：'' = 普通路径（vrouter 拦截）；'@' 前缀 = 跳出路由整页跳转（MPA）
+  pathPrefix = ''; // 链接前缀：'' = 交给所属 vrouter 按路由表空间解析（默认，跨模块也正确）；'@' = 跳过前缀解析，item.path 原样作为绝对路径
   overlay = false;
   open = false;
   mq = null;
@@ -288,7 +288,6 @@
   };
 </script>
 <script>
-  pathPrefix = '@' + $node.parentNode.closest('[vref]').$mod.scoped
   mq = window.matchMedia('(max-width: 767px)');
   mqHandler = (e) => {
     overlay = e.matches;
