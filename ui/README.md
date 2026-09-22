@@ -868,7 +868,7 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 | width          | 展开时的宽度                                                     | String                               | 240px  |
 | collapsedWidth | 折叠时的宽度                                                     | String                               | 64px   |
 | value          | 受控当前路径（v:value），设置后点击不跳转、仅更新 value          | String                               | null   |
-| pathPrefix     | 链接前缀，`'@'` 表示跳出路由整页跳转（MPA）                      | String                               | ''     |
+| pathPrefix     | 链接前缀，`''` = 按所属 vrouter 路由空间解析；`'@'` = 跳过前缀                      | String                               | ''     |
 
 ### Events
 
