@@ -5,127 +5,114 @@
     display: inline-block;
     /* 尺寸跟宿主高度走：外部直接给 v-lang 设 height 即可，宽度随纵横比 */
     height: 100%;
-    /* 宿主没给高度时的兜底：height:100% 会塌成 0（.lang-toggle 是 container-type:size，
-       图标跟着 100cqmin 一起消失），保证始终有可点击的 24px 见方目标 */
+    /* 宿主没给高度时的兜底，保证始终有可点击的 24px 见方目标 */
     min-height: 24px;
     aspect-ratio: 1 / 1;
   }
 
   .lang-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
     height: 100%;
-    /* 尺寸容器：内部 icon 用 cqmin 取宽高中小值自适应 */
-    container-type: size;
     cursor: pointer;
-    transition: all var(--v-transition-base);
     user-select: none;
-    position: relative;
-    overflow: hidden;
+    transition: transform var(--v-transition-base);
   }
 
   .lang-toggle:hover {
-    border-color: var(--v-color-primary);
     transform: translateY(-1px);
   }
 
   .lang-toggle:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
   }
 
-  .lang-icon {
-    /* 填满容器（取宽高中小值），视觉边距由 SVG viewBox 自带留白（≈8%）决定 */
-    width: 100cqmin;
-    height: 100cqmin;
-    position: absolute;
-    transition: all var(--v-transition-base);
+  .lang-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
-  /* 中文图标 - 默认显示 */
-  .icon-zh {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-  }
-
-  .lang-toggle.en .icon-zh {
-    opacity: 0;
-    transform: rotate(-90deg) scale(0.5);
-  }
-
-  /* 英文图标 - 默认隐藏 */
-  .icon-en {
-    opacity: 0;
-    transform: rotate(90deg) scale(0.5);
-  }
-
-  .lang-toggle.en .icon-en {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-  }
-
-  /* 图标颜色 */
-  .lang-icon path,
-  .lang-icon circle,
-  .lang-icon line,
-  .lang-icon rect {
-    stroke: var(--v-text-color-secondary);
+  /* 外圈底环（保持中性色，hover 不变色——否则点击时与扫环同色，扫过动画不可见） */
+  .ring-bg {
+    fill: none;
+    stroke: var(--v-border-color);
+    stroke-width: 1.5;
     transition: stroke var(--v-transition-fast);
   }
 
-  .lang-icon text {
-    fill: var(--v-text-color-secondary);
-    transition: fill var(--v-transition-fast);
-  }
-
-  .lang-toggle:hover .lang-icon path,
-  .lang-toggle:hover .lang-icon circle,
-  .lang-toggle:hover .lang-icon line,
-  .lang-toggle:hover .lang-icon rect {
+  /* 切换时扫过一圈的高亮环（spin-a/spin-b 交替重触发同一动画） */
+  .ring-sweep {
+    fill: none;
     stroke: var(--v-color-primary);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-dasharray: 62.83;
+    stroke-dashoffset: 62.83;
+    opacity: 0;
+    transform: rotate(-90deg);
+    transform-origin: center;
   }
 
-  .lang-toggle:hover .icon-zh text {
-    fill: var(--v-color-primary) !important;
+  .lang-toggle.spin-a .ring-sweep {
+    animation: sweep-a 560ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* 文字样式 */
-  .lang-text {
-    font-size: 11px;
-    font-weight: var(--v-font-weight-bold);
+  .lang-toggle.spin-b .ring-sweep {
+    animation: sweep-b 560ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes sweep-a {
+    0% { opacity: 1; stroke-dashoffset: 62.83; }
+    80% { opacity: 1; }
+    100% { opacity: 0; stroke-dashoffset: 0; }
+  }
+
+  @keyframes sweep-b {
+    0% { opacity: 1; stroke-dashoffset: 62.83; }
+    80% { opacity: 1; }
+    100% { opacity: 0; stroke-dashoffset: 0; }
+  }
+
+  /* 文字：垂直滚动切换——旧词向上滚出，新词自下方滚入并轻微回弹 */
+  .lang-label {
     fill: var(--v-text-color-secondary);
-    transition: fill var(--v-transition-fast);
+    font-weight: var(--v-font-weight-bold, 600);
+    text-anchor: middle;
+    transition: transform 340ms cubic-bezier(0.34, 1.35, 0.64, 1), opacity 240ms ease;
   }
 
-  .lang-toggle:hover .lang-text {
+  .lang-toggle:hover .lang-label {
     fill: var(--v-color-primary);
   }
+
+  /* 当前中文 → 显示 EN（点击切到英文）；当前英文 → 显示 中 */
+  .label-en { opacity: 1; transform: translateY(0); }
+  .label-zh { opacity: 0; transform: translateY(5px); }
+
+  .lang-toggle.en .label-en { opacity: 0; transform: translateY(-5px); }
+  .lang-toggle.en .label-zh { opacity: 1; transform: translateY(0); }
 </style>
 
 <body>
-  <div class="lang-toggle" :class="{en: currentLang === 'en-US'}" @click="toggleLang"
-    title="点击切换语言 / Click to switch language">
-    <!-- 中文图标 -->
-    <svg class="lang-icon icon-zh" viewBox="0 0 24 24" fill="none">
-      <text x="12" y="17.5" font-size="16" font-weight="600" text-anchor="middle" fill="var(--v-color-primary)">中</text>
-    </svg>
-    <!-- 英文图标 -->
-    <svg class="lang-icon icon-en" viewBox="0 0 24 24" fill="none" stroke="var(--v-color-primary)" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="4" y1="12" x2="20" y2="12"></line>
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+  <div class="lang-toggle" :class="{en: currentLang === 'en-US', 'spin-a': spin, 'spin-b': !spin}" @click="toggleLang"
+    :title="currentLang === 'en-US' ? 'Switch to 中文' : '切换到 English'">
+    <svg class="lang-svg" viewBox="0 0 24 24">
+      <circle class="ring-bg" cx="12" cy="12" r="10" />
+      <circle class="ring-sweep" cx="12" cy="12" r="10" />
+      <text class="lang-label label-en" x="12" y="14.9" font-size="8" letter-spacing="0.5">EN</text>
+      <text class="lang-label label-zh" x="12" y="15.8" font-size="11">中</text>
     </svg>
   </div>
 </body>
 
 <script setup>
   currentLang = $i18n.getLocale()
+  spin = true
   toggleLang = () => {
     const newLang = currentLang === 'zh-CN' ? 'en-US' : 'zh-CN';
     $i18n.setLocale(newLang);
     currentLang = newLang;
+    spin = !spin; // 交替动画类，重触发圆环扫过动画
   };
 </script>
 <script>

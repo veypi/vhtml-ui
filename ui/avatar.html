@@ -42,7 +42,7 @@
 
 <body>
   <span class="v-avatar" :class="'is-' + shape" :style="computeStyle">
-    <img v-if="src && !loadError" :src="icon_url()" :alt="name" @error="loadError = true" />
+    <img v-if="src && !loadError" :src="icon_url()" :alt="name" loading="lazy" decoding="async" @error="loadError = true" />
     <span v-else>{{ initial() }}</span>
   </span>
 </body>
