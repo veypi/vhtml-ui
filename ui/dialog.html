@@ -92,6 +92,13 @@
       gap: var(--v-spacing-sm);
     }
 
+    /* 无投影内容时隐藏 footer 栏：vhtml 的 outlet 元素常驻 DOM，空投影只剩
+       空白文本节点，:not(:has(*)) 精确区分（2026-10-20：否则空 footer 的
+       padding+border-top 会渲染成一条空栏）。 */
+    .v-dialog-footer:not(:has(*)) {
+      display: none;
+    }
+
     .v-dialog--compact {
       background-color: transparent;
       border-radius: 0;
