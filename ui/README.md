@@ -984,6 +984,34 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 | ------ | ---------- | -------------------------- |
 | -      | 行内容定义 | row（节点数据）, depth（深度）|
 
+## Theme 主题切换
+
+浅色 / 深色 / 跟随系统三态主题开关，状态由全局服务 `$theme` 管理，组件只负责展示与切换。
+
+### 基础用法
+
+```html
+<v-theme></v-theme>
+```
+
+点击按 `light → dark → auto → light` 循环，图标对应当前偏好（太阳 / 月亮 / 显示器）。`auto` 通过 `matchMedia('(prefers-color-scheme: dark)')` 实时跟随系统；系统主题变化、其他组件调用 `set`、跨标签页修改都会同步按钮状态。
+
+### `$theme` API
+
+```js
+$theme.get()        // 用户偏好：'light' | 'dark' | 'auto'
+$theme.resolved()   // 实际生效主题：'light' | 'dark'
+$theme.set('auto')  // 写入偏好并把解析结果落到 documentElement[theme]
+$theme.cycle()      // 按三态顺序切换
+const off = $theme.subscribe(({preference, resolved}) => {})
+```
+
+偏好保存在 `localStorage['vhtml-ui-theme']`。`documentElement` 的 `theme` 属性始终是解析后的 `light` / `dark`，业务 CSS 直接写 `:root[theme="dark"]` 即可；裸 HTML 应用如需避免首帧闪烁，可在引入脚本前用同一存储键提前设置该属性。
+
+### 尺寸
+
+宽高比 1:1，高度跟随宿主（例如 `v-theme { height: 1.4rem; }`），未给高度时兜底 24px。
+
 ## Lang 语言切换
 
 简洁的语言切换组件，用于在中文和英文之间快速切换，集成 vhtml 的 i18n 功能。

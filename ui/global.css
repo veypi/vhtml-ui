@@ -197,13 +197,13 @@ body {
 
 /* ==========================================================================
    2.1 Themes (主题)
-   通过 documentElement 的 theme 属性切换（$mod.theme.set('t2')）。
+   通过 documentElement 的 theme 属性切换（$theme.set('dark')）。
    挂在 :root 而非组件宿主，确保 teleport 到 body 的弹层也能继承。
-   t1 为默认主题（:root 基础值），无需覆盖块。
+   浅色为默认主题（:root 基础值），无需覆盖块。
    ========================================================================== */
 
-/* 主题 T2: 暗黑/霓虹风格 */
-:root[theme="t2"] {
+/* 深色主题 */
+:root[theme="dark"] {
   color-scheme: dark;
 
   /* Backgrounds */

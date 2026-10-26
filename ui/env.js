@@ -2,6 +2,20 @@ import { checkValue } from './validate.js'
 import vmessage from './vmessage.js'
 
 const THEME_KEY = 'vhtml-ui-theme'
+const THEME_VALUES = ['light', 'dark', 'auto']
+const themeMedia = window.matchMedia?.('(prefers-color-scheme: dark)') || null
+const themeListeners = new Set()
+const normalizeTheme = value => THEME_VALUES.includes(value) ? value : 'auto'
+const readTheme = () => normalizeTheme(localStorage.getItem(THEME_KEY))
+const resolveTheme = value => value === 'auto' ? (themeMedia?.matches ? 'dark' : 'light') : value
+const applyTheme = () => {
+  const preference = readTheme()
+  const resolved = resolveTheme(preference)
+  document.documentElement.setAttribute('theme', resolved)
+  document.documentElement.style.colorScheme = resolved
+  for (const listener of themeListeners) listener({ preference, resolved })
+  return { preference, resolved }
+}
 
 export default async ($mod, all) => {
   // $message（v0.10.3 自 vhtml 内核迁入本库）：定义到 manager.globals，
@@ -14,20 +28,34 @@ export default async ($mod, all) => {
   // 共享表单校验
   $mod.checkValue = checkValue
 
-  // 主题管理：t1 默认亮色，t2 暗黑；持久化到 localStorage
-  $mod.theme = {
-    get() {
-      return localStorage.getItem(THEME_KEY) || 't1'
+  // 主题偏好：light / dark / auto。localStorage 只存偏好，documentElement 上的
+  // theme 始终是解析后的 light / dark；auto 跟随系统并跨标签同步。
+  const theme = {
+    get: readTheme,
+    resolved: () => resolveTheme(readTheme()),
+    set(value) {
+      const preference = normalizeTheme(value)
+      localStorage.setItem(THEME_KEY, preference)
+      return applyTheme()
     },
-    set(name) {
-      localStorage.setItem(THEME_KEY, name)
-      document.documentElement.setAttribute('theme', name)
+    cycle() {
+      const current = readTheme()
+      const next = THEME_VALUES[(THEME_VALUES.indexOf(current) + 1) % THEME_VALUES.length]
+      return theme.set(next)
     },
-    toggle() {
-      this.set(this.get() === 't1' ? 't2' : 't1')
+    subscribe(listener) {
+      themeListeners.add(listener)
+      return () => { themeListeners.delete(listener) }
     }
   }
-  document.documentElement.setAttribute('theme', $mod.theme.get())
+  all.define('$theme', theme)
+  applyTheme()
+  themeMedia?.addEventListener('change', () => {
+    if (readTheme() === 'auto') applyTheme()
+  })
+  window.addEventListener('storage', event => {
+    if (event.key === THEME_KEY) applyTheme()
+  })
 
   // 组件导航注册表：外壳菜单与首页共用
   const icon = (body) =>

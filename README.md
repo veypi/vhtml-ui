@@ -1,6 +1,11 @@
 # vhtml-ui
 
-vhtml 官方 UI 组件库
+vhtml 官方 UI 组件库。
+
+- 组件文档（引用方式 / 参数 / 事件 / 主题与语言切换）：[ui/README.md](ui/README.md)
+- 文档地图：[docs/index.md](docs/index.md)
+- 变更记录：[CHANGELOG.md](CHANGELOG.md)；开发约定：[AGENTS.md](AGENTS.md)
+
 组件列表
 
 - [x] Input 输入框

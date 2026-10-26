@@ -1,5 +1,12 @@
 # 开发指南
 
+## 文档约定
+
+统一架构（与 ivec 各仓一致）：根目录只有 `README.md` / `CHANGELOG.md` / `AGENTS.md`，
+文档地图在 `docs/index.md`；组件文档跟随源码放 `ui/README.md`，示例页放 `ui/docs/`。
+已完成的变更写根目录 `CHANGELOG.md`（版本以 git tag 为准），未来计划写
+`docs/development/todo.md`，不另设第二份组件说明。
+
 ## 组件开发流程
 注意：因为该组件是纯粹静态ui组件，所以在没被其他库引用时是没确定组件前缀的, 所以在编写组件文档时要注意不要使用带前缀的引用方式,使用vsrc语法引入组件，如<div vsrc='/btn'></div>
 0. 每次只开发一个组件
