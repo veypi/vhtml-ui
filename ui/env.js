@@ -3,33 +3,31 @@ import vmessage from './vmessage.js'
 
 const THEME_KEY = 'vhtml-ui-theme'
 const THEME_VALUES = ['light', 'dark', 'auto']
-const themeMedia = window.matchMedia?.('(prefers-color-scheme: dark)') || null
-const themeListeners = new Set()
+const THEME_RUNTIME = Symbol.for('vhtml-ui.theme.runtime')
 const normalizeTheme = value => THEME_VALUES.includes(value) ? value : 'auto'
-const readTheme = () => normalizeTheme(localStorage.getItem(THEME_KEY))
-const resolveTheme = value => value === 'auto' ? (themeMedia?.matches ? 'dark' : 'light') : value
-const applyTheme = () => {
-  const preference = readTheme()
-  const resolved = resolveTheme(preference)
-  document.documentElement.setAttribute('theme', resolved)
-  document.documentElement.style.colorScheme = resolved
-  for (const listener of themeListeners) listener({ preference, resolved })
-  return { preference, resolved }
-}
 
-export default async ($mod, all) => {
-  // $message（v0.10.3 自 vhtml 内核迁入本库）：定义到 manager.globals，
-  // 模板 `$message.xxx` 经 $mod root 链回落解析。守卫读 all.globals——
-  // 多挂载点/嵌套装载时 env.js 可能执行多次，重复 define 会撞已装描述符；
-  // manager.clear() 后 globals 重建，守卫自然放行重定义。
-  if (!all.globals.$message) {
-    all.define('$message', vmessage)
+// 主题属于 window，而不是某一次模块初始化：clearScoped / import epoch 产生新
+// 模块实例后仍复用同一服务与监听集合，避免旧闭包和全局 handler 无界累积。
+function createThemeRuntime() {
+  const themeMedia = window.matchMedia?.('(prefers-color-scheme: dark)') || null
+  const themeListeners = new Set()
+  const readTheme = () => normalizeTheme(localStorage.getItem(THEME_KEY))
+  const resolveTheme = value => value === 'auto' ? (themeMedia?.matches ? 'dark' : 'light') : value
+  let lastTheme = null
+  const applyTheme = (changesOnly = false) => {
+    const preference = readTheme()
+    const resolved = resolveTheme(preference)
+    const changed = !lastTheme || lastTheme.preference !== preference || lastTheme.resolved !== resolved
+    lastTheme = { preference, resolved }
+    document.documentElement.setAttribute('theme', resolved)
+    document.documentElement.style.colorScheme = resolved
+    // env 重载仍同步 DOM，但状态未变时不惊动存活的旧订阅者；set / storage
+    // 等显式 apply 保持原有通知语义。
+    if (!changesOnly || changed) {
+      for (const listener of themeListeners) listener(lastTheme)
+    }
+    return lastTheme
   }
-  // 共享表单校验
-  $mod.checkValue = checkValue
-
-  // 主题偏好：light / dark / auto。localStorage 只存偏好，documentElement 上的
-  // theme 始终是解析后的 light / dark；auto 跟随系统并跨标签同步。
   const theme = {
     get: readTheme,
     resolved: () => resolveTheme(readTheme()),
@@ -48,14 +46,46 @@ export default async ($mod, all) => {
       return () => { themeListeners.delete(listener) }
     }
   }
-  all.define('$theme', theme)
-  applyTheme()
-  themeMedia?.addEventListener('change', () => {
-    if (readTheme() === 'auto') applyTheme()
-  })
-  window.addEventListener('storage', event => {
-    if (event.key === THEME_KEY) applyTheme()
-  })
+  let bound = false
+  return {
+    theme,
+    applyTheme,
+    bind() {
+      if (bound) return
+      bound = true
+      themeMedia?.addEventListener('change', () => {
+        if (readTheme() === 'auto') applyTheme()
+      })
+      window.addEventListener('storage', event => {
+        if (event.key === THEME_KEY) applyTheme()
+      })
+    }
+  }
+}
+
+function themeRuntime() {
+  if (!window[THEME_RUNTIME]) window[THEME_RUNTIME] = createThemeRuntime()
+  return window[THEME_RUNTIME]
+}
+
+export default async ($mod, all) => {
+  // $message（v0.10.3 自 vhtml 内核迁入本库）：定义到 manager.globals，
+  // 模板 `$message.xxx` 经 $mod root 链回落解析。守卫读 all.globals——
+  // 多挂载点/嵌套装载时 env.js 可能执行多次，重复 define 会撞已装描述符；
+  // manager.clear() 后 globals 重建，守卫自然放行重定义。
+  if (!all.globals.$message) {
+    all.define('$message', vmessage)
+  }
+  // 共享表单校验
+  $mod.checkValue = checkValue
+
+  // 主题偏好：light / dark / auto。localStorage 只存偏好，documentElement 上的
+  // theme 始终是解析后的 light / dark；auto 跟随系统并跨标签同步。
+  // 服务与全局监听按 window 幂等；重复 env 初始化同步 DOM，但状态未变时不重复通知。
+  const runtime = themeRuntime()
+  all.define('$theme', runtime.theme)
+  runtime.applyTheme(true)
+  runtime.bind()
 
   // 组件导航注册表：外壳菜单与首页共用
   const icon = (body) =>
