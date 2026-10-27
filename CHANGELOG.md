@@ -3,6 +3,20 @@
 版本以 git tag（`vX.Y.Z`）为准，遵循 SemVer。本文只记录已完成变更，未来计划写入
 `docs/development/todo.md`。
 
+## 0.1.7 — 2026-10-28
+
+### 修复
+
+- **主题运行时跟模块重载解绑**：`ui/env.js` 的 `$theme` 原先在**每次模块初始化时重建**——
+  `matchMedia` 监听与 `storage` 监听随 env.js 一起挂，模块被 `clearScoped` / import epoch
+  换掉后旧闭包与全局 handler 无人解绑地累积（重载越多，`change` / `storage` 回调发得越多），
+  且 `$theme` 服务本身也随模块实例换掉，订阅者拿到的是不同的服务对象。现把主题运行时挂到
+  `window`（`Symbol.for('vhtml-ui.theme.runtime')`）：服务、全局监听集合与 `lastTheme` 状态
+  跨模块实例复用，重复 env 初始化只重新 `define` 同一服务。`applyTheme` 区分「显式变更」
+  与「重载后同步 DOM」两种调用——后者在偏好与解析结果都没变时**不惊动存活的旧订阅者**
+  （但 DOM 属性照常同步），避免重载本身变成一次「主题变了」的事件。监听注册（`bind`）按
+  window 幂等，只挂一次。新增 `test/theme-env.test.mjs` 4 例。
+
 ## 0.1.6 — 2026-10-27
 
 ### 破坏性变更

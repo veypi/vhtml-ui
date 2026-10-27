@@ -1008,6 +1008,8 @@ const off = $theme.subscribe(({preference, resolved}) => {})
 
 偏好保存在 `localStorage['vhtml-ui-theme']`。`documentElement` 的 `theme` 属性始终是解析后的 `light` / `dark`，业务 CSS 直接写 `:root[theme="dark"]` 即可；裸 HTML 应用如需避免首帧闪烁，可在引入脚本前用同一存储键提前设置该属性。
 
+主题运行时挂在 `window`（`Symbol.for('vhtml-ui.theme.runtime')`）而非某一次模块实例：模块被重载（`clearScoped` / import epoch）后 `$theme` 仍是同一个服务对象，全局监听只挂一次、不随重载累积。模块重载后 env 会同步一次 DOM，但**偏好与解析结果没变时不通知订阅者**——重载本身不算一次「主题变了」。
+
 ### 尺寸
 
 宽高比 1:1，高度跟随宿主（例如 `v-theme { height: 1.4rem; }`），未给高度时兜底 24px。
