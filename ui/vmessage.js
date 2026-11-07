@@ -388,7 +388,7 @@ class Message {
     return new Promise((resolve) => {
       this.runtime.queue(() => {
         const {
-          title = "提示",
+          title = "",
           type = "confirm",
           inputValue = "",
           confirmText = "确定",
@@ -408,7 +408,8 @@ class Message {
 
         const titleEl = document.createElement("h3");
         titleEl.className = "vmsg-title";
-        titleEl.textContent = title;
+        // 输入弹窗的说明就是任务标题；显式 title 仍保留“标题 + 详细说明”形态。
+        titleEl.textContent = title || (type === "input" ? content : "提示");
 
         const closeBtn = document.createElement("button");
         closeBtn.className = "vmsg-close-btn";
@@ -420,10 +421,12 @@ class Message {
         const body = document.createElement("div");
         body.className = "vmsg-body";
 
-        const contentEl = document.createElement("div");
-        contentEl.className = "vmsg-prompt-content";
-        contentEl.textContent = content;
-        body.appendChild(contentEl);
+        if (type !== "input" || title) {
+          const contentEl = document.createElement("div");
+          contentEl.className = "vmsg-prompt-content";
+          contentEl.textContent = content;
+          body.appendChild(contentEl);
+        }
 
         let inputEl = null;
         if (type === "input") {

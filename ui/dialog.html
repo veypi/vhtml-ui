@@ -23,6 +23,14 @@
       align-items: center;
     }
 
+    .v-dialog-overlay--positioned {
+      display: block;
+    }
+
+    .v-dialog-overlay--positioned .v-dialog {
+      position: absolute;
+    }
+
     .v-dialog {
       background-color: var(--v-bg-color);
       border-radius: var(--v-radius-lg);
@@ -147,19 +155,22 @@
       v-if="opened"
       v-show="visible"
       class="v-dialog-overlay"
-      :class="{ 'v-dialog-overlay--compact': compact }"
+      :class="{
+        'v-dialog-overlay--compact': compact,
+        'v-dialog-overlay--positioned': hasPosition(),
+      }"
       @click="handleOverlayClick"
-      :style="compact ? '' : 'background-color:' + background"
+      :style="{ backgroundColor: background }"
     >
       <div
         class="v-dialog"
         :class="{ 'v-dialog--compact': compact }"
-        :style="compact ? '' : 'width:' + width"
+        :style="dialogStyle()"
         @click="stopProp"
       >
         <vslot v-if="!compact" name="title" class="v-dialog-header">
           <span class="v-dialog-title">{{ title }}</span>
-          <button class="v-dialog-close" @click="handleClose">×</button>
+          <button v-if="showClose" class="v-dialog-close" @click="handleClose">×</button>
         </vslot>
 
         <vslot
@@ -169,7 +180,7 @@
 
         <vslot v-if="!compact" class="v-dialog-footer" name="footer"> </vslot>
 
-        <button v-if="compact" class="v-dialog-close--compact" @click="handleClose">×</button>
+        <button v-if="compact && showClose" class="v-dialog-close--compact" @click="handleClose">×</button>
       </div>
     </div>
   </body>
@@ -179,7 +190,31 @@
     width = "50%";
     closeOnClickModal = true;
     compact = false;
+    showClose = true;
+    lockScroll = true;
+    position = null;
     background = "color-mix(in srgb, var(--v-text-color) 38%, transparent)";
+
+    positionValue = (value) => {
+      if (typeof value === "number") {
+        return Number.isFinite(value) ? value + "px" : null;
+      }
+      if (typeof value === "string" && value.trim()) return value;
+      return null;
+    };
+    hasPosition = () => {
+      if (!position || typeof position !== "object") return false;
+      return positionValue(position.x) !== null && positionValue(position.y) !== null;
+    };
+    dialogStyle = () => {
+      const style = {};
+      if (!compact) style.width = width;
+      if (hasPosition()) {
+        style.left = positionValue(position.x);
+        style.top = positionValue(position.y);
+      }
+      return style;
+    };
 
     handleClose = () => {
       visible = false;
@@ -200,6 +235,7 @@
     overlayEl = null;
     teleported = false;
     prevOverflow = "";
+    scrollLocked = false;
     onKeydown = null;
   </script>
 
@@ -225,19 +261,26 @@
       // v-if 分支在响应式冲刷期插入并编译，短轮询等待其出现后再 teleport
       let tries = 0;
       const tryAttach = () => {
+        if (!visible) return;
         if (ensureOverlayAttached()) {
-          prevOverflow = document.body.style.overflow;
-          document.body.style.overflow = "hidden";
+          if (lockScroll && !scrollLocked) {
+            prevOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+            scrollLocked = true;
+          }
           document.addEventListener("keydown", onKeydown);
         } else if (++tries < 10) {
-          setTimeout(tryAttach, 16);
+          $scope.setTimeout(tryAttach, 16);
         }
       };
-      setTimeout(tryAttach, 0);
+      $scope.setTimeout(tryAttach, 0);
     };
 
     closeDialog = () => {
-      document.body.style.overflow = prevOverflow || "";
+      if (scrollLocked) {
+        document.body.style.overflow = prevOverflow || "";
+        scrollLocked = false;
+      }
       document.removeEventListener("keydown", onKeydown);
     };
 

@@ -47,6 +47,8 @@ assert.equal(resolved,false); assert.equal(cleared,1,'cancel leaves data intact'
 let promptValue;
 message.prompt('Name','value').then(value=>promptValue=value);
 await wait(350);
+assert.equal(document.querySelector('.vmsg-title').textContent,'Name','prompt message becomes the header title');
+assert.equal(document.querySelector('.vmsg-prompt-content'),null,'default prompt does not duplicate the title in body');
 const input = document.querySelector('.vmsg-input');
 input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true,isComposing:true}));
 await wait(30);

@@ -753,7 +753,22 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 
 ```html
 <v-dialog v:visible="showDialog" compact>
-  <div>紧凑模式无 header、footer、背景和内边距，宽高由内容决定</div>
+  <div>紧凑模式无 header、footer，内容区无背景和内边距，宽高由内容决定</div>
+</v-dialog>
+```
+
+### 指定位置与菜单模式
+
+```html
+<v-dialog
+  v:visible="showMenu"
+  compact
+  background="transparent"
+  :show-close="false"
+  :lock-scroll="false"
+  :position="{x: 120, y: 80}"
+>
+  <div>内容显示在视口坐标 (120, 80)；不传 position 时居中</div>
 </v-dialog>
 ```
 
@@ -765,8 +780,11 @@ vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简
 | title             | Dialog 的标题                                                | String  | Dialog |
 | width             | Dialog 的宽度（compact 模式下无效）                          | String  | 50%    |
 | closeOnClickModal | 是否可以通过点击遮罩关闭 Dialog                              | Boolean | true   |
-| compact           | 紧凑模式，无 header/footer/背景/内边距，宽高由内容自适应     | Boolean | false  |
-| background        | 遮罩背景色                                                   | String  | -      |
+| compact           | 紧凑模式，无 header/footer，内容区无背景/内边距，宽高自适应 | Boolean | false  |
+| background        | 遮罩背景色；菜单等场景可设为 `transparent`                   | String  | -      |
+| position          | 内容左上角视口坐标 `{x, y}`；数字单位为 px，也支持 CSS 长度 | Object  | null   |
+| showClose         | 是否显示内置关闭按钮                                         | Boolean | true   |
+| lockScroll        | 打开时是否锁定 body 滚动                                     | Boolean | true   |
 
 ### Events
 
@@ -1067,6 +1085,7 @@ $message.copy('text')   // 复制到剪贴板 + 成功提示
 
 - Toast options: `{ duration = 3000, showClose, onClose }`（`duration: 0` = 不自动关闭）
 - Dialog options: `{ title, confirmText, cancelText, onConfirm, onCancel }`
+- `prompt(message, value)` 默认把 `message` 作为 header 标题，正文只显示输入框；显式传 `title` 时保留“自定义标题 + message 说明”。
 - 弹窗显示后 Enter 确认、Esc 取消；打开弹窗的按键、长按连发和输入法选词不会触发确认。
 - 键盘回归测试：[test/vmessage.html](../test/vmessage.html)，从仓库根目录启动静态 HTTP 服务后在浏览器打开；仅使用页面内计数，不调用业务 API。
 - `confirm` / `prompt` 取消或关闭时 **resolve 空值**：confirm → `false`、prompt → `null`（空字符串输入是合法值，用 `null` 区分取消）；永不 reject，无需挂 `.catch`；`onCancel` 回调照常触发

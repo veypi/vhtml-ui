@@ -3,6 +3,13 @@
 版本以 git tag（`vX.Y.Z`）为准，遵循 SemVer。本文只记录已完成变更，未来计划写入
 `docs/development/todo.md`。
 
+## 未发布
+
+- **dialog 定位模式与可配置项**：新增 `position`（`{x, y}`，数字按 px，也接受 CSS 长度；
+  不传则居中）、`showClose`、`lockScroll` 三个属性；定位模式下遮罩改为 `display:block`、
+  内容绝对定位。`prompt(message, value)` 默认把 message 作为弹窗标题、正文只显示输入框
+  （显式传 `title` 时保留「标题 + 说明」形态）。文档：`ui/README.md`；回归：`test/vmessage.html`。
+
 ## 0.1.7 — 2026-10-28
 
 ### 修复
