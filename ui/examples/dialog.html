@@ -7,11 +7,11 @@
 </head>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('dialog.title') }}</h1>
-    <p class="doc-intro">{{ $t('dialog.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('dialog.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('dialog.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('dialog.ex.basic.title')" :desc="$t('dialog.ex.basic.desc')" :code="codeBasic">
       <div vsrc="/btn" @click="visible = true">{{ $t('dialog.clickToOpen') }}</div>
@@ -21,7 +21,7 @@
       <div vsrc="/btn" variant="outline" @click="visible2 = true">{{ $t('dialog.customContent') }}</div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
     <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>

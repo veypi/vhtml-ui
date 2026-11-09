@@ -37,10 +37,10 @@
       <div v-for="(item, index) in items" class="v-form-item"
         :style="item.full ? 'grid-column: 1 / -1;' : (item.span ? 'grid-column: span ' + item.span + ';' : '')">
         <!-- Dynamic Input Component -->
-        <div vsrc="/input.html" class="v-form-field" :type="item.type || 'text'" :label="item.label"
-          :placeholder="item.placeholder" :required="item.required" :disabled="item.disabled || disabled"
-          :readonly="item.readonly" :noborder="item.noborder" :validate="item.validate" :opts="item.opts || {}"
-          :name="item.name" v:value="data[item.name]">
+        <div vsrc="/input.html" class="v-form-field" :type="item.type || 'text'" :label="item.label || ''"
+          :placeholder="item.placeholder || ''" :required="!!item.required" :disabled="item.disabled || disabled"
+          :readonly="!!item.readonly" :noborder="!!item.noborder" :validate="item.validate || null" :opts="item.opts || {}"
+          :name="item.name" :value="data[item.name]" @update="fieldSetter(item.name)">
         </div>
       </div>
     </div>
@@ -59,6 +59,8 @@
   cols = 1;   // Grid columns
   disabled = false;
   snapshot = null;
+
+  fieldSetter = (name) => (value) => { data[name] = value; }
 
   validateAll = () => {
     let allValid = true;

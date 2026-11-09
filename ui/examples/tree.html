@@ -55,11 +55,11 @@
 </style>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('tree.title') }}</h1>
-    <p class="doc-intro">{{ $t('tree.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('tree.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('tree.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('tree.ex.basic.title')" :desc="$t('tree.ex.basic.desc')" :code="codeBasic">
       <div class="tree-demo-panel">
@@ -84,7 +84,7 @@
       </div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
     <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>

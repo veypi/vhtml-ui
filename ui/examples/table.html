@@ -7,11 +7,11 @@
 </head>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('table.title') }}</h1>
-    <p class="doc-intro">{{ $t('table.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('table.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('table.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('table.ex.basic.title')" :desc="$t('table.ex.basic.desc')" :code="codeBasic">
       <div vsrc="/table" :columns="columns" :data="tableData" striped></div>
@@ -41,7 +41,7 @@
       <div vsrc="/table" :columns="columns" :data="demo2Data" :loading="loading"></div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
     <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>

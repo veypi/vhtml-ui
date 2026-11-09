@@ -12,6 +12,8 @@
 | [ui/README.md](../ui/README.md) | 组件文档：引用方式、参数、事件、主题与语言切换、`$message` | 使用或修改组件前必读 |
 | [AGENTS.md](../AGENTS.md) | 组件开发流程与文档写法约定 | 新增组件前必读 |
 | [CHANGELOG.md](../CHANGELOG.md) | 已完成变更（含破坏性契约调整） | 升级组件库时 |
+| [design.md](development/design.md) | 视觉北极星、控件语法与验收约束 | 调整组件视觉或主题时 |
+| [migration.md](development/migration.md) | 既有页面迁移顺序、组件边界与契约检查 | 将旧页面迁到 vhtml-ui 时 |
 
 ## 约定
 

@@ -7,11 +7,11 @@
 </head>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('skeleton.title') }}</h1>
-    <p class="doc-intro">{{ $t('skeleton.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('skeleton.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('skeleton.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('skeleton.ex.basic.title')" :desc="$t('skeleton.ex.basic.desc')" :code="codeBasic">
       <div vsrc="/skeleton"></div>
@@ -32,7 +32,7 @@
       </div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
     <doc-api :title="$t('doc.slots')" :rows="slotRows"></doc-api>

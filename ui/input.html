@@ -10,14 +10,14 @@
   body {
     display: block;
     width: 100%;
-    margin: var(--v-spacing-sm) 0;
+    margin: 0;
   }
 
   .v-input-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: var(--v-spacing-md);
+    gap: 12px;
     width: 100%;
   }
 
@@ -25,9 +25,9 @@
     font-size: var(--v-font-size-sm);
     color: var(--v-text-color);
     font-weight: var(--v-font-weight-medium);
-    min-width: 80px;
+    min-width: 88px;
     flex-shrink: 0;
-    padding-top: 10px;
+    padding-top: 7px;
     line-height: 1.5;
   }
 
@@ -154,6 +154,7 @@
   handleInput = (e) => {
     value = e.target.value;
     runCheck(e.target);
+    $emit('update', value);
   }
 
   handleBlur = (e) => {

@@ -15,23 +15,29 @@ const MESSAGE_STYLE_ID = "vhtml-message-style";
 const MESSAGE_STYLE = `
   .vmsg-container {
     position: fixed;
-    top: 60px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 9999;
-    width: min(300px, calc(100vw - 32px));
+    z-index: var(--v-z-toast, 2000);
+    width: min(420px, calc(100vw - 32px));
+    pointer-events: none;
   }
 
   .vmsg-item {
-    margin-bottom: 10px;
-    padding: 15px;
-    border-radius: 4px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    transform: translateY(100%);
+    --vmsg-accent: var(--v-color-info);
+    margin-bottom: 8px;
+    padding: 12px;
+    border: 1px solid color-mix(in srgb, var(--vmsg-accent) 30%, var(--v-border-color));
+    border-radius: var(--v-radius-md, 8px);
+    box-shadow: var(--v-shadow-md);
+    background: color-mix(in srgb, var(--vmsg-accent) 7%, var(--v-bg-color));
+    color: var(--v-text-color);
+    transform: translateY(-8px) scale(0.985);
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: opacity var(--v-transition-fast, 150ms), transform var(--v-transition-fast, 150ms);
     display: flex;
     align-items: flex-start;
+    pointer-events: auto;
   }
 
   .vmsg-item.show {
@@ -40,63 +46,67 @@ const MESSAGE_STYLE = `
   }
 
   .vmsg-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 26px;
+    width: 26px;
+    height: 26px;
     margin-right: 10px;
-    font-size: 16px;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--vmsg-accent) 14%, transparent);
+    color: var(--vmsg-accent);
     line-height: 1;
+  }
+
+  .vmsg-icon svg {
+    width: 16px;
+    height: 16px;
   }
 
   .vmsg-content {
     flex: 1;
+    padding-top: 2px;
+    min-width: 0;
+    color: var(--v-text-color);
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 20px;
   }
 
   .vmsg-close {
-    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin: 1px -4px -1px 8px;
+    border-radius: var(--v-radius-sm, 5px);
+    color: var(--v-text-color-tertiary);
     cursor: pointer;
-    font-size: 16px;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    font-size: 18px;
+    transition: color var(--v-transition-fast, 150ms), background-color var(--v-transition-fast, 150ms);
   }
 
   .vmsg-close:hover {
-    opacity: 1;
+    color: var(--v-text-color);
+    background: var(--v-bg-color-secondary);
   }
 
-  .vmsg-success {
-    background-color: #f0f9eb;
-    border: 1px solid #e1f3d8;
-    color: var(--color-success, #67c23a);
-  }
-
-  .vmsg-warning {
-    background-color: #fdf6ec;
-    border: 1px solid #faecd8;
-    color: #e6a23c;
-  }
-
-  .vmsg-error {
-    background-color: #fef0f0;
-    border: 1px solid #fde2e2;
-    color: #f56c6c;
-  }
-
-  .vmsg-info {
-    background-color: #edf2fc;
-    border: 1px solid #ebeef5;
-    color: #409eff;
-  }
+  .vmsg-success { --vmsg-accent: var(--v-color-success); }
+  .vmsg-warning { --vmsg-accent: var(--v-color-warning); }
+  .vmsg-error { --vmsg-accent: var(--v-color-danger); }
+  .vmsg-info { --vmsg-accent: var(--v-color-info); }
 
   .vmsg-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10000;
+    background-color: color-mix(in srgb, var(--v-text-color) 38%, transparent);
+    z-index: var(--v-z-modal, 1000);
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--v-transition-base, 200ms);
   }
 
   .vmsg-overlay.show {
@@ -104,13 +114,16 @@ const MESSAGE_STYLE = `
   }
 
   .vmsg-dialog {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    background: var(--v-bg-color);
+    color: var(--v-text-color);
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-lg, 12px);
+    box-shadow: var(--v-shadow-lg);
     min-width: min(400px, calc(100vw - 32px));
-    max-width: min(500px, calc(100vw - 32px));
-    transform: scale(0.8);
-    transition: transform 0.3s ease;
+    max-width: min(460px, calc(100vw - 32px));
+    overflow: hidden;
+    transform: translateY(6px) scale(0.985);
+    transition: transform var(--v-transition-fast, 150ms);
   }
 
   .vmsg-overlay.show .vmsg-dialog {
@@ -118,53 +131,79 @@ const MESSAGE_STYLE = `
   }
 
   .vmsg-header {
-    padding: 20px 20px 10px;
+    padding: 10px 14px 4px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #eee;
+    gap: 8px;
+  }
+
+  .vmsg-dialog-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-radius: 7px;
+    color: var(--v-color-info);
+    background: color-mix(in srgb, var(--v-color-info) 12%, transparent);
+  }
+
+  .vmsg-dialog-icon svg {
+    width: 17px;
+    height: 17px;
   }
 
   .vmsg-title {
-    font-size: 18px;
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
     font-weight: 500;
+    color: var(--v-text-color-secondary);
     margin: 0;
   }
 
   .vmsg-close-btn {
     cursor: pointer;
     font-size: 20px;
-    color: #999;
+    color: var(--v-text-color-tertiary);
     border: none;
     background: none;
     padding: 0;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--v-radius-sm, 5px);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .vmsg-close-btn:hover {
-    color: #666;
+    color: var(--v-text-color);
+    background: var(--v-bg-color-secondary);
   }
 
   .vmsg-body {
-    padding: 20px;
+    padding: 12px 16px 16px;
+    font-size: 15px;
+    line-height: 1.65;
   }
 
   .vmsg-prompt-content {
-    margin-bottom: 20px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #333;
+    margin-bottom: 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--v-text-color);
   }
 
   .vmsg-input {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
+    padding: 8px 12px;
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-md, 8px);
+    background: var(--v-bg-color);
+    color: var(--v-text-color);
     font-size: 14px;
     box-sizing: border-box;
     transition: border-color 0.2s;
@@ -172,46 +211,59 @@ const MESSAGE_STYLE = `
 
   .vmsg-input:focus {
     outline: none;
-    border-color: #409eff;
+    border-color: var(--v-color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--v-color-primary) 18%, transparent);
   }
 
   .vmsg-footer {
-    padding: 15px 20px;
-    text-align: right;
-    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+    padding: 4px 14px 12px;
+    background: transparent;
   }
 
   .vmsg-btn {
-    padding: 8px 16px;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    font-size: 14px;
+    min-height: 28px;
+    padding: 3px 9px;
+    border: 1px solid transparent;
+    border-radius: var(--v-radius-sm, 5px);
+    font-size: 12px;
     cursor: pointer;
-    margin-left: 10px;
-    transition: all 0.2s;
+    margin-left: 0;
+    transition: background-color var(--v-transition-fast, 150ms), border-color var(--v-transition-fast, 150ms);
   }
 
   .vmsg-btn-cancel {
-    background: white;
-    color: #606266;
+    background: transparent;
+    color: var(--v-text-color-secondary);
   }
 
   .vmsg-btn-cancel:hover {
-    background: #f5f7fa;
-    border-color: #c0c4cc;
+    background: var(--v-bg-color-secondary);
+    border-color: transparent;
   }
 
   .vmsg-btn-confirm {
-    background: #409eff;
-    color: white;
-    border-color: #409eff;
+    background: color-mix(in srgb, var(--v-color-primary) 10%, var(--v-bg-color));
+    color: var(--v-color-primary);
+    border-color: transparent;
   }
 
   .vmsg-btn-confirm:hover {
-    background: #66b1ff;
-    border-color: #66b1ff;
+    background: color-mix(in srgb, var(--v-color-primary) 16%, var(--v-bg-color));
+    border-color: transparent;
   }
 `;
+
+const MESSAGE_ICONS = {
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5"></path><path d="M12 8h.01"></path></svg>',
+  success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg>',
+  warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.1 2.8 17a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3L13.7 4.1a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
+  error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m9 9 6 6"></path><path d="m15 9-6 6"></path></svg>',
+  confirm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.3 2.1c-.8.4-1.1 1-1.1 1.9"></path><path d="M12 17h.01"></path></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path></svg>',
+};
 
 class MessageRuntime {
   constructor() {
@@ -287,6 +339,22 @@ class MessageRuntime {
 class Message {
   constructor(runtime = new MessageRuntime()) {
     this.runtime = runtime;
+    this.translator = null;
+  }
+
+  setTranslator(translator) {
+    this.translator = typeof translator === "function" ? translator : null;
+  }
+
+  t(key) {
+    if (this.translator) return this.translator(key);
+    const defaults = {
+      "message.dialogTitle": "提示",
+      "message.copied": "已复制",
+      "dialog.confirm": "确定",
+      "dialog.cancel": "取消",
+    };
+    return defaults[key] || key;
   }
 
   createMessage(type, content, options = {}) {
@@ -296,16 +364,9 @@ class Message {
       const messageItem = document.createElement("div");
       messageItem.className = `vmsg-item vmsg-${type}`;
 
-      const icons = {
-        success: "✓",
-        warning: "⚠",
-        error: "✕",
-        info: "ℹ",
-      };
-
       const icon = document.createElement("span");
       icon.className = "vmsg-icon";
-      icon.textContent = icons[type] || icons.info;
+      icon.innerHTML = MESSAGE_ICONS[type] || MESSAGE_ICONS.info;
 
       const contentEl = document.createElement("div");
       contentEl.className = "vmsg-content";
@@ -364,7 +425,7 @@ class Message {
   copy(text) {
     if (!text) return;
     navigator.clipboard.writeText(text).then(() => {
-      this.success("coped.");
+      this.success(this.t("message.copied"));
     });
   }
 
@@ -391,8 +452,8 @@ class Message {
           title = "",
           type = "confirm",
           inputValue = "",
-          confirmText = "确定",
-          cancelText = "取消",
+          confirmText = this.t("dialog.confirm"),
+          cancelText = this.t("dialog.cancel"),
           onConfirm = null,
           onCancel = null,
         } = options;
@@ -406,15 +467,20 @@ class Message {
         const header = document.createElement("div");
         header.className = "vmsg-header";
 
+        const dialogIcon = document.createElement("span");
+        dialogIcon.className = "vmsg-dialog-icon";
+        dialogIcon.innerHTML = MESSAGE_ICONS[type === "input" ? "edit" : "confirm"];
+
         const titleEl = document.createElement("h3");
         titleEl.className = "vmsg-title";
         // 输入弹窗的说明就是任务标题；显式 title 仍保留“标题 + 详细说明”形态。
-        titleEl.textContent = title || (type === "input" ? content : "提示");
+        titleEl.textContent = title || (type === "input" ? content : this.t("message.dialogTitle"));
 
         const closeBtn = document.createElement("button");
         closeBtn.className = "vmsg-close-btn";
         closeBtn.innerHTML = "&times;";
 
+        header.appendChild(dialogIcon);
         header.appendChild(titleEl);
         header.appendChild(closeBtn);
 

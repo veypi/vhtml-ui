@@ -21,13 +21,15 @@
     white-space: nowrap;
     border-radius: var(--v-radius-md);
     font-weight: var(--v-font-weight-medium);
-    transition: all var(--v-transition-base);
+    line-height: 1;
+    letter-spacing: -0.005em;
+    transition: background-color var(--v-transition-fast), border-color var(--v-transition-fast), color var(--v-transition-fast), box-shadow var(--v-transition-fast), transform 80ms ease;
     outline: none;
     cursor: pointer;
     user-select: none;
     text-decoration: none;
     border: 1px solid transparent;
-    gap: var(--v-spacing-sm);
+    gap: 6px;
     position: relative;
     box-sizing: border-box;
   }
@@ -41,7 +43,7 @@
   .v-btn:disabled,
   .v-btn--disabled {
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
   }
 
@@ -56,7 +58,8 @@
   .v-btn--default {
     background-color: var(--v-btn-bg, var(--v-color-primary));
     color: var(--v-btn-text, var(--v-color-primary-text));
-    border-color: transparent;
+    border-color: color-mix(in srgb, var(--v-btn-bg, var(--v-color-primary)) 88%, black);
+    box-shadow: var(--v-shadow-sm);
   }
 
   .v-btn--default:hover:not(:disabled) {
@@ -71,14 +74,15 @@
 
   /* Outline */
   .v-btn--outline {
-    border-color: var(--v-btn-border, var(--v-border-color));
-    background-color: transparent;
+    border-color: var(--v-btn-border, var(--v-border-color-hover));
+    background-color: var(--v-btn-bg, var(--v-bg-color));
     color: var(--v-btn-text, var(--v-text-color));
+    box-shadow: var(--v-shadow-sm);
   }
 
   .v-btn--outline:hover:not(:disabled) {
     background-color: var(--v-btn-bg-hover, var(--v-bg-color-secondary));
-    border-color: var(--v-btn-border-hover, var(--v-text-color-secondary));
+    border-color: var(--v-btn-border-hover, var(--v-color-primary));
     color: var(--v-btn-text-hover, var(--v-text-color));
   }
 
@@ -137,39 +141,39 @@
 
   /* SM */
   .v-btn--size-sm {
-    height: 32px;
-    padding: 0 12px;
+    height: 30px;
+    padding: 0 11px;
     font-size: var(--v-font-size-sm);
   }
 
   /* MD (Default) */
   .v-btn--size-md {
-    height: 40px;
-    padding: 0 var(--v-spacing-md);
+    height: 36px;
+    padding: 0 14px;
     font-size: var(--v-font-size-md);
   }
 
   /* LG */
   .v-btn--size-lg {
-    height: 48px;
-    padding: 0 20px;
+    height: 42px;
+    padding: 0 18px;
     font-size: var(--v-font-size-lg);
   }
 
   /* XL */
   .v-btn--size-xl {
-    height: 56px;
-    padding: 0 28px;
-    font-size: var(--v-font-size-xl);
+    height: 48px;
+    padding: 0 22px;
+    font-size: var(--v-font-size-lg);
     border-radius: var(--v-radius-lg);
   }
 
   /* XXL */
   .v-btn--size-xxl {
-    height: 64px;
-    padding: 0 36px;
-    font-size: var(--v-font-size-2xl);
-    border-radius: var(--v-radius-xl);
+    height: 54px;
+    padding: 0 26px;
+    font-size: var(--v-font-size-xl);
+    border-radius: var(--v-radius-lg);
   }
 
   /* Icon Sizes - Optional, derived from height */
@@ -188,36 +192,36 @@
   }
 
   .v-btn--size-icon-sm {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     padding: 0;
     font-size: var(--v-font-size-sm);
   }
 
   .v-btn--size-icon-md {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     padding: 0;
     font-size: var(--v-font-size-md);
   }
 
   .v-btn--size-icon-lg {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     padding: 0;
     font-size: var(--v-font-size-lg);
   }
 
   .v-btn--size-icon-xl {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     padding: 0;
     font-size: var(--v-font-size-xl);
   }
 
   .v-btn--size-icon-xxl {
-    width: 64px;
-    height: 64px;
+    width: 54px;
+    height: 54px;
     padding: 0;
     font-size: var(--v-font-size-2xl);
   }
@@ -231,6 +235,11 @@
   /* Rounded Full (Utility) */
   .v-btn.rounded-full {
     border-radius: var(--v-radius-full, 9999px);
+  }
+
+  .v-btn:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: none;
   }
 
   /* Loading Spinner */
@@ -334,7 +343,7 @@
     if (variant === 'default') {
       styles['--v-btn-bg'] = baseColor;
       // No need to calculate hover/active manually anymore, CSS color-mix handles it based on --v-btn-bg
-      styles['--v-btn-text'] = 'white'; // Default text color
+      styles['--v-btn-text'] = 'var(--v-color-filled-text)';
     } else if (variant === 'outline' || variant === 'ghost') {
       styles['--v-btn-color'] = baseColor;
       // No need to calculate alpha manually, CSS color-mix handles it based on --v-btn-color

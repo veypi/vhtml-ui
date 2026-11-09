@@ -16,7 +16,7 @@
     z-index: var(--v-z-sticky);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    background: color-mix(in srgb, var(--v-bg-color) 75%, transparent);
+    background: color-mix(in srgb, var(--v-bg-color) 92%, transparent);
     border-bottom: 1px solid var(--v-border-color);
   }
 
@@ -24,7 +24,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
+    height: 56px;
     max-width: var(--v-layout-max-width);
     margin: 0 auto;
     padding: 0 var(--v-spacing-lg);
@@ -35,44 +35,41 @@
     align-items: center;
     gap: var(--v-spacing-sm);
     text-decoration: none;
-    font-size: var(--v-font-size-xl);
+    font-size: 18px;
+    letter-spacing: -0.02em;
     font-weight: var(--v-font-weight-bold);
     color: var(--v-text-color);
   }
 
   .nav-logo-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: var(--v-radius-md);
-    background: linear-gradient(135deg, var(--v-color-primary), var(--v-color-primary-active));
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: var(--v-text-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--v-color-primary-text);
-    font-size: 15px;
+    color: var(--v-bg-color);
+    font-size: 14px;
     font-weight: var(--v-font-weight-bold);
-    box-shadow: var(--v-shadow-md);
   }
 
   .nav-actions {
     display: flex;
     align-items: center;
-    gap: var(--v-spacing-sm);
+    gap: 6px;
   }
 
-  v-theme {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--v-radius-full);
-    border: 1px solid var(--v-border-color);
-    background: var(--v-bg-color);
-    transition: border-color var(--v-transition-base), box-shadow var(--v-transition-base), transform var(--v-transition-base);
-  }
-
-  v-theme:hover {
-    border-color: var(--v-color-primary);
-    transform: translateY(-1px);
-    box-shadow: var(--v-shadow-sm);
+  /* vsrc 组件宿主必须显式约束尺寸；lang/theme 内部均为 100% SVG。 */
+  .nav-actions>* {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--v-radius-md);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--v-text-color-secondary);
+    transition: background-color var(--v-transition-fast), border-color var(--v-transition-fast);
   }
 </style>
 
@@ -84,8 +81,8 @@
         <span>{{ $t('app.logo') }}</span>
       </a>
       <div class="nav-actions">
-        <v-theme></v-theme>
-        <div vsrc="/lang.html"></div>
+        <div vsrc='theme'></div>
+        <div vsrc="lang"></div>
       </div>
     </div>
   </header>

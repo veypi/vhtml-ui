@@ -27,8 +27,8 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--v-radius-md);
-    border: 1px solid var(--v-border-color);
-    background: var(--v-bg-color);
+    border: 1px solid transparent;
+    background: transparent;
     color: var(--v-text-color);
     font-size: var(--v-font-size-sm);
     cursor: pointer;
@@ -36,14 +36,15 @@
   }
 
   .v-page-btn:hover:not(.is-disabled):not(.is-active) {
-    border-color: var(--v-color-primary);
-    color: var(--v-color-primary);
+    border-color: var(--v-border-color);
+    background: var(--v-bg-color);
+    color: var(--v-text-color);
   }
 
   .v-page-btn.is-active {
-    background: var(--v-color-primary);
-    border-color: var(--v-color-primary);
-    color: var(--v-color-primary-text);
+    background: var(--v-text-color);
+    border-color: var(--v-text-color);
+    color: var(--v-bg-color);
     font-weight: var(--v-font-weight-medium);
   }
 

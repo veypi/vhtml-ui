@@ -16,11 +16,11 @@
 </style>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('tabs.title') }}</h1>
-    <p class="doc-intro">{{ $t('tabs.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('tabs.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('tabs.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('tabs.ex.line.title')" :desc="$t('tabs.ex.line.desc')" :code="codeLine">
       <div vsrc="/tabs" v:value="activeTab1" :items="items1">
@@ -30,7 +30,7 @@
           <div v-if="activeTab1 === '3'">{{ $t('tabs.roleMgmt') }}{{ $t('tabs.content') }}...</div>
         </div>
       </div>
-      <div class="value-display">{{ $t('tabs.currentSelected') }}: {{ activeTab1 }}</div>
+      <div class="v-value-display">{{ $t('tabs.currentSelected') }}: {{ activeTab1 }}</div>
     </doc-demo>
 
     <doc-demo :title="$t('tabs.ex.card.title')" :desc="$t('tabs.ex.card.desc')" :code="codeCard">
@@ -49,7 +49,7 @@
       </div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
     <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>

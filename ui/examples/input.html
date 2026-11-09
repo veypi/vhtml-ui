@@ -38,11 +38,11 @@
 </style>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('input.title') }}</h1>
-    <p class="doc-intro">{{ $t('input.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('input.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('input.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('input.ex.basic.title')" :desc="$t('input.ex.basic.desc')" :code="codeBasic">
       <div class="input-col">
@@ -52,7 +52,7 @@
         <div>
           <div vsrc="/input" type="number" v:value="numVal" :label="$t('input.numberLabel')"
             :placeholder="$t('input.numberPlaceholder')" :validate="numValidator"></div>
-          <div class="value-display">{{ $t('input.currentValue') }}: {{ numVal }}</div>
+          <div class="v-value-display">{{ $t('input.currentValue') }}: {{ numVal }}</div>
         </div>
         <div vsrc="/input" type="textarea" v:value="textareaVal" :label="$t('input.textareaLabel')"
           :placeholder="$t('input.textareaPlaceholder')" :opts="{rows: 4}"></div>
@@ -72,7 +72,7 @@
         <div>
           <div vsrc="/input" type="select" v:value="selectVal" :label="$t('input.selectCity')"
             :placeholder="$t('input.selectPlaceholder')" :opts="{options: cityOptions}"></div>
-          <div class="value-display">{{ $t('input.value') }}: {{ selectVal }}</div>
+          <div class="v-value-display">{{ $t('input.value') }}: {{ selectVal }}</div>
         </div>
         <div vsrc="/input" type="select" v:value="simpleSelectVal" :label="$t('input.selectColor')"
           :placeholder="$t('input.selectColorPlaceholder')" :opts="{options: colorOptions}"></div>
@@ -133,7 +133,7 @@
       </div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
     <doc-api title="opts" :rows="optsRows"></doc-api>

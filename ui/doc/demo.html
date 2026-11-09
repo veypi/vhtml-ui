@@ -8,22 +8,23 @@
 <style>
   body {
     display: block;
-    margin-bottom: var(--v-spacing-lg);
+    margin-bottom: 20px;
   }
 
   .demo-block {
     border: 1px solid var(--v-border-color);
     border-radius: var(--v-radius-lg);
     background: var(--v-bg-color);
+    box-shadow: 0 1px 2px rgb(23 26 31 / 0.025);
     overflow: hidden;
   }
 
   .demo-block__header {
-    padding: var(--v-spacing-md) var(--v-spacing-lg) 0;
+    padding: 18px 20px 0;
   }
 
   .demo-block__title {
-    font-size: var(--v-font-size-lg);
+    font-size: var(--v-font-size-md);
     font-weight: var(--v-font-weight-bold);
     color: var(--v-text-color);
   }
@@ -36,7 +37,9 @@
   }
 
   .demo-block__preview {
-    padding: var(--v-spacing-lg);
+    min-height: 88px;
+    padding: 24px 20px;
+    background: var(--v-bg-color);
   }
 
   .demo-block__preview>vslot {
@@ -48,8 +51,9 @@
     align-items: center;
     justify-content: space-between;
     border-top: 1px solid var(--v-border-color);
-    padding: 0 var(--v-spacing-sm);
-    height: 40px;
+    padding: 0 10px;
+    height: 38px;
+    background: var(--v-bg-color-secondary);
   }
 
   .demo-block__toggle,
@@ -62,7 +66,7 @@
     cursor: pointer;
     font-size: var(--v-font-size-sm);
     color: var(--v-text-color-secondary);
-    padding: var(--v-spacing-xs) var(--v-spacing-sm);
+    padding: 5px 8px;
     border-radius: var(--v-radius-md);
     transition: all var(--v-transition-fast);
   }
@@ -85,12 +89,12 @@
 
   .demo-block__code {
     border-top: 1px solid var(--v-border-color);
-    background: #0f172a;
+    background: #11151a;
   }
 
   .demo-block__code pre {
     margin: 0;
-    padding: var(--v-spacing-md) var(--v-spacing-lg);
+    padding: 18px 20px;
     color: #e2e8f0;
     font-family: "Menlo", "Monaco", "Consolas", monospace;
     font-size: 13px;

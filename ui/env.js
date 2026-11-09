@@ -97,6 +97,7 @@ export default async ($mod, all) => {
     { name: 'card', label: () => $mod.$t('menu.card'), desc: () => $mod.$t('home.desc.card'), icon: icon('<rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line>') },
     { name: 'tag', label: () => $mod.$t('menu.tag'), desc: () => $mod.$t('home.desc.tag'), icon: icon('<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"></path><circle cx="7" cy="7" r="1"></circle>') },
     { name: 'alert', label: () => $mod.$t('menu.alert'), desc: () => $mod.$t('home.desc.alert'), icon: icon('<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>') },
+    { name: 'message', label: () => $mod.$t('menu.message'), desc: () => $mod.$t('home.desc.message'), icon: icon('<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a2 2 0 0 1 2-2h12a4 4 0 0 1 4 4z"></path><line x1="8" y1="9" x2="16" y2="9"></line><line x1="8" y1="13" x2="13" y2="13"></line>') },
     { name: 'spinner', label: () => $mod.$t('menu.spinner'), desc: () => $mod.$t('home.desc.spinner'), icon: icon('<path d="M21 12a9 9 0 1 1-6.22-8.56"></path>') },
     { name: 'empty', label: () => $mod.$t('menu.empty'), desc: () => $mod.$t('home.desc.empty'), icon: icon('<rect x="3" y="6" width="18" height="14" rx="2"></rect><line x1="8" y1="12" x2="16" y2="12" opacity="0.4"></line><line x1="10" y1="16" x2="14" y2="16" opacity="0.4"></line>') },
     { name: 'tooltip', label: () => $mod.$t('menu.tooltip'), desc: () => $mod.$t('home.desc.tooltip'), icon: icon('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>') },
@@ -116,4 +117,5 @@ export default async ($mod, all) => {
 
   // 加载 i18n 翻译文件
   await $mod.fetch('/langs.json').then(e => e.json().then(e => $mod.$i18n.load(e)))
+  vmessage.setTranslator($mod.$t)
 }

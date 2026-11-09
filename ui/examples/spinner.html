@@ -7,11 +7,11 @@
 </head>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('spinner.title') }}</h1>
-    <p class="doc-intro">{{ $t('spinner.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('spinner.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('spinner.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('spinner.ex.basic.title')" :desc="$t('spinner.ex.basic.desc')" :code="codeBasic">
       <div class="v-flex v-gap-md v-items-center v-flex-wrap">
@@ -29,7 +29,7 @@
       <div vsrc="/spinner" :text="$t('spinner.loading')"></div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
   </div>

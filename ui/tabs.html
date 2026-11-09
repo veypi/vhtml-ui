@@ -26,11 +26,12 @@
   /* Variant: Line (Default) */
   .v-tabs-nav.is-line {
     border-bottom: 1px solid var(--v-border-color);
-    gap: var(--v-spacing-lg);
+    gap: 24px;
   }
   
   .v-tabs-nav.is-line .v-tab-item {
-    padding: var(--v-spacing-sm) 0;
+    min-height: 40px;
+    padding: 8px 0;
     margin-bottom: -1px;
     border-bottom: 2px solid transparent;
   }
@@ -45,7 +46,9 @@
     border-bottom: 1px solid var(--v-border-color);
     gap: 4px;
     background-color: var(--v-bg-color-secondary);
-    padding: 4px 4px 0;
+    padding: 4px;
+    border: 1px solid var(--v-border-color);
+    border-bottom: none;
     border-radius: var(--v-radius-md) var(--v-radius-md) 0 0;
   }
 
@@ -61,25 +64,32 @@
   .v-tabs-nav.is-card .v-tab-item.is-active {
     background-color: var(--v-bg-color);
     color: var(--v-color-primary);
-    box-shadow: 0 -1px 2px rgba(0,0,0,0.05);
+    border-color: var(--v-border-color);
+    box-shadow: 0 1px 0 var(--v-bg-color);
   }
 
   /* Variant: Pills */
   .v-tabs-nav.is-pills {
-    gap: var(--v-spacing-sm);
-    border-bottom: none;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-md);
+    background: var(--v-bg-color-secondary);
   }
 
   .v-tabs-nav.is-pills .v-tab-item {
-    padding: var(--v-spacing-xs) var(--v-spacing-md);
-    border-radius: var(--v-radius-md);
-    background-color: var(--v-bg-color-secondary);
+    min-height: 30px;
+    padding: 5px 12px;
+    border-radius: var(--v-radius-sm);
+    background-color: transparent;
     border: 1px solid transparent;
   }
 
   .v-tabs-nav.is-pills .v-tab-item.is-active {
-    background-color: var(--v-color-primary);
-    color: var(--v-color-primary-text);
+    background-color: var(--v-bg-color);
+    color: var(--v-text-color);
+    border-color: var(--v-border-color);
+    box-shadow: var(--v-shadow-sm);
   }
 
   /* Common Item Styles */

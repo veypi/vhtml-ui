@@ -15,7 +15,7 @@
     background: var(--v-bg-color);
     border-radius: var(--v-radius-lg);
     border: 1px solid transparent;
-    transition: box-shadow var(--v-transition-base);
+    transition: border-color var(--v-transition-fast), box-shadow var(--v-transition-fast);
     overflow: hidden;
   }
 
@@ -35,8 +35,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--v-spacing-md) var(--v-spacing-lg);
+    min-height: 52px;
+    padding: 14px 20px;
     border-bottom: 1px solid var(--v-border-color);
+    font-size: var(--v-font-size-md);
     font-weight: var(--v-font-weight-bold);
     color: var(--v-text-color);
   }
@@ -46,12 +48,13 @@
   }
 
   .v-card-body {
-    padding: var(--v-spacing-lg);
+    padding: 20px;
     color: var(--v-text-color);
+    line-height: 1.65;
   }
 
   .v-card-footer {
-    padding: var(--v-spacing-md) var(--v-spacing-lg);
+    padding: 14px 20px;
     border-top: 1px solid var(--v-border-color);
     color: var(--v-text-color-secondary);
   }

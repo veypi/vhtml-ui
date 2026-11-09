@@ -18,7 +18,7 @@
     position: relative;
     font-size: var(--v-font-size-md);
     line-height: 20px;
-    height: 40px;
+    height: 36px;
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
@@ -37,15 +37,15 @@
     margin: 0;
     display: inline-block;
     position: relative;
-    width: 40px;
+    width: 36px;
     height: 20px;
     border: 1px solid var(--v-border-color);
     outline: none;
     border-radius: 10px;
     box-sizing: border-box;
-    background: var(--v-bg-color-secondary);
+    background: var(--v-bg-color-tertiary);
     cursor: pointer;
-    transition: border-color .3s, background-color .3s;
+    transition: border-color var(--v-transition-fast), background-color var(--v-transition-fast), box-shadow var(--v-transition-fast);
     vertical-align: middle;
   }
 
@@ -55,10 +55,14 @@
     top: 1px;
     left: 1px;
     border-radius: 100%;
-    transition: all .3s;
+    transition: left var(--v-transition-fast), margin-left var(--v-transition-fast);
     width: 16px;
     height: 16px;
     background-color: var(--v-bg-color);
+  }
+
+  .v-switch:has(input:focus-visible) .v-switch-core {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--v-color-primary) 20%, transparent);
   }
 
   .v-switch.is-checked .v-switch-core {

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="description" content="Global Message API Documentation" />
+  <title>{{ $t('message.title') }}</title>
+</head>
+<style>
+  .message-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--v-spacing-sm);
+  }
+
+  .message-result {
+    margin-top: var(--v-spacing-md);
+  }
+</style>
+
+<body>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('message.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('message.intro') }}</p>
+
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
+
+    <doc-demo :title="$t('message.ex.types.title')" :desc="$t('message.ex.types.desc')" :code="codeTypes">
+      <div class="message-actions">
+        <div vsrc="/btn" variant="outline" @click="showMessage('info')">{{ $t('message.info') }}</div>
+        <div vsrc="/btn" color="success" @click="showMessage('success')">{{ $t('message.success') }}</div>
+        <div vsrc="/btn" color="warning" @click="showMessage('warning')">{{ $t('message.warning') }}</div>
+        <div vsrc="/btn" color="danger" @click="showMessage('error')">{{ $t('message.error') }}</div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('message.ex.options.title')" :desc="$t('message.ex.options.desc')" :code="codeOptions">
+      <div class="message-actions">
+        <div vsrc="/btn" variant="outline" @click="showPersistent">{{ $t('message.persistent') }}</div>
+        <div vsrc="/btn" variant="ghost" @click="$message.copy('vhtml-ui')">{{ $t('message.copy') }}</div>
+      </div>
+    </doc-demo>
+
+    <doc-demo :title="$t('message.ex.actions.title')" :desc="$t('message.ex.actions.desc')" :code="codeActions">
+      <div class="message-actions">
+        <div vsrc="/btn" variant="outline" color="danger" @click="askConfirm">{{ $t('message.confirm') }}</div>
+        <div vsrc="/btn" variant="outline" @click="askPrompt">{{ $t('message.prompt') }}</div>
+      </div>
+      <div v-if="result" class="message-result v-value-display">{{ result }}</div>
+    </doc-demo>
+
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
+    <doc-api title="$message" :rows="methodRows"></doc-api>
+  </div>
+
+  <script setup>
+    result = ''
+    messageContent = {
+      info: () => $t('message.content.info'),
+      success: () => $t('message.content.success'),
+      warning: () => $t('message.content.warning'),
+      error: () => $t('message.content.error')
+    }
+
+    showMessage = (type) => {
+      $message[type](messageContent[type]())
+    }
+
+    showPersistent = () => {
+      $message.info($t('message.persistentContent'), { duration: 0, showClose: true })
+    }
+
+    askConfirm = async () => {
+      const confirmed = await $message.confirm($t('message.confirmContent'))
+      result = $t('message.confirmResult', { value: String(confirmed) })
+    }
+
+    askPrompt = async () => {
+      const value = await $message.prompt($t('message.promptContent'), 'vhtml-ui')
+      result = $t('message.promptResult', { value: String(value) })
+    }
+
+    codeTypes = `$message.info('Notice')
+$message.success('Saved')
+$message.warning('Check your input')
+$message.error('Request failed')`
+
+    codeOptions = `// duration: 0 keeps the message until the user closes it
+$message.info('Persistent message', { duration: 0, showClose: true })
+
+// Copy text and show a success message
+$message.copy('vhtml-ui')`
+
+    codeActions = `const confirmed = await $message.confirm('Delete this record?')
+// confirm: true; cancel, Escape, overlay click or close: false
+
+const name = await $message.prompt('Project name', 'vhtml-ui')
+// confirm: entered text; cancel: null`
+
+    methodRows = [
+      { name: 'info(content, options?)', desc: $t('message.api.info'), type: 'HTMLElement', default: '-' },
+      { name: 'success(content, options?)', desc: $t('message.api.success'), type: 'HTMLElement', default: '-' },
+      { name: 'warning(content, options?)', desc: $t('message.api.warning'), type: 'HTMLElement', default: '-' },
+      { name: 'error(content, options?)', desc: $t('message.api.error'), type: 'HTMLElement', default: '-' },
+      { name: 'confirm(content, options?)', desc: $t('message.api.confirm'), type: 'Promise<boolean>', default: '-' },
+      { name: 'prompt(content, value?, options?)', desc: $t('message.api.prompt'), type: 'Promise<string | null>', default: '-' },
+      { name: 'copy(text)', desc: $t('message.api.copy'), type: 'void', default: '-' }
+    ]
+  </script>
+</body>
+
+</html>

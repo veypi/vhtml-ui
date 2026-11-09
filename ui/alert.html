@@ -13,11 +13,11 @@
 
   .v-alert {
     display: flex;
-    gap: var(--v-spacing-sm);
-    padding: var(--v-spacing-sm) var(--v-spacing-md);
+    gap: 10px;
+    padding: 12px 14px;
     border-radius: var(--v-radius-md);
-    border: 1px solid color-mix(in srgb, var(--v-alert-color) 25%, transparent);
-    background: color-mix(in srgb, var(--v-alert-color) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--v-alert-color) 22%, var(--v-border-color));
+    background: color-mix(in srgb, var(--v-alert-color) 6%, var(--v-bg-color));
     color: var(--v-text-color);
     align-items: flex-start;
   }
@@ -43,7 +43,7 @@
 
   .v-alert-title {
     font-weight: var(--v-font-weight-bold);
-    color: var(--v-alert-color);
+    color: var(--v-text-color);
     line-height: 1.5;
   }
 
@@ -64,14 +64,19 @@
     background: transparent;
     color: var(--v-text-color-tertiary);
     cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin: -2px -4px -2px 0;
+    border-radius: var(--v-radius-sm);
     padding: 0;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.4;
     transition: color var(--v-transition-fast);
   }
 
   .v-alert-close:hover {
     color: var(--v-text-color);
+    background: color-mix(in srgb, var(--v-alert-color) 10%, transparent);
   }
 
   vslot {

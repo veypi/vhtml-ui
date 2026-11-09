@@ -12,6 +12,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     background: var(--v-bg-color);
+    container-type: inline-size;
   }
 
   .container {
@@ -24,10 +25,13 @@
   .hero {
     position: relative;
     overflow: hidden;
-    padding: 88px 0 72px;
+    padding: 64px 0;
+    border-bottom: 1px solid var(--v-border-color);
+    background: var(--v-bg-color-secondary);
   }
 
   .hero-glow {
+    display: none;
     position: absolute;
     border-radius: 50%;
     filter: blur(90px);
@@ -51,6 +55,7 @@
   }
 
   .hero-grid-bg {
+    display: none;
     position: absolute;
     inset: 0;
     background-image:
@@ -66,8 +71,8 @@
   .hero-inner {
     position: relative;
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: var(--v-spacing-xl);
+    grid-template-columns: minmax(0, 1fr) minmax(400px, 0.9fr);
+    gap: 64px;
     align-items: center;
   }
 
@@ -75,45 +80,42 @@
     display: inline-flex;
     align-items: center;
     gap: var(--v-spacing-sm);
-    padding: 6px 14px;
-    border-radius: var(--v-radius-full);
+    padding: 5px 10px;
+    border-radius: var(--v-radius-sm);
     border: 1px solid var(--v-border-color);
-    background: color-mix(in srgb, var(--v-bg-color) 70%, transparent);
+    background: var(--v-bg-color);
     font-size: var(--v-font-size-sm);
     color: var(--v-text-color-secondary);
     margin-bottom: var(--v-spacing-lg);
   }
 
   .hero-badge-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
     background: var(--v-color-success);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--v-color-success) 25%, transparent);
+    box-shadow: none;
   }
 
   .hero-title {
-    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-    line-height: 1.2;
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    line-height: 1.08;
     font-weight: var(--v-font-weight-bold);
     color: var(--v-text-color);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.045em;
     margin-bottom: var(--v-spacing-lg);
   }
 
   .hero-title em {
     font-style: normal;
-    background: linear-gradient(120deg, var(--v-color-primary), var(--v-color-info) 60%, var(--v-color-success));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--v-color-primary);
   }
 
   .hero-subtitle {
     font-size: var(--v-font-size-lg);
     color: var(--v-text-color-secondary);
-    line-height: 1.8;
-    max-width: 520px;
+    line-height: 1.75;
+    max-width: 580px;
     margin-bottom: var(--v-spacing-xl);
   }
 
@@ -127,12 +129,16 @@
 
   .hero-stats {
     display: flex;
-    gap: var(--v-spacing-xl);
+    gap: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--v-border-color);
   }
 
   .hero-stat b {
     display: block;
-    font-size: var(--v-font-size-2xl);
+    font-size: 22px;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
     font-weight: var(--v-font-weight-bold);
     color: var(--v-text-color);
   }
@@ -145,48 +151,50 @@
   /* Hero 右侧组件拼贴 */
   .collage {
     position: relative;
-    height: 380px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-xl);
+    background: var(--v-bg-color);
+    box-shadow: var(--v-shadow-md);
   }
 
   .tile {
-    position: absolute;
+    position: static;
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: var(--v-spacing-sm);
-    padding: var(--v-spacing-md) var(--v-spacing-lg);
-    border-radius: var(--v-radius-lg);
+    min-height: 96px;
+    padding: 18px;
+    border-radius: var(--v-radius-md);
     border: 1px solid var(--v-border-color);
-    background: color-mix(in srgb, var(--v-bg-color) 72%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: var(--v-shadow-lg);
-    animation: tile-float 7s ease-in-out infinite;
+    background: var(--v-bg-color);
   }
 
   .tile.t1 {
-    top: 24px;
-    left: 8px;
+    grid-column: 1 / -1;
+    min-height: 112px;
   }
 
   .tile.t2 {
-    top: 120px;
-    right: 0;
-    animation-delay: -2.2s;
-    animation-duration: 8s;
+    grid-column: 1 / -1;
   }
 
   .tile.t3 {
-    bottom: 96px;
-    left: 44px;
-    animation-delay: -4s;
-    animation-duration: 6.5s;
+    min-height: 80px;
+    flex-wrap: nowrap;
+  }
+
+  .tile.t3 > div:first-child {
+    width: auto;
   }
 
   .tile.t4 {
-    bottom: 12px;
-    right: 40px;
-    animation-delay: -1.2s;
-    animation-duration: 7.5s;
+    min-height: 80px;
   }
 
   @keyframes tile-float {
@@ -208,13 +216,12 @@
 
   /* ================= 区块通用 ================= */
   .home-section {
-    padding: 72px 0;
+    padding: 64px 0;
   }
 
   .home-section-head {
-    text-align: center;
-    max-width: 640px;
-    margin: 0 auto var(--v-spacing-xl);
+    max-width: 680px;
+    margin: 0 0 28px;
   }
 
   .home-section-title {
@@ -233,39 +240,40 @@
   .feature-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--v-spacing-lg);
+    gap: 1px;
+    padding: 1px;
+    border: 1px solid var(--v-border-color);
+    border-radius: var(--v-radius-lg);
+    background: var(--v-border-color);
+    overflow: hidden;
   }
 
   .feature-card {
-    padding: var(--v-spacing-lg);
-    border: 1px solid var(--v-border-color);
-    border-radius: var(--v-radius-lg);
+    padding: 24px;
+    border: 0;
+    border-radius: 0;
     background: var(--v-bg-color);
     transition: all var(--v-transition-base);
   }
 
   .feature-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--v-color-primary);
-    box-shadow: var(--v-shadow-lg);
+    background: var(--v-bg-color-secondary);
   }
 
   .feature-icon {
-    width: 44px;
-    height: 44px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--v-radius-md);
-    color: var(--v-color-primary);
-    background: color-mix(in srgb, var(--v-color-primary) 10%, transparent);
+    color: var(--v-text-color);
+    background: transparent;
     margin-bottom: var(--v-spacing-md);
     transition: all var(--v-transition-base);
   }
 
   .feature-card:hover .feature-icon {
-    background: var(--v-color-primary);
-    color: var(--v-color-primary-text);
+    color: var(--v-color-primary);
   }
 
   .feature-icon svg {
@@ -297,7 +305,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--v-spacing-sm);
-    padding: var(--v-spacing-lg);
+    position: relative;
+    padding: 20px;
     background: var(--v-bg-color);
     border: 1px solid var(--v-border-color);
     border-radius: var(--v-radius-lg);
@@ -307,27 +316,25 @@
   }
 
   .home-card:hover {
-    border-color: var(--v-color-primary);
-    box-shadow: var(--v-shadow-md);
-    transform: translateY(-2px);
+    border-color: var(--v-border-color-hover);
+    background: var(--v-bg-color-secondary);
   }
 
   .home-card-icon {
-    width: 40px;
-    height: 40px;
+    width: 28px;
+    height: 28px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--v-color-primary);
-    background: color-mix(in srgb, var(--v-color-primary) 10%, transparent);
-    border-radius: var(--v-radius-md);
+    color: var(--v-text-color-secondary);
+    background: transparent;
+    border-radius: 0;
     transition: all var(--v-transition-base);
   }
 
   .home-card:hover .home-card-icon {
-    background: var(--v-color-primary);
-    color: var(--v-color-primary-text);
+    color: var(--v-color-primary);
   }
 
   .home-card-icon svg {
@@ -356,17 +363,23 @@
   }
 
   /* ================= 响应式 ================= */
-  @media (max-width: 900px) {
+  #home-components {
+    border-top: 1px solid var(--v-border-color);
+    background: var(--v-bg-color-secondary);
+  }
+
+  @container (max-width: 900px) {
     .hero {
       padding: 56px 0;
     }
 
     .hero-inner {
       grid-template-columns: 1fr;
+      gap: 40px;
     }
 
     .collage {
-      height: 320px;
+      max-width: 560px;
     }
 
     .hero-stats {

@@ -11,6 +11,8 @@
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
+      background: var(--v-bg-color-secondary);
+      container-type: inline-size;
     }
 
     /* 与首页同宽的整体居中容器（vitepress 式） */
@@ -22,13 +24,25 @@
       max-width: var(--v-layout-max-width);
       margin: 0 auto;
       padding: 0 var(--v-spacing-lg);
+      gap: 0;
     }
 
     .content-scroll {
       flex: 1;
       min-width: 0;
       overflow-y: auto;
-      padding: var(--v-spacing-xl) var(--v-spacing-lg);
+      margin: 24px 0 24px 24px;
+      padding: 36px 40px 48px;
+      border: 1px solid var(--v-border-color);
+      border-radius: var(--v-radius-lg);
+      background: var(--v-bg-color);
+    }
+
+    @container (max-width: 760px) {
+      .content-scroll {
+        margin: 12px 0;
+        padding: 24px 20px 36px;
+      }
     }
 
     vslot {

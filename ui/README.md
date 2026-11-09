@@ -1,33 +1,38 @@
-# vhtml UI 组件文档
+# vhtml-ui 组件文档
 
-vhtml UI 是一套基于 vhtml 框架的轻量级 UI 组件库，旨在提供简洁、高效的界面构建方案。
+vhtml 官方 UI 组件库。组件通过 kebab-case 标签直接引用，例如 `<v-btn>` 对应 `/btn.html`，
+`<v-input>` 对应 `/input.html`。明暗主题、状态反馈与中英文入口由全库统一提供。
 
-每个组件通过 kebab-case 标签名直接引用，例如 `<v-btn>` 对应 `/btn.html`，`<v-input>` 对应 `/input.html`。
+## 快速开始
 
-## 组件列表
+```html
+<v-btn @click="save">保存</v-btn>
+<v-btn variant="outline">取消</v-btn>
+<v-input v:value="name" label="名称" placeholder="请输入名称"></v-input>
+<v-card title="基本信息">内容</v-card>
+```
 
-- [Button 按钮](#button-按钮)
-- [Input 输入框](#input-输入框)
-- [Form 表单](#form-表单)
-- [Card 卡片](#card-卡片)
-- [Tag 标签](#tag-标签)
-- [Alert 警告提示](#alert-警告提示)
-- [Spinner 加载](#spinner-加载)
-- [Empty 空状态](#empty-空状态)
-- [Tooltip 文字提示](#tooltip-文字提示)
-- [Table 表格](#table-表格)
-- [Pagination 分页](#pagination-分页)
-- [Badge 徽标](#badge-徽标)
-- [Avatar 头像](#avatar-头像)
-- [Popover 气泡卡片](#popover-气泡卡片)
-- [Skeleton 骨架屏](#skeleton-骨架屏)
-- [Breadcrumb 面包屑](#breadcrumb-面包屑)
-- [Dialog 对话框](#dialog-对话框)
-- [Dropdown 下拉菜单](#dropdown-下拉菜单)
-- [Sidebar 侧边栏](#sidebar-侧边栏)
-- [Tabs 标签页](#tabs-标签页)
-- [Tree 树形组件](#tree-树形组件)
-- [Lang 语言切换](#lang-语言切换)
+```js
+$message.success('已保存')
+const confirmed = await $message.confirm('确认删除？')
+$theme.set('dark') // light / dark / auto
+```
+
+**规则**：优先复用下方组件，不重复实现同功能控件；`v:value` 只接受静态属性路径；消息反馈、
+确认和输入弹窗统一走 `$message`。每个组件章节给出真实 Props、Events、Slots 与代码示例。
+
+AI 在平台上可直接用云端指令 `curl /v/README.md` 查询本文档（`exec _host=cloud`），并可与 `grep` / `head` / `tail` 组合，只读取目标组件章节。
+
+## 组件导航
+
+| 分类 | 组件 |
+| --- | --- |
+| 操作与展示 | [Button](#button-按钮) · [Card](#card-卡片) · [Tag](#tag-标签) · [Badge](#badge-徽标) · [Avatar](#avatar-头像) |
+| 数据输入 | [Input](#input-输入框) · [Form](#form-表单) |
+| 状态反馈 | [Alert](#alert-警告提示) · [Spinner](#spinner-加载) · [Skeleton](#skeleton-骨架屏) · [Empty](#empty-空状态) · [$message](#message-全局消息) |
+| 导航与结构 | [Tabs](#tabs-标签页) · [Sidebar](#sidebar-侧边栏) · [Breadcrumb](#breadcrumb-面包屑) · [Pagination](#pagination-分页) · [Tree](#tree-树形组件) |
+| 浮层与弹窗 | [Tooltip](#tooltip-文字提示) · [Popover](#popover-气泡卡片) · [Dialog](#dialog-对话框) · [Dropdown](#dropdown-下拉菜单) |
+| 系统能力 | [Theme](#theme-主题切换) · [Lang](#lang-语言切换) · [$message](#message-全局消息) |
 
 ## Button 按钮
 

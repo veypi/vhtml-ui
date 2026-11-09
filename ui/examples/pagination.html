@@ -7,20 +7,20 @@
 </head>
 
 <body>
-  <div class="doc-page">
-    <h1 class="doc-title">{{ $t('pagination.title') }}</h1>
-    <p class="doc-intro">{{ $t('pagination.intro') }}</p>
+  <div class="v-doc-page">
+    <h1 class="v-doc-title">{{ $t('pagination.title') }}</h1>
+    <p class="v-doc-intro">{{ $t('pagination.intro') }}</p>
 
-    <h2 class="doc-h2">{{ $t('doc.examples') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.examples') }}</h2>
 
     <doc-demo :title="$t('pagination.ex.basic.title')" :desc="$t('pagination.ex.basic.desc')" :code="codeBasic">
       <div vsrc="/pagination" v:value="page1" :total="50"></div>
-      <div class="value-display">{{ $t('pagination.current') }}: {{ page1 }}</div>
+      <div class="v-value-display">{{ $t('pagination.current') }}: {{ page1 }}</div>
     </doc-demo>
 
     <doc-demo :title="$t('pagination.ex.many.title')" :desc="$t('pagination.ex.many.desc')" :code="codeMany">
       <div vsrc="/pagination" v:value="page2" :total="500"></div>
-      <div class="value-display">{{ $t('pagination.current') }}: {{ page2 }}</div>
+      <div class="v-value-display">{{ $t('pagination.current') }}: {{ page2 }}</div>
     </doc-demo>
 
     <doc-demo :title="$t('pagination.ex.total.title')" :desc="$t('pagination.ex.total.desc')" :code="codeTable">
@@ -30,7 +30,7 @@
       </div>
     </doc-demo>
 
-    <h2 class="doc-h2">{{ $t('doc.api') }}</h2>
+    <h2 class="v-doc-h2">{{ $t('doc.api') }}</h2>
 
     <doc-api :title="$t('doc.props')" :rows="propRows"></doc-api>
     <doc-api :title="$t('doc.events')" :rows="eventRows"></doc-api>

@@ -56,10 +56,9 @@ body {
   background: color-mix(in srgb, var(--v-color-primary) 25%, transparent);
 }
 
+/* 焦点反馈由具体组件的边框或背景承担，不绘制全局外框。 */
 :focus-visible {
-  outline: 2px solid
-    color-mix(in oklab, var(--v-color-primary) 45%, transparent);
-  outline-offset: 2px;
+  outline: none;
 }
 
 /* 自定义焦点样式的组件关闭默认 outline，避免双重焦点环 */
@@ -75,34 +74,32 @@ body {
    ========================================================================== */
 :root {
   /* --- Primitives: Colors (原始色板) --- */
-  /* 主色：indigo 系（Linear 风） */
-  --v-indigo-50: #eef2ff;
-  --v-indigo-100: #e0e7ff;
-  --v-indigo-500: #6366f1;
-  --v-indigo-600: #4f46e5;
-  --v-indigo-700: #4338ca;
+  /* 信号蓝：只用于主动作、选中和焦点，不铺大面积品牌渐变。 */
+  --v-indigo-50: #eff6ff;
+  --v-indigo-100: #dbeafe;
+  --v-indigo-500: #3b82f6;
+  --v-indigo-600: #2563eb;
+  --v-indigo-700: #1d4ed8;
 
-  /* emerald：比 green 更柔和现代 */
   --v-green-500: #10b981;
   --v-green-600: #059669;
 
   --v-red-500: #ef4444;
   --v-red-600: #dc2626;
 
-  /* amber：比 yellow 更克制 */
   --v-yellow-500: #f59e0b;
 
-  /* 纯中性灰阶（zinc 系，去蓝色调） */
-  --v-gray-50: #fafafa;
-  --v-gray-100: #f4f4f5;
-  --v-gray-200: #e4e4e7;
-  --v-gray-300: #d4d4d8;
-  --v-gray-400: #a1a1aa;
-  --v-gray-500: #71717a;
-  --v-gray-600: #52525b;
-  --v-gray-700: #3f3f46;
-  --v-gray-800: #27272a;
-  --v-gray-900: #18181b;
+  /* 略暖的中性色让白色控件与画布分层，避免冷灰蓝铺满界面。 */
+  --v-gray-50: #f7f8fa;
+  --v-gray-100: #f0f2f4;
+  --v-gray-200: #e3e6ea;
+  --v-gray-300: #cbd1d8;
+  --v-gray-400: #98a1ac;
+  --v-gray-500: #69727d;
+  --v-gray-600: #4d5560;
+  --v-gray-700: #373e47;
+  --v-gray-800: #24292f;
+  --v-gray-900: #171a1f;
 
   --v-white: #ffffff;
   --v-black: #000000;
@@ -113,6 +110,7 @@ body {
   --v-color-primary-hover: var(--v-indigo-600);
   --v-color-primary-active: var(--v-indigo-700);
   --v-color-primary-text: var(--v-white);
+  --v-color-filled-text: var(--v-white);
 
   /* Secondary Action */
   --v-color-secondary: var(--v-gray-500);
@@ -144,10 +142,10 @@ body {
   --v-border-color-hover: var(--v-gray-300);
 
   /* --- Dimensions: Spacing & Radius (尺寸) --- */
-  --v-radius-sm: 4px;
-  --v-radius-md: 6px;
-  --v-radius-lg: 10px;
-  --v-radius-xl: 14px;
+  --v-radius-sm: 5px;
+  --v-radius-md: 8px;
+  --v-radius-lg: 12px;
+  --v-radius-xl: 16px;
   --v-radius-full: 9999px;
 
   --v-spacing-xs: 4px;
@@ -171,13 +169,9 @@ body {
 
   /* --- Effects (特效) ---
      现代简约阴影：hairline 描边 + 柔和扩散，避免厚重感 */
-  --v-shadow-sm: 0 0 0 1px rgb(0 0 0 / 0.02), 0 1px 2px 0 rgb(0 0 0 / 0.04);
-  --v-shadow-md:
-    0 0 0 1px rgb(0 0 0 / 0.03), 0 2px 4px -1px rgb(0 0 0 / 0.05),
-    0 6px 12px -4px rgb(0 0 0 / 0.06);
-  --v-shadow-lg:
-    0 0 0 1px rgb(0 0 0 / 0.03), 0 4px 8px -2px rgb(0 0 0 / 0.05),
-    0 16px 32px -8px rgb(0 0 0 / 0.1);
+  --v-shadow-sm: 0 1px 2px rgb(23 26 31 / 0.05);
+  --v-shadow-md: 0 8px 24px rgb(23 26 31 / 0.08), 0 2px 6px rgb(23 26 31 / 0.04);
+  --v-shadow-lg: 0 24px 64px rgb(23 26 31 / 0.16), 0 4px 16px rgb(23 26 31 / 0.08);
 
   /* --- Transitions (动画) --- */
   --v-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -192,7 +186,7 @@ body {
   --v-z-toast: 2000;
 
   /* --- Layout (布局) --- */
-  --v-layout-max-width: 1120px;
+  --v-layout-max-width: 1280px;
 }
 
 /* ==========================================================================
@@ -206,54 +200,37 @@ body {
 :root[theme="dark"] {
   color-scheme: dark;
 
-  /* Backgrounds */
-  --v-bg-color: #0f172a;
-  --v-bg-color-secondary: #1e293b;
-  --v-bg-color-tertiary: #334155;
+  --v-bg-color: #121518;
+  --v-bg-color-secondary: #1a1e23;
+  --v-bg-color-tertiary: #242a31;
 
-  /* Text */
-  --v-text-color: #e2e8f0;
-  --v-text-color-secondary: #94a3b8;
-  --v-text-color-tertiary: #64748b;
-  --v-text-color-disabled: #475569;
+  --v-text-color: #edf0f3;
+  --v-text-color-secondary: #a5aeb9;
+  --v-text-color-tertiary: #77818d;
+  --v-text-color-disabled: #555f6a;
 
-  /* Primary: 紫色主调 */
-  --v-color-primary: #8b5cf6;
-  --v-color-primary-hover: #7c3aed;
-  --v-color-primary-active: #6d28d9;
-  --v-color-primary-text: #ffffff;
+  --v-color-primary: #60a5fa;
+  --v-color-primary-hover: #93c5fd;
+  --v-color-primary-active: #3b82f6;
+  --v-color-primary-text: #0b1524;
+  --v-color-filled-text: #121518;
 
-  /* Secondary */
-  --v-color-secondary: #64748b;
-  --v-color-secondary-hover: #475569;
-  --v-color-secondary-active: #334155;
+  --v-color-secondary: #8b95a1;
+  --v-color-secondary-hover: #a5aeb9;
+  --v-color-secondary-active: #69727d;
 
-  /* Feedback */
-  --v-color-info: #8b5cf6;
-  --v-color-success: #10b981;
-  --v-color-warning: #f59e0b;
-  --v-color-danger: #f43f5e;
-  --v-color-danger-hover: #e11d48;
+  --v-color-info: #60a5fa;
+  --v-color-success: #34d399;
+  --v-color-warning: #fbbf24;
+  --v-color-danger: #f87171;
+  --v-color-danger-hover: #fca5a5;
 
-  /* Borders */
-  --v-border-color: #334155;
-  --v-border-color-hover: #475569;
+  --v-border-color: #2b323a;
+  --v-border-color-hover: #414a55;
 
-  /* Radius: 更大的圆角 */
-  --v-radius-sm: 8px;
-  --v-radius-md: 12px;
-  --v-radius-lg: 16px;
-  --v-radius-xl: 20px;
-
-  /* Typography: 极客字体 */
-  --v-font-family: "Menlo", "Monaco", "Courier New", monospace;
-
-  /* Shadows: 暗色下加深 */
-  --v-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --v-shadow-md:
-    0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-  --v-shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  --v-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.24);
+  --v-shadow-md: 0 8px 24px rgb(0 0 0 / 0.32);
+  --v-shadow-lg: 0 24px 64px rgb(0 0 0 / 0.48);
 }
 
 /* ==========================================================================
@@ -486,8 +463,9 @@ body {
   border-radius: var(--v-radius-md);
   border: 1px solid var(--v-border-color);
   box-sizing: border-box;
-  transition: var(--v-transition-base, all 0.2s);
+  transition: border-color var(--v-transition-fast), box-shadow var(--v-transition-fast), background-color var(--v-transition-fast);
   overflow: hidden;
+  box-shadow: 0 1px 1px rgb(23 26 31 / 0.025);
 }
 
 .v-input-wrapper:hover:not(.is-disabled) {
@@ -532,9 +510,9 @@ body {
   color: var(--v-text-color);
   font-size: var(--v-font-size-md);
   outline: none;
-  padding: var(--v-spacing-sm) var(--v-spacing-md);
+  padding: 8px 12px;
   margin: 0;
-  line-height: 1.5;
+  line-height: 20px;
 }
 
 .v-input__inner::placeholder {
@@ -563,7 +541,7 @@ body {
 /* ==========================================================================
    5. Demo Helpers (演示站点共用样式)
    ========================================================================== */
-.value-display {
+.v-value-display {
   font-family: ui-monospace, monospace;
   font-size: var(--v-font-size-xs);
   background: var(--v-bg-color-secondary);
@@ -571,34 +549,37 @@ body {
   padding: var(--v-spacing-sm);
   border-radius: var(--v-radius-sm);
   margin-top: var(--v-spacing-xs);
+  border: 1px solid var(--v-border-color);
 }
 
 /* ==========================================================================
    6. Doc Pages (组件教程页共用样式)
    ========================================================================== */
-.doc-page {
+.v-doc-page {
   width: 100%;
   padding-bottom: 48px;
 }
 
-.doc-title {
-  font-size: 1.8rem;
+.v-doc-title {
+  font-size: 2rem;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
   font-weight: var(--v-font-weight-bold);
   color: var(--v-text-color);
   margin-bottom: var(--v-spacing-sm);
 }
 
-.doc-intro {
+.v-doc-intro {
   color: var(--v-text-color-secondary);
   line-height: 1.8;
   margin-bottom: var(--v-spacing-xl);
 }
 
-.doc-h2 {
-  font-size: 1.3rem;
+.v-doc-h2 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
   font-weight: var(--v-font-weight-bold);
   color: var(--v-text-color);
-  margin: 40px 0 var(--v-spacing-md);
-  padding-top: var(--v-spacing-lg);
-  border-top: 1px solid var(--v-border-color);
+  margin: 48px 0 var(--v-spacing-md);
 }
