@@ -239,7 +239,8 @@
   /* ================= 特性 ================= */
   .feature-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* 6 张卡固定 3 列 → 2 行正好填满；auto-fill 宽屏下会多出一列，空位露出容器底色。 */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1px;
     padding: 1px;
     border: 1px solid var(--v-border-color);
@@ -384,6 +385,16 @@
 
     .hero-stats {
       gap: var(--v-spacing-lg);
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container (max-width: 560px) {
+    .feature-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

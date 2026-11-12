@@ -87,7 +87,7 @@
 <body>
   <div v-show="visible" class="v-alert" :style="{ '--v-alert-color': typeColor() }">
     <vslot name="icon" class="v-alert-icon">
-      <span class="v-alert-icon" v-html="typeIcon()"></span>
+      <div class="v-alert-icon" v-html="typeIcon()"></div>
     </vslot>
     <div class="v-alert-content">
       <div v-if="title" class="v-alert-title">{{ title }}</div>

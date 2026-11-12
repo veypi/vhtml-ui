@@ -5,6 +5,13 @@
 
 ## 未发布
 
+- **修复 `v-html` 用在非 div 上导致内容不渲染**：vhtml 的 `v-html` 只在 `<div>` 上生效，写成
+  `<span v-html>` / `<li v-html>` 时属性原样留在 DOM 上、内容永远为空。alert 的图标槽位正是
+  `<span v-html="typeIcon()">`——所有提示条都不带图标。改为 `<div v-html>`；empty 的默认插图与
+  tree 示例同步修正。
+- **特性栅格不再留灰色空块**：首页「为什么选择 vhtml-ui」用 `auto-fill` 排 6 张卡，宽屏下排成
+  4+2，空出的两格露出容器底色（一大块灰）。改为固定 3 列 → 2 行填满，窄屏 2/1 列。
+
 - **组件文档补充事件约定**：新增「事件约定」章节——vhtml 只在原生 DOM 事件里注入 `$event`，
   组件自定义事件（`update` / `v-focus` / `v-blur`）的 payload 要用形参接收
   （`@update="value => handler(value)"`），并说明自定义事件名不得与 DOM 内置事件同名。

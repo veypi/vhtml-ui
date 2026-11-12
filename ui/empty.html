@@ -59,7 +59,7 @@
   <div class="v-empty">
     <vslot name="image" class="v-empty-image">
       <span v-if="image" class="v-empty-image"><img :src="image" alt="" /></span>
-      <span v-else class="v-empty-image" v-html="defaultSvg"></span>
+      <div v-else class="v-empty-image" v-html="defaultSvg"></div>
     </vslot>
     <div class="v-empty-desc">{{ description || $t('empty.noData') }}</div>
     <div class="v-empty-action">
