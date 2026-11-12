@@ -3,7 +3,7 @@
 版本以 git tag（`vX.Y.Z`）为准，遵循 SemVer。本文只记录已完成变更，未来计划写入
 `docs/development/todo.md`。
 
-## 未发布
+## 0.1.8 — 2026-11-12
 
 - **修复 `v-html` 用在非 div 上导致内容不渲染**：vhtml 的 `v-html` 只在 `<div>` 上生效，写成
   `<span v-html>` / `<li v-html>` 时属性原样留在 DOM 上、内容永远为空。alert 的图标槽位正是
@@ -24,6 +24,8 @@
   不传则居中）、`showClose`、`lockScroll` 三个属性；定位模式下遮罩改为 `display:block`、
   内容绝对定位。`prompt(message, value)` 默认把 message 作为弹窗标题、正文只显示输入框
   （显式传 `title` 时保留「标题 + 说明」形态）。文档：`ui/README.md`；回归：`test/vmessage.html`。
+
+- **`$message` 通知条换独立高明度配色**：浅色主题用近白亮底（info `#eef7ff` / success `#effff9` / warning `#fffbea` / danger `#fff1f4`）+ 鲜亮前景 + 同色系浅阴影，不再混用主题底色与边框；暗色主题沿用 accent 派生色（`hsl(from var(--vmsg-accent) …)`），两类主题各自可读。
 
 ## 0.1.7 — 2026-10-28
 
