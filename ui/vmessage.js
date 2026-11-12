@@ -25,13 +25,17 @@ const MESSAGE_STYLE = `
 
   .vmsg-item {
     --vmsg-accent: var(--v-color-info);
+    /* 独立高明度配色：近白亮底、鲜亮前景与同色系浅阴影。 */
+    --vmsg-bg: #eef7ff;
+    --vmsg-fg: #0787ff;
+    --vmsg-solid: #2aa7ff;
     margin-bottom: 8px;
     padding: 12px;
-    border: 1px solid color-mix(in srgb, var(--vmsg-accent) 30%, var(--v-border-color));
+    border: 1px solid color-mix(in srgb, var(--vmsg-solid) 28%, var(--vmsg-bg));
     border-radius: var(--v-radius-md, 8px);
-    box-shadow: var(--v-shadow-md);
-    background: color-mix(in srgb, var(--vmsg-accent) 7%, var(--v-bg-color));
-    color: var(--v-text-color);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--vmsg-solid) 14%, transparent);
+    background: var(--vmsg-bg);
+    color: var(--vmsg-fg);
     transform: translateY(-8px) scale(0.985);
     opacity: 0;
     transition: opacity var(--v-transition-fast, 150ms), transform var(--v-transition-fast, 150ms);
@@ -54,8 +58,8 @@ const MESSAGE_STYLE = `
     height: 26px;
     margin-right: 10px;
     border-radius: 7px;
-    background: color-mix(in srgb, var(--vmsg-accent) 14%, transparent);
-    color: var(--vmsg-accent);
+    background: color-mix(in srgb, var(--vmsg-solid) 22%, var(--vmsg-bg));
+    color: var(--vmsg-solid);
     line-height: 1;
   }
 
@@ -68,7 +72,7 @@ const MESSAGE_STYLE = `
     flex: 1;
     padding-top: 2px;
     min-width: 0;
-    color: var(--v-text-color);
+    color: var(--vmsg-fg);
     font-size: 14px;
     line-height: 20px;
   }
@@ -88,14 +92,40 @@ const MESSAGE_STYLE = `
   }
 
   .vmsg-close:hover {
-    color: var(--v-text-color);
-    background: var(--v-bg-color-secondary);
+    color: var(--vmsg-fg);
+    background: color-mix(in srgb, var(--vmsg-solid) 12%, var(--vmsg-bg));
   }
 
-  .vmsg-success { --vmsg-accent: var(--v-color-success); }
-  .vmsg-warning { --vmsg-accent: var(--v-color-warning); }
-  .vmsg-error { --vmsg-accent: var(--v-color-danger); }
-  .vmsg-info { --vmsg-accent: var(--v-color-info); }
+  .vmsg-success {
+    --vmsg-accent: var(--v-color-success);
+    --vmsg-bg: #effff9;
+    --vmsg-fg: #00b578;
+    --vmsg-solid: #20d99b;
+  }
+  .vmsg-warning {
+    --vmsg-accent: var(--v-color-warning);
+    --vmsg-bg: #fffbea;
+    --vmsg-fg: #ed9f00;
+    --vmsg-solid: #ffb020;
+  }
+  .vmsg-error {
+    --vmsg-accent: var(--v-color-danger);
+    --vmsg-bg: #fff1f4;
+    --vmsg-fg: #f43f5e;
+    --vmsg-solid: #ff5c8a;
+  }
+  .vmsg-info {
+    --vmsg-accent: var(--v-color-info);
+    --vmsg-bg: #eef7ff;
+    --vmsg-fg: #0787ff;
+    --vmsg-solid: #2aa7ff;
+  }
+
+  :root[theme="dark"] .vmsg-item {
+    --vmsg-bg: hsl(from var(--vmsg-accent) h 32% 20%);
+    --vmsg-fg: hsl(from var(--vmsg-accent) h 70% 82%);
+    --vmsg-solid: hsl(from var(--vmsg-accent) h 65% 62%);
+  }
 
   .vmsg-overlay {
     position: fixed;
@@ -144,10 +174,8 @@ const MESSAGE_STYLE = `
     flex: 0 0 20px;
     width: 20px;
     height: 20px;
-    background: transparent;
     border-radius: 7px;
     color: var(--v-color-info);
-    background: color-mix(in srgb, var(--v-color-info) 12%, transparent);
   }
 
   .vmsg-dialog-icon svg {
