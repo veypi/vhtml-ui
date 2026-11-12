@@ -34,6 +34,31 @@ AI 在平台上可直接用云端指令 `curl /v/README.md` 查询本文档（`e
 | 浮层与弹窗 | [Tooltip](#tooltip-文字提示) · [Popover](#popover-气泡卡片) · [Dialog](#dialog-对话框) · [Dropdown](#dropdown-下拉菜单) |
 | 系统能力 | [Theme](#theme-主题切换) · [Lang](#lang-语言切换) · [$message](#message-全局消息) |
 
+## 事件约定
+
+vhtml 有两类事件，**父组件拿参数的方式不一样**：
+
+| 事件类型 | 例子 | 父组件怎么拿参数 |
+| --- | --- | --- |
+| 原生 DOM 事件 | `click`、`input`、`change`、`keyup` | 框架注入 `$event`（事件对象） |
+| 组件自定义事件（组件内 `$emit`） | `update`、`v-focus`、`v-blur` | **没有 `$event`**：payload 由回调参数传入 |
+
+自定义事件的 payload 必须用形参接：
+
+```html
+<!-- 错：$event 只在原生事件里存在，自定义事件里是 undefined -->
+<v-input @update="onChange($event)"></v-input>
+
+<!-- 对：用箭头函数形参接收 payload -->
+<v-input @update="value => onChange(value)"></v-input>
+
+<!-- 也对：直接把处理函数交给事件，payload 原样传入 -->
+<v-input @update="onChange"></v-input>
+```
+
+组件里 `$emit('update', value)` 时，父组件的 `@update="onChange"` 相当于调用 `onChange(value)`。
+自定义事件名不能与 DOM 内置事件同名（`change` / `input` / `click` 等），否则会被当成原生监听器挂上，框架会直接抛错。
+
 ## Button 按钮
 
 常用的操作按钮，支持多种变体、尺寸和图标。
@@ -286,6 +311,8 @@ AI 在平台上可直接用云端指令 `curl /v/README.md` 查询本文档（`e
 | update  | 值变化时触发（v:value 绑定）| value    |
 | v-focus | 聚焦时触发                  | event    |
 | v-blur  | 失焦时触发                  | event    |
+
+以上都是自定义事件：**父组件里没有 `$event`**，payload 用形参接（见 [事件约定](#事件约定)）。
 
 ### Slots
 
